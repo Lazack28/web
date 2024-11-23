@@ -10,7 +10,7 @@ body {
 }
 
 header {
-  background-color: rgba(255, 204, 0, 0.8); /* Semi-transparent background */
+  background-color: rgba(17, 54, 78, 0.8); /* Semi-transparent background */
   padding: 20px;
 }
 
@@ -50,14 +50,14 @@ p {
 }
 
 .shiny-cta:hover {
-  background-color: rgba(0, 86, 179, 0.8); /* Semi-transparent hover color */
+  background-color: rgba(99, 97, 226, 0.637); /* Semi-transparent hover color */
   transform: scale(1.05);
 }
 
 footer {
   margin-top: 50px;
   padding: 20px;
-  background-color: rgba(255, 204, 0, 0.8); /* Semi-transparent footer background */
+  background-color: rgba(46, 25, 29, 0); /* Semi-transparent footer background */
   position: relative;
   bottom: 0;
   width: 100%;
