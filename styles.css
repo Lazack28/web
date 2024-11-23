@@ -10,7 +10,7 @@ body {
 }
 
 header {
-  background-color: rgba(17, 54, 78, 0.8); /* Semi-transparent background */
+  background-color: rgba(50, 51, 53, 0.8); /* Semi-transparent background */
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
 }
