@@ -10,21 +10,23 @@ body {
 }
 
 header {
-  background-color: rgba(50, 51, 53, 0.8); /* Semi-transparent background */
+  background-color: rgba(30, 30, 30, 0.85); /* Darker semi-transparent background */
   padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6); /* Softer shadow for depth */
 }
 
 h1 {
   margin: 0;
-  font-size: 2.5em;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Text shadow for depth */
+  font-size: 2.8em; /* Increased font size */
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8); /* Deeper text shadow for depth */
+  animation: fadeIn 1s ease-in; /* Fade-in animation */
 }
 
 p {
-  font-size: 1.2em;
+  font-size: 1.3em; /* Increased font size */
   margin-top: 10px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Text shadow for depth */
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6); /* Text shadow for depth */
+  animation: fadeIn 1.5s ease-in; /* Fade-in animation */
 }
 
 .button-container {
@@ -35,9 +37,9 @@ p {
 }
 
 .shiny-cta {
-  background: linear-gradient(135deg, rgba(0, 123, 255, 0.8), rgba(99, 97, 226, 0.8)); /* Gradient background */
+  background: linear-gradient(135deg, rgba(255, 105, 180, 0.9), rgba(70, 130, 180, 0.9)); /* Softer gradient background */
   border: none;
-  border-radius: 5px;
+  border-radius: 8px; /* Slightly more rounded corners */
   color: white;
   cursor: pointer;
   font-size: 1.2em;
@@ -45,8 +47,9 @@ p {
   padding: 15px 30px;
   position: relative;
   text-decoration: none;
-  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Added box-shadow transition */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s; /* Added box-shadow transition */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); /* Softer shadow for depth */
+  animation: popIn 0.5s ease-in-out; /* Pop-in animation */
 }
 
 .shiny-cta a {
@@ -55,23 +58,52 @@ p {
 }
 
 .shiny-cta:hover {
-  background: linear-gradient(135deg, rgba(54, 54, 54, 0.8), rgba(0, 123, 255, 0.8)); /* Reverse gradient on hover */
+  background: linear-gradient(135deg, rgba(255, 20, 147, 0.9), rgba(30, 144, 255, 0.9)); /* Reverse gradient on hover */
   transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Deeper shadow on hover */
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6); /* Deeper shadow on hover */
+  animation: pulse 0.5s infinite alternate; /* Pulse animation on hover */
 }
 
 footer {
   margin-top: 50px;
   padding: 20px;
-  background-color: rgba(46, 25, 29, 0.8); /* Semi-transparent footer background */
+  background-color: rgba(20, 20, 20, 0.85); /* Darker semi-transparent footer background */
   position: relative;
   bottom: 0;
   width: 100%;
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+  box-shadow: 0 -6px 15px rgba(0, 0, 0, 0.6); /* Softer shadow for depth */
   color: white; /* Change footer text color to white */
 }
 
 footer p {
   margin: 0; /* Remove default margin */
   font-size: 1em; /* Adjust font size */
+}
+
+/* Keyframes for animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
 }
