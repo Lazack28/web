@@ -10,9 +10,10 @@ body {
 }
 
 header {
-  background-color: rgba(30, 30, 30, 0.85); /* Darker semi-transparent background */
+  background-color: rgba(255, 165, 0, 0.9); /* Bright orange semi-transparent background */
   padding: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6); /* Softer shadow for depth */
+  animation: slideDown 0.5s ease-out; /* Slide down animation */
 }
 
 h1 {
@@ -107,3 +108,16 @@ footer p {
     transform: scale(1.1);
   }
 }
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@key
