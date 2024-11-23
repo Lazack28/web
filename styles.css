@@ -55,7 +55,7 @@ p {
 }
 
 .shiny-cta:hover {
-  background: linear-gradient(135deg, rgba(99, 97, 226, 0.8), rgba(0, 123, 255, 0.8)); /* Reverse gradient on hover */
+  background: linear-gradient(135deg, rgba(54, 54, 54, 0.8), rgba(0, 123, 255, 0.8)); /* Reverse gradient on hover */
   transform: scale(1.05);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Deeper shadow on hover */
 }
