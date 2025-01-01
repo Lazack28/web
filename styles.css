@@ -1,123 +1,97 @@
-body {
-  font-family: 'Arial', sans-serif;
-  background-image: url('./mtaju.jpg'); /* Set the background image */
-  background-size: cover; /* Cover the entire viewport */
-  background-position: center; /* Center the image */
-  color: #333;
+/* Reset some default styles */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+/* Header styles */
+header {
+  background: #007bff;
+  color: white;
+  padding: 20px 0;
   text-align: center;
 }
 
-header {
-  background-color: rgba(255, 165, 0, 0.9); /* Bright orange semi-transparent background */
+header h1 {
+  margin-bottom: 10px;
+}
+
+header p {
+  font-size: 1.2em;
+}
+
+/* Main content styles */
+main {
   padding: 20px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6); /* Softer shadow for depth */
-  animation: slideDown 0.5s ease-out; /* Slide down animation */
+  max-width: 800px;
+  margin: 20px auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-  margin: 0;
-  font-size: 2.8em; /* Increased font size */
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8); /* Deeper text shadow for depth */
-  animation: fadeIn 1s ease-in; /* Fade-in animation */
-}
-
-p {
-  font-size: 1.3em; /* Increased font size */
-  margin-top: 10px;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6); /* Text shadow for depth */
-  animation: fadeIn 1.5s ease-in; /* Fade-in animation */
-}
-
+/* Button container styles */
 .button-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 50px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .shiny-cta {
-  background: linear-gradient(135deg, rgba(255, 105, 180, 0.9), rgba(70, 130, 180, 0.9)); /* Softer gradient background */
+  background: #28a745;
   border: none;
-  border-radius: 8px; /* Slightly more rounded corners */
+  border-radius: 5px;
   color: white;
-  cursor: pointer;
-  font-size: 1.2em;
+  padding: 15px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1em;
   margin: 10px;
-  padding: 15px 30px;
-  position: relative;
-  text-decoration: none;
-  transition: background 0.3s, transform 0.3s, box-shadow 0.3s; /* Added box-shadow transition */
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); /* Softer shadow for depth */
-  animation: popIn 0.5s ease-in-out; /* Pop-in animation */
-}
-
-.shiny-cta a {
-  color: white;
-  text-decoration: none;
+  transition: background 0.3s, transform 0.3s;
+  cursor: pointer;
 }
 
 .shiny-cta:hover {
-  background: linear-gradient(135deg, rgba(255, 20, 147, 0.9), rgba(30, 144, 255, 0.9)); /* Reverse gradient on hover */
-  transform: scale(1.05);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6); /* Deeper shadow on hover */
-  animation: pulse 0.5s infinite alternate; /* Pulse animation on hover */
+  background: #218838;
+  transform: translateY(-2px);
 }
 
-footer {
-  margin-top: 50px;
+/* Info section styles */
+.info-section {
+  margin-top: 20px;
   padding: 20px;
-  background-color: rgba(20, 20, 20, 0.85); /* Darker semi-transparent footer background */
+  background: #e9ecef;
+  border-radius: 8px;
+}
+
+.info-section h2 {
+  margin-bottom: 10px;
+}
+
+.info-section p {
+  margin-bottom: 10px;
+}
+
+/* Footer styles */
+footer {
+  text-align: center;
+  padding: 10px 0;
+  background: #007bff;
+  color: white;
   position: relative;
   bottom: 0;
   width: 100%;
-  box-shadow: 0 -6px 15px rgba(0, 0, 0, 0.6); /* Softer shadow for depth */
-  color: white; /* Change footer text color to white */
 }
 
 footer p {
-  margin: 0; /* Remove default margin */
-  font-size: 1em; /* Adjust font size */
+  margin: 0;
 }
-
-/* Keyframes for animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes popIn {
-  0% {
-    transform: scale(0.8);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(1.1);
-  }
-}
-
-@keyframes slideDown {
-  0% {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@key
