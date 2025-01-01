@@ -47,7 +47,7 @@ main {
 }
 
 .shiny-cta {
-  background: #28a745;
+  background: linear-gradient(145deg, #6a11cb, #2575fc);
   border: none;
   border-radius: 5px;
   color: white;
@@ -56,13 +56,15 @@ main {
   text-decoration: none;
   font-size: 1em;
   margin: 10px;
-  transition: background 0.3s, transform 0.3s;
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
   cursor: pointer;
+  box-shadow: 5px 5px 15px #a3a3a3, -5px -5px 15px #ffffff;
 }
 
 .shiny-cta:hover {
-  background: #218838;
+  background: linear-gradient(145deg, #2575fc, #6a11cb);
   transform: translateY(-2px);
+  box-shadow: 5px 5px 20px #a3a3a3, -5px -5px 20px #ffffff;
 }
 
 /* Info section styles */
