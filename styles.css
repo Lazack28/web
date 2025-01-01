@@ -6,22 +6,24 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
-  background-color: #f4f4f4;
+  background-color: #f0f4f8; /* Lighter background for a softer look */
   color: #333;
 }
 
 /* Header styles */
 header {
-  background: #007bff;
+  background: linear-gradient(135deg, #007bff, #0056b3); /* Gradient background */
   color: white;
-  padding: 20px 0;
+  padding: 30px 0; /* Increased padding for a more spacious feel */
   text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
 
 header h1 {
   margin-bottom: 10px;
+  font-size: 2.5em; /* Larger font size for the title */
 }
 
 header p {
@@ -30,12 +32,12 @@ header p {
 
 /* Main content styles */
 main {
-  padding: 20px;
+  padding: 30px; /* Increased padding for a more spacious feel */
   max-width: 800px;
   margin: 20px auto;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px; /* Slightly more rounded corners */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Deeper shadow for more depth */
 }
 
 /* Button container styles */
@@ -47,15 +49,15 @@ main {
 }
 
 .shiny-cta {
-  background: #e0e0e0; /* Grey background */
+  background: #007bff; /* Changed to a more vibrant blue */
   border: none;
   border-radius: 25px; /* Rounded edges */
-  color: #333; /* Dark text color for contrast */
-  padding: 15px 20px;
+  color: white; /* White text for better contrast */
+  padding: 15px 25px; /* Increased padding for a more substantial button */
   text-align: center;
   text-decoration: none;
   font-size: 1em;
-  font-family: Arial, sans-serif; /* Sans-serif font */
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Sans-serif font */
   margin: 10px;
   transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
   cursor: pointer;
@@ -63,7 +65,7 @@ main {
 }
 
 .shiny-cta:hover {
-  background: #d0d0d0; /* Slightly darker grey on hover */
+  background: #0056b3; /* Darker blue on hover */
   transform: translateY(-2px);
   box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3), -4px -4px 15px rgba(255, 255, 255, 0.6);
 }
@@ -74,10 +76,12 @@ main {
   padding: 20px;
   background: #e9ecef;
   border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Added shadow for depth */
 }
 
 .info-section h2 {
   margin-bottom: 10px;
+  font-size: 1.8em; /* Increased font size for section headers */
 }
 
 .info-section p {
@@ -87,8 +91,8 @@ main {
 /* Footer styles */
 footer {
   text-align: center;
-  padding: 10px 0;
-  background: #007bff;
+  padding: 15px 0; /* Increased padding for a more spacious feel */
+  background: linear-gradient(135deg, #007bff, #0056b3); /* Gradient background */
   color: white;
   position: relative;
   bottom: 0;
@@ -97,4 +101,5 @@ footer {
 
 footer p {
   margin: 0;
+  font-size: 0.9em; /* Slightly smaller font size for footer text */
 }
