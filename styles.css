@@ -17,7 +17,7 @@ body {
 
 /* Header Styles */
 header {
-  background: rgba(0, 123, 255, 0.8); /* Added transparency for a better overlay effect */
+  background: rgba(140, 139, 143, 0.8); /* Added transparency for a better overlay effect */
   color: white;
   padding: 20px 0;
   text-align: center;
@@ -51,7 +51,7 @@ main {
 
 /* Button Styles */
 .shiny-cta {
-  background: #28a745;
+  background: #b1a0b1;
   border: none;
   border-radius: 5px;
   color: white;
@@ -70,7 +70,7 @@ main {
 }
 
 .shiny-cta:hover {
-  background: #218838;
+  background: #aca1ad;
   transform: scale(1.05);
 }
 
