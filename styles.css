@@ -83,7 +83,15 @@ main {
 .info-section h2 {
   margin-bottom: 15px;
 }
-
+.info-section {
+  background: #ffffff url('https://wallpapers.com/images/hd/call-of-duty-modern-warfare-alex-anajzi2cdr5ag61h.jpg') no-repeat center center;
+  background-size: cover;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  padding: 20px;
+  text-align: center;
+}
 /* Footer Styles */
 footer {
   text-align: center;
