@@ -1,128 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LAZACK ORGANISATION</title>
-    <meta property="og:image" content="https://home.lazackorganisation.my.id/img/img1.png" />
-    
-    <!-- Open Graph meta tags -->
-    <meta property="og:title" content="LAZACK PAIRING" />
-    <meta property="og:description" content="Lazack pairing page." />
-    <meta property="og:image" content="./mtaju.png" />
-    <meta property="og:url" content="https://lazackorganisation.my.id" />
-    <meta property="og:type" content="website" />
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7936121276332496"
-    crossorigin="anonymous"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-        }
-        header p {
-            margin: 5px 0 0;
-            font-size: 1.2rem;
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 30px 0;
-        }
-        .shiny-cta {
-            background-color: #4CAF50;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .shiny-cta a {
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-        }
-        .shiny-cta:hover {
-            background-color: #45a049;
-        }
-        .info-section {
-            text-align: center;
-            margin: 40px 20px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .info-section h2 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-        .info-section p {
-            font-size: 1rem;
-            margin: 10px 0;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            margin-top: 30px;
-        }
-        footer p {
-            margin: 0;
-            font-size: 0.9rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lazack Organisation</title>
+  <meta property="og:title" content="Lazack Organisation" />
+  <meta property="og:description" content="Smart Tech Solutions by Lazack." />
+  <meta property="og:image" content="https://home.lazackorganisation.my.id/img/img1.png" />
+  <meta property="og:url" content="https://lazackorganisation.my.id" />
+  <meta property="og:type" content="website" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7936121276332496"
+  crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --primary-color: #0f172a;
+      --accent-color: #10b981;
+      --button-hover: #059669;
+      --background-light: #f9fafb;
+      --text-light: #ffffff;
+      --text-dark: #1f2937;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--background-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: var(--text-light);
+      padding: 60px 20px 40px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+    }
+
+    .hero-message {
+      margin-top: 20px;
+      font-size: 1rem;
+      color: #d1d5db;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 30px 20px;
+    }
+
+    .shiny-cta {
+      background-color: var(--accent-color);
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .shiny-cta a {
+      text-decoration: none;
+      color: white;
+      font-weight: 600;
+    }
+
+    .shiny-cta:hover {
+      background-color: var(--button-hover);
+      transform: scale(1.03);
+    }
+
+    .info-section {
+      background-color: white;
+      margin: 40px 20px;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .info-section h2 {
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+
+    .info-section p {
+      font-size: 1rem;
+      margin: 10px 0 20px;
+    }
+
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+    }
+
+    footer p {
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>LAZACK PAIRING PAGE</h1>
-        <p>Used in Lazack Bots</p>
-    </header>
-    
-    <main>
-        <div class="button-container">
-            <button class="shiny-cta">
-                <a href="https://lazack-organisation.onrender.com/pair">Session ID</a>
-            </button>
-            <button class="shiny-cta">
-                <a href="https://whatsapp.com/channel/0029VaFytPbAojYm7RIs6l1x">Join Channel</a>
-            </button>
-            <button class="shiny-cta">
-                <a href="https://replit.com/@lazck22/LAZACK-ADVANCE-AND-DEVICE">Pairing Code</a>
-            </button>
-            <button class="shiny-cta">
-                <a href="https://github.com/lazack28">CEO & Owner</a>
-            </button>
-        </div>
+  <header>
+    <h1>LAZACK ORGANISATION</h1>
+    <p>Smart Tech | Automation | Growth</p>
+    <div class="hero-message">🚀 Empowering innovation with smart, reliable, and easy-to-use digital tools.</div>
+  </header>
 
-        <section class="info-section">
-            <h2>Get All Required Information</h2>
-            <p>For more resources and information, visit our home page:</p>
-            <button class="shiny-cta">
-                <a href="https://home.lazackorganisation.my.id">Home Page</a>
-            </button>
-            <p>If you have any questions, feel free to reach out through our channels.</p>
-        </section>
-    </main>
+  <main>
+    <div class="button-container">
+      <button class="shiny-cta">
+        <a href="https://lazack-organisation.onrender.com">Session ID</a>
+      </button>
+      <button class="shiny-cta">
+        <a href="https://whatsapp.com/channel/0029VaFytPbAojYm7RIs6l1x">Join Channel</a>
+      </button>
+      <button class="shiny-cta">
+        <a href="https://lazack-cred.onrender.com/pair">Pairing Code</a>
+      </button>
+      <button class="shiny-cta">
+        <a href="https://github.com/lazack28">CEO & Owner</a>
+      </button>
+    </div>
 
-    <footer>
-        <p>&copy; 2025 Lazack Pairing Page. All rights reserved.</p>
-    </footer>
+    <section class="info-section">
+      <h2>All the Resources You Need</h2>
+      <p>Need more tools or help? Visit our main website for tutorials and support.</p>
+      <button class="shiny-cta">
+        <a href="https://home.lazackorganisation.my.id">Visit Home Page</a>
+      </button>
+      <p>Still have questions? Reach out via our official channels.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Lazack Organisation. All rights reserved.</p>
+  </footer>
 </body>
 </html>
