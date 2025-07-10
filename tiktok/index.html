@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LzcTeam | Free TikTok Views</title>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(to bottom right, #1f1c2c, #928dab);
+      --primary-color: #ff416c;
+      --secondary-color: #ff4b2b;
+      --text-color: #ffffff;
+      --card-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1.2s ease;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtext {
+      font-size: 0.95em;
+      margin-bottom: 20px;
+      color: #cccccc;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95em;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: var(--primary-color);
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: var(--secondary-color);
+    }
+
+    .status {
+      margin-top: 20px;
+      font-size: 0.9em;
+    }
+
+    footer {
+      margin-top: 30px;
+      font-size: 0.8em;
+      color: #ccc;
+    }
+
+    footer strong {
+      color: #fff;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>LzcTeam</h1>
+    <p class="subtext">Get <strong>200 free TikTok views</strong> daily – powered by LazackOrganisation</p>
+
+    <form id="viewsForm">
+      <input type="url" id="link" placeholder="Enter your TikTok Video URL" required />
+      <input type="email" id="email" placeholder="Enter your Email Address" required />
+      <button type="submit">Send My Free Views</button>
+    </form>
+
+    <p id="status" class="status"></p>
+
+    <footer>
+      LazackOrganisation © 2025 <br />
+      Contact us: <strong>+255734980103</strong>
+    </footer>
+  </div>
+
+  <script>
+    const form = document.getElementById("viewsForm");
+    const status = document.getElementById("status");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      status.textContent = "⏳ Sending request...";
+
+      const email = document.getElementById("email").value.trim();
+      const link = document.getElementById("link").value.trim();
+
+      try {
+        const res = await fetch("/api/sendViews", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, link })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          status.textContent = "✅ Success! Check your email for confirmation.";
+          form.reset();
+        } else {
+          status.textContent = "❌ " + (data.error || "Something went wrong.");
+        }
+      } catch (err) {
+        status.textContent = "❌ Failed to connect to server.";
+      }
+    });
+  </script>
+</body>
+</html>
