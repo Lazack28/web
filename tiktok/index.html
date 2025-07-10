@@ -124,38 +124,38 @@
     </footer>
   </div>
 
-  <script>
-    const form = document.getElementById("viewsForm");
-    const status = document.getElementById("status");
+<script>
+  const form = document.getElementById("viewsForm");
+  const status = document.getElementById("status");
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      status.textContent = "⏳ Sending request...";
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    status.textContent = "⏳ Sending request...";
 
-      const email = document.getElementById("email").value.trim();
-      const link = document.getElementById("link").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const link = document.getElementById("link").value.trim();
 
-      try {
-        const res = await fetch("/api/sendViews", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ email, link })
-        });
+    try {
+      const res = await fetch("https://fastwaysmm.onrender.com/api/sendViews", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, link })
+      });
 
-        const data = await res.json();
+      const data = await res.json();
 
-        if (data.success) {
-          status.textContent = "✅ Success! Check your email for confirmation.";
-          form.reset();
-        } else {
-          status.textContent = "❌ " + (data.error || "Something went wrong.");
-        }
-      } catch (err) {
-        status.textContent = "❌ Failed to connect to server.";
+      if (data.success) {
+        status.textContent = "✅ Success! Check your email for confirmation.";
+        form.reset();
+      } else {
+        status.textContent = "❌ " + (data.error || "Something went wrong.");
       }
-    });
-  </script>
+    } catch (err) {
+      status.textContent = "❌ Failed to connect to server.";
+    }
+  });
+</script>
 </body>
 </html>
