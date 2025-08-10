@@ -51,16 +51,16 @@ async function pay() {
   const payload = {
     amount,
     currency,
-    redirect_url: 'https://lazackorganisation.my.id/thanks',  // replace with your URL
+    redirect_url: 'https://lazackorganisation.my.id/payment-success.html',  // your real redirect URL here
     buyer_email: email,
-    buyer_name: fname + ' ' + lname,
+    buyer_name: `${fname} ${lname}`,
     buyer_phone: phone
   };
 
   try {
     const res = await fetch('https://international-qw5v.onrender.com/create-payment', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
 
@@ -71,11 +71,16 @@ async function pay() {
     }
 
     const data = await res.json();
+    console.log('Payment response:', data);
+    if (!data.payment_url) {
+      alert('Payment failed: payment URL not found.');
+      return;
+    }
     window.location.href = data.payment_url;
   } catch (e) {
     alert('Error: ' + e.message);
   }
 }
-</script>
+  </script>
 </body>
   </html>
