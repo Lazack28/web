@@ -3,19 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Donate with love</title>
+<title>Donate with Love</title>
 <style>
   body { font-family: sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
   input, select, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 4px; border: 1px solid #ccc; font-size: 1rem; }
-  button { background: #007bff; color: white; border: none; cursor: pointer; }
-  button:hover { background: #0056b3; }
+  button { background: #e91e63; color: white; border: none; cursor: pointer; font-weight: bold; }
+  button:hover { background: #ad1457; }
 </style>
 </head>
 <body>
-<h2>Make Love Donation</h2>
+<h2>Make a Donation</h2>
 <input id="fname" placeholder="First Name" required />
 <input id="lname" placeholder="Last Name" required />
 <input id="email" type="email" placeholder="Email" required />
+<input id="phone" type="tel" placeholder="Phone Number" required />
 <input id="amount" type="number" placeholder="Amount" required min="1" step="any" />
 <select id="currency" required>
   <option value="" disabled selected>Select Currency</option>
@@ -30,31 +31,30 @@
   <option value="GBP">British Pound (GBP)</option>
   <option value="INR">Indian Rupee (INR)</option>
   <option value="CNY">Chinese Yuan (CNY)</option>
-  <!-- Add more currencies as needed -->
 </select>
-<button onclick="pay()">Pay Now</button>
+<button onclick="pay()">Donate with Love ❤️</button>
 
 <script>
 async function pay() {
   const fname = document.getElementById('fname').value.trim();
   const lname = document.getElementById('lname').value.trim();
   const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
   const amount = Number(document.getElementById('amount').value);
   const currency = document.getElementById('currency').value;
 
-  if (!fname || !lname || !email || !amount || amount <= 0 || !currency) {
-    alert('Please fill all fields correctly, including selecting a currency.');
+  if (!fname || !lname || !email || !phone || !amount || amount <= 0 || !currency) {
+    alert('Please fill all fields correctly.');
     return;
   }
 
   const payload = {
     amount,
     currency,
-    email,
-    first_name: fname,
-    last_name: lname,
-    redirect_url: 'https://lazackorganisation.my.id', // replace with your URL
-    cancel_url: 'https://lazackorganisation.my.id/international' // replace with your URL
+    redirect_url: 'https://yourwebsite.com/payment-success',  // replace with your URL
+    buyer_email: email,
+    buyer_name: fname + ' ' + lname,
+    buyer_phone: phone
   };
 
   try {
@@ -66,7 +66,7 @@ async function pay() {
 
     if (!res.ok) {
       const error = await res.json();
-      alert('Payment failed: ' + (error.error || 'Unknown error'));
+      alert('Donation failed: ' + (error.error || 'Unknown error'));
       return;
     }
 
