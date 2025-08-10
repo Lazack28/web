@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Donate with love</title>
+<style>
+  body { font-family: sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+  input, select, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 4px; border: 1px solid #ccc; font-size: 1rem; }
+  button { background: #007bff; color: white; border: none; cursor: pointer; }
+  button:hover { background: #0056b3; }
+</style>
+</head>
+<body>
+<h2>Make Love Donation</h2>
+<input id="fname" placeholder="First Name" required />
+<input id="lname" placeholder="Last Name" required />
+<input id="email" type="email" placeholder="Email" required />
+<input id="amount" type="number" placeholder="Amount" required min="1" step="any" />
+<select id="currency" required>
+  <option value="" disabled selected>Select Currency</option>
+  <option value="TZS">Tanzanian Shilling (TZS)</option>
+  <option value="USD">US Dollar (USD)</option>
+  <option value="KES">Kenyan Shilling (KES)</option>
+  <option value="UGX">Ugandan Shilling (UGX)</option>
+  <option value="ZAR">South African Rand (ZAR)</option>
+  <option value="NGN">Nigerian Naira (NGN)</option>
+  <option value="GHS">Ghanaian Cedi (GHS)</option>
+  <option value="EUR">Euro (EUR)</option>
+  <option value="GBP">British Pound (GBP)</option>
+  <option value="INR">Indian Rupee (INR)</option>
+  <option value="CNY">Chinese Yuan (CNY)</option>
+  <!-- Add more currencies as needed -->
+</select>
+<button onclick="pay()">Pay Now</button>
+
+<script>
+async function pay() {
+  const fname = document.getElementById('fname').value.trim();
+  const lname = document.getElementById('lname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const amount = Number(document.getElementById('amount').value);
+  const currency = document.getElementById('currency').value;
+
+  if (!fname || !lname || !email || !amount || amount <= 0 || !currency) {
+    alert('Please fill all fields correctly, including selecting a currency.');
+    return;
+  }
+
+  const payload = {
+    amount,
+    currency,
+    email,
+    first_name: fname,
+    last_name: lname,
+    redirect_url: 'https://lazackorganisation.my.id', // replace with your URL
+    cancel_url: 'https://lazackorganisation.my.id/international' // replace with your URL
+  };
+
+  try {
+    const res = await fetch('https://international-qw5v.onrender.com/create-payment', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      const error = await res.json();
+      alert('Payment failed: ' + (error.error || 'Unknown error'));
+      return;
+    }
+
+    const data = await res.json();
+    window.location.href = data.payment_url;
+  } catch (e) {
+    alert('Error: ' + e.message);
+  }
+}
+</script>
+</body>
+  </html>
