@@ -3,7 +3,146 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Thank You!</title>
+  <title>Thank You!</title<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Payment Received - Thank You!</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f8f9fa;
+      display: flex;
+      min-height: 100vh;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+    .container {
+      text-align: center;
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      max-width: 500px;
+      width: 90%;
+      margin: 20px;
+    }
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      color: #e91e63;
+    }
+    .success-icon {
+      font-size: 4rem;
+      color: #4caf50;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+    .confirmation-box {
+      background-color: #f8f9fa;
+      border-left: 4px solid #e91e63;
+      padding: 15px;
+      margin: 25px 0;
+      text-align: left;
+      border-radius: 0 5px 5px 0;
+    }
+    .confirmation-box h3 {
+      margin-top: 0;
+      color: #e91e63;
+    }
+    .whatsapp-button {
+      display: inline-block;
+      background-color: #25D366;
+      color: white;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 5px;
+      font-weight: bold;
+      margin: 10px 5px;
+      transition: background-color 0.3s;
+    }
+    .whatsapp-button:hover {
+      background-color: #128C7E;
+    }
+    .home-button {
+      display: inline-block;
+      background-color: #e91e63;
+      color: white;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 5px;
+      font-weight: bold;
+      margin: 10px 5px;
+      transition: background-color 0.3s;
+    }
+    .home-button:hover {
+      background-color: #c2185b;
+    }
+    .contact-info {
+      margin-top: 30px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="success-icon">✓</div>
+    <h1>Payment Received!</h1>
+    <p>Thank you for your payment. We've received your transaction.</p>
+    
+    <div class="confirmation-box">
+      <h3>Important Next Steps:</h3>
+      <p>To complete your payment verification and activate your account:</p>
+      <ol>
+        <li>Save your transaction receipt</li>
+        <li>Contact us via WhatsApp for confirmation</li>
+        <li>Provide your payment details when requested</li>
+      </ol>
+    </div>
+    
+    <a href="https://wa.me/255734980103" class="whatsapp-button">
+      Contact on WhatsApp
+    </a>
+    
+    <a href="https://boost.lazackorganisation.my.id" class="home-button">
+      Return to Homepage
+    </a>
+    
+    <div class="contact-info">
+      <p>For any issues, contact:<br>
+      <strong>+255 734 980 103</strong> (WhatsApp only)</p>
+    </div>
+  </div>
+
+  <script>
+    // Extract payment details from URL parameters if needed
+    const urlParams = new URLSearchParams(window.location.search);
+    const transactionId = urlParams.get('transaction_id');
+    const amount = urlParams.get('amount');
+    const currency = urlParams.get('currency');
+    
+    // You could use these parameters to display transaction details
+    // For example:
+    if (transactionId) {
+      const confirmationBox = document.querySelector('.confirmation-box');
+      if (confirmationBox) {
+        const detailsPara = document.createElement('p');
+        detailsPara.innerHTML = `<strong>Transaction ID:</strong> ${transactionId}<br>
+                                <strong>Amount:</strong> ${amount} ${currency}`;
+        confirmationBox.insertBefore(detailsPara, confirmationBox.firstChild);
+      }
+    }
+  </script>
+</body>
+</html>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
