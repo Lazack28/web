@@ -1,86 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Donate with Love</title>
-<style>
-  body { font-family: sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-  input, select, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 4px; border: 1px solid #ccc; font-size: 1rem; }
-  button { background: #e91e63; color: white; border: none; cursor: pointer; font-weight: bold; }
-  button:hover { background: #ad1457; }
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>International Payment Portal</title>
+    <style>
+        body { 
+            font-family: 'Arial', sans-serif; 
+            max-width: 500px; 
+            margin: 50px auto; 
+            padding: 25px; 
+            border: 1px solid #e0e0e0; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 { 
+            color: #2c3e50; 
+            text-align: center; 
+            margin-bottom: 25px;
+        }
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #e91e63;
+        }
+        .instructions ol {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        .contact-info {
+            background-color: #e8f4fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 8px 0; 
+            border-radius: 5px; 
+            border: 1px solid #ddd; 
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        button { 
+            width: 100%; 
+            padding: 14px; 
+            margin: 15px 0; 
+            border-radius: 5px; 
+            border: none; 
+            font-size: 1rem; 
+            font-weight: bold;
+            background: #e91e63; 
+            color: white; 
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover { 
+            background: #c2185b; 
+        }
+        .required:after {
+            content: " *";
+            color: red;
+        }
+        .currency-container {
+            display: flex;
+            align-items: center;
+        }
+        .currency-symbol {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<h2>Make a Donation</h2>
-<input id="fname" placeholder="First Name" required />
-<input id="lname" placeholder="Last Name" required />
-<input id="email" type="email" placeholder="Email" required />
-<input id="phone" type="tel" placeholder="Phone Number" required />
-<input id="amount" type="number" placeholder="Amount" required min="1" step="any" />
-<select id="currency" required>
-  <option value="" disabled selected>Select Currency</option>
-  <option value="TZS">Tanzanian Shilling (TZS)</option>
-  <option value="USD">US Dollar (USD)</option>
-  <option value="KES">Kenyan Shilling (KES)</option>
-  <option value="UGX">Ugandan Shilling (UGX)</option>
-  <option value="ZAR">South African Rand (ZAR)</option>
-  <option value="NGN">Nigerian Naira (NGN)</option>
-  <option value="GHS">Ghanaian Cedi (GHS)</option>
-  <option value="EUR">Euro (EUR)</option>
-  <option value="GBP">British Pound (GBP)</option>
-  <option value="INR">Indian Rupee (INR)</option>
-  <option value="CNY">Chinese Yuan (CNY)</option>
-</select>
-<button onclick="pay()">Donate with Love ❤️</button>
+    <h2>International Payment Portal</h2>
+    
+    <div class="instructions">
+        <h3>Payment Instructions:</h3>
+        <ol>
+            <li>Complete all fields below</li>
+            <li>Click "Proceed to Payment" button</li>
+            <li>Complete your payment through our secure gateway</li>
+            <li>Contact us for payment confirmation</li>
+        </ol>
+    </div>
+    
+    <div class="contact-info">
+        After payment, WhatsApp confirmation to:<br>
+        <a href="https://wa.me/255734980103" style="color: #e91e63; text-decoration: none;">+255 734 980 103</a>
+    </div>
+    
+    <label class="required">First Name</label>
+    <input id="fname" placeholder="Enter your first name" required />
+    
+    <label class="required">Last Name</label>
+    <input id="lname" placeholder="Enter your last name" required />
+    
+    <label class="required">Email</label>
+    <input id="email" type="email" placeholder="Enter your email address" required />
+    
+    <label class="required">Phone Number</label>
+    <input id="phone" type="tel" placeholder="Enter your phone number with country code" required />
+    
+    <label class="required">Amount</label>
+    <div class="currency-container">
+        <span class="currency-symbol" id="currencySymbol">$</span>
+        <input id="amount" type="number" placeholder="Enter amount" required min="1" step="any" />
+    </div>
+    
+    <label class="required">Currency</label>
+    <select id="currency" required onchange="updateCurrencySymbol()">
+        <option value="" disabled selected>Select your currency</option>
+        <option value="USD">US Dollar (USD)</option>
+        <option value="TZS">Tanzanian Shilling (TZS)</option>
+        <option value="KES">Kenyan Shilling (KES)</option>
+        <option value="UGX">Ugandan Shilling (UGX)</option>
+        <option value="ZAR">South African Rand (ZAR)</option>
+        <option value="NGN">Nigerian Naira (NGN)</option>
+        <option value="GHS">Ghanaian Cedi (GHS)</option>
+        <option value="EUR">Euro (EUR)</option>
+        <option value="GBP">British Pound (GBP)</option>
+        <option value="INR">Indian Rupee (INR)</option>
+        <option value="CNY">Chinese Yuan (CNY)</option>
+    </select>
+    
+    <button onclick="pay()">Proceed to Payment</button>
+    
+    <div style="text-align: center; margin-top: 20px; font-size: 0.9em; color: #666;">
+        You will be redirected to our secure payment gateway
+    </div>
 
-<script>
-async function pay() {
-  const fname = document.getElementById('fname').value.trim();
-  const lname = document.getElementById('lname').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const amount = Number(document.getElementById('amount').value);
-  const currency = document.getElementById('currency').value;
+    <script>
+        function updateCurrencySymbol() {
+            const currency = document.getElementById('currency').value;
+            const symbolMap = {
+                'USD': '$', 'TZS': 'TSh', 'KES': 'KSh', 'UGX': 'USh',
+                'ZAR': 'R', 'NGN': '₦', 'GHS': 'GH₵', 'EUR': '€',
+                'GBP': '£', 'INR': '₹', 'CNY': '¥'
+            };
+            document.getElementById('currencySymbol').textContent = symbolMap[currency] || '$';
+        }
 
-  if (!fname || !lname || !email || !phone || !amount || amount <= 0 || !currency) {
-    alert('Please fill all fields correctly.');
-    return;
-  }
+        async function pay() {
+            const fname = document.getElementById('fname').value.trim();
+            const lname = document.getElementById('lname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const amount = Number(document.getElementById('amount').value);
+            const currency = document.getElementById('currency').value;
 
-  const payload = {
-    amount,
-    currency,
-    redirect_url: 'https://lazackorganisation.my.id/thanks',  // your real redirect URL here
-    buyer_email: email,
-    buyer_name: `${fname} ${lname}`,
-    buyer_phone: phone
-  };
+            if (!fname || !lname || !email || !phone || !amount || amount <= 0 || !currency) {
+                alert('Please fill all required fields correctly.');
+                return;
+            }
 
-  try {
-    const res = await fetch('https://international-qw5v.onrender.com/create-payment', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+            const payload = {
+                amount,
+                currency,
+                redirect_url: 'https://boost.lazackorganisation.my.id/thank-you',
+                buyer_email: email,
+                buyer_name: `${fname} ${lname}`,
+                buyer_phone: phone
+            };
 
-    if (!res.ok) {
-      const error = await res.json();
-      alert('Donation failed: ' + (error.error || 'Unknown error'));
-      return;
-    }
+            try {
+                // Show loading state
+                const btn = document.querySelector('button');
+                btn.disabled = true;
+                btn.textContent = 'Processing...';
+                
+                const res = await fetch('https://international-qw5v.onrender.com/create-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-    const data = await res.json();
-    console.log('Payment response:', data);
-    if (!data.payment_url) {
-      alert('Payment failed: payment URL not found.');
-      return;
-    }
-    window.location.href = data.payment_url;
-  } catch (e) {
-    alert('Error: ' + e.message);
-  }
-}
-  </script>
+                if (!res.ok) {
+                    const error = await res.json();
+                    throw new Error(error.error || 'Payment failed. Please try again.');
+                }
+
+                const data = await res.json();
+                if (!data.payment_url) {
+                    throw new Error('Payment URL not found. Please contact support.');
+                }
+                
+                // Redirect to payment gateway
+                window.location.href = data.payment_url;
+                
+            } catch (e) {
+                alert('Error: ' + e.message);
+                const btn = document.querySelector('button');
+                btn.disabled = false;
+                btn.textContent = 'Proceed to Payment';
+            }
+        }
+    </script>
 </body>
-  </html>
+</html>
