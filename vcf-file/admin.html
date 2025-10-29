@@ -9,33 +9,37 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
   <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
     <h1 class="text-2xl font-bold mb-6 text-center">Admin Panel</h1>
 
     <!-- Login Section -->
     <div id="loginDiv" class="text-center mb-4">
-      <button id="googleLoginBtn" class="bg-red-500 text-white p-2 rounded hover:bg-red-600">Login with Google</button>
+      <button id="googleLoginBtn" class="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-full">Login with Google</button>
       <p id="loginMessage" class="mt-2 text-red-500"></p>
     </div>
 
     <!-- Admin Panel -->
-    <div id="adminPanel" class="hidden">
-      <p class="text-center mb-4" id="welcomeMsg"></p>
-      <button id="logoutBtn" class="w-full bg-gray-500 text-white p-2 rounded hover:bg-gray-600 mb-4">Logout</button>
+    <div id="adminPanel" class="hidden space-y-4">
+      <p class="text-center text-lg font-semibold" id="welcomeMsg"></p>
+      <button id="logoutBtn" class="w-full bg-gray-500 text-white p-2 rounded hover:bg-gray-600">Logout</button>
 
-      <div class="mb-4">
-        <button id="checkStatus" class="w-full bg-gray-500 text-white p-2 rounded hover:bg-gray-600">Check Registration Status</button>
-        <p id="registrationStatus" class="mt-2 text-center font-semibold"></p>
+      <div class="flex flex-col gap-2">
+        <button id="checkStatus" class="bg-gray-500 text-white p-2 rounded hover:bg-gray-600">Check Registration Status</button>
+        <p id="registrationStatus" class="text-center font-semibold"></p>
       </div>
 
-      <div class="mb-4 flex gap-2">
+      <div class="flex gap-2">
         <button id="openReg" class="flex-1 bg-green-500 text-white p-2 rounded hover:bg-green-600">Open Registration</button>
         <button id="closeReg" class="flex-1 bg-red-500 text-white p-2 rounded hover:bg-red-600">Close Registration</button>
       </div>
 
-      <div class="mb-4">
-        <input type="text" id="fileName" placeholder="VCF file name" class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-        <button id="downloadFile" class="w-full bg-blue-500 text-white p-2 rounded mt-2 hover:bg-blue-600">Download & Auto-Delete</button>
+      <div class="flex flex-col gap-2">
+        <button id="downloadLatest" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Download Latest VCF</button>
+        <select id="fileList" class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <option value="">-- Select a VCF file --</option>
+        </select>
+        <button id="downloadSelected" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Download Selected VCF</button>
         <p id="downloadLink" class="mt-2 text-center break-all"></p>
       </div>
     </div>
@@ -43,13 +47,11 @@
 
   <script>
     const backendUrl = 'https://vcf-backend.onrender.com';
-
-    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyDPOAvVsquRV_UCJXWbO4ArhFOeoTG6aSI",
       authDomain: "mod-apk-unlimited.firebaseapp.com",
       projectId: "mod-apk-unlimited",
-      storageBucket: "mod-apk-unlimited.firebasestorage.app",
+      storageBucket: "mod-apk-unlimited.appspot.com",
       messagingSenderId: "400394122333",
       appId: "1:400394122333:web:183ded7ea62bd7f86749b4",
       measurementId: "G-8VCQGMD0HF"
@@ -57,13 +59,16 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    const ADMIN_EMAIL = "lazaromtaju12@gmail.com"; // Replace with your admin email
+    const ADMIN_EMAIL = "lazaromtaju12@gmail.com"; // Admin email
     let idToken = null;
 
     const loginDiv = document.getElementById('loginDiv');
     const adminPanel = document.getElementById('adminPanel');
     const loginMessage = document.getElementById('loginMessage');
     const welcomeMsg = document.getElementById('welcomeMsg');
+    const registrationStatus = document.getElementById('registrationStatus');
+    const downloadLink = document.getElementById('downloadLink');
+    const fileList = document.getElementById('fileList');
 
     // Google login
     document.getElementById('googleLoginBtn').addEventListener('click', async () => {
@@ -80,6 +85,8 @@
         loginDiv.classList.add('hidden');
         adminPanel.classList.remove('hidden');
         welcomeMsg.textContent = `Welcome, ${user.displayName}`;
+        loadFileList(); // Load available VCF files on login
+        checkStatus(); // Show registration status immediately
       } catch (err) {
         console.error(err);
         loginMessage.textContent = err.message;
@@ -93,6 +100,7 @@
       adminPanel.classList.add('hidden');
       loginDiv.classList.remove('hidden');
       loginMessage.textContent = "";
+      downloadLink.textContent = "";
     });
 
     // Check registration status
@@ -100,10 +108,10 @@
       try {
         const res = await fetch(`${backendUrl}/settings`);
         const data = await res.json();
-        document.getElementById('registrationStatus').textContent = data.registrationOpen ? "✅ Registration OPEN" : "❌ Registration CLOSED";
+        registrationStatus.textContent = data.registrationOpen ? "✅ Registration OPEN" : "❌ Registration CLOSED";
       } catch (err) {
         console.error(err);
-        document.getElementById('registrationStatus').textContent = "Error fetching status";
+        registrationStatus.textContent = "Error fetching status";
       }
     }
     document.getElementById('checkStatus').addEventListener('click', checkStatus);
@@ -117,30 +125,64 @@
           body: JSON.stringify({ open })
         });
         const text = await res.text();
-        document.getElementById('registrationStatus').textContent = text;
+        registrationStatus.textContent = text;
       } catch (err) {
         console.error(err);
-        document.getElementById('registrationStatus').textContent = "Error updating registration";
+        registrationStatus.textContent = "Error updating registration";
       }
     }
     document.getElementById('openReg').addEventListener('click', () => toggleRegistration(true));
     document.getElementById('closeReg').addEventListener('click', () => toggleRegistration(false));
 
-    // Download VCF
-    document.getElementById('downloadFile').addEventListener('click', async () => {
-      const fileName = document.getElementById('fileName').value.trim();
-      if (!fileName) return alert("Enter a file name");
+    // Download latest VCF
+    document.getElementById('downloadLatest').addEventListener('click', async () => {
       try {
-        const res = await fetch(`${backendUrl}/admin/download?file=${fileName}`, {
+        const res = await fetch(`${backendUrl}/admin/download-latest`, {
           headers: { 'Authorization': 'Bearer ' + idToken }
         });
         const data = await res.json();
-        document.getElementById('downloadLink').innerHTML = `<a href="${data.downloadUrl}" target="_blank" class="text-blue-500 underline">Download VCF</a>`;
+        downloadLink.innerHTML = `<a href="${data.downloadUrl}" target="_blank" class="text-blue-500 underline">Download ${data.fileName}</a>`;
       } catch (err) {
         console.error(err);
-        document.getElementById('downloadLink').textContent = "Error fetching download link";
+        downloadLink.textContent = "Error fetching latest VCF";
       }
     });
+
+    // Load available files into dropdown
+    async function loadFileList() {
+      try {
+        const res = await fetch(`${backendUrl}/admin/files`, {
+          headers: { 'Authorization': 'Bearer ' + idToken }
+        });
+        const files = await res.json();
+        fileList.innerHTML = '<option value="">-- Select a VCF file --</option>';
+        files.forEach(f => {
+          const opt = document.createElement('option');
+          opt.value = f;
+          opt.textContent = f;
+          fileList.appendChild(opt);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // Download selected VCF
+    document.getElementById('downloadSelected').addEventListener('click', async () => {
+      const selectedFile = fileList.value;
+      if (!selectedFile) return alert("Select a file");
+      try {
+        const res = await fetch(`${backendUrl}/admin/download?file=${selectedFile}`, {
+          headers: { 'Authorization': 'Bearer ' + idToken }
+        });
+        const data = await res.json();
+        downloadLink.innerHTML = `<a href="${data.downloadUrl}" target="_blank" class="text-blue-500 underline">Download ${selectedFile}</a>`;
+      } catch (err) {
+        console.error(err);
+        downloadLink.textContent = "Error fetching download link";
+      }
+    });
+
   </script>
 </body>
-</html>
+          </html>
