@@ -36,10 +36,12 @@
 
       <div class="flex flex-col gap-2">
         <button id="downloadLatest" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Download Latest VCF</button>
+
         <select id="fileList" class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
           <option value="">-- Select a VCF file --</option>
         </select>
         <button id="downloadSelected" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Download Selected VCF</button>
+
         <p id="downloadLink" class="mt-2 text-center break-all"></p>
       </div>
     </div>
@@ -60,7 +62,7 @@
     const auth = firebase.auth();
 
     const ADMIN_EMAIL = "lazaromtaju12@gmail.com"; // Admin email
-    let idToken = null;
+    let currentUser = null;
 
     const loginDiv = document.getElementById('loginDiv');
     const adminPanel = document.getElementById('adminPanel');
@@ -69,6 +71,12 @@
     const registrationStatus = document.getElementById('registrationStatus');
     const downloadLink = document.getElementById('downloadLink');
     const fileList = document.getElementById('fileList');
+
+    // Helper to get a fresh token
+    async function getIdToken() {
+      if (!currentUser) throw new Error("Not logged in");
+      return await currentUser.getIdToken(true); // refresh token
+    }
 
     // Google login
     document.getElementById('googleLoginBtn').addEventListener('click', async () => {
@@ -81,12 +89,12 @@
           await auth.signOut();
           return;
         }
-        idToken = await user.getIdToken();
+        currentUser = user;
         loginDiv.classList.add('hidden');
         adminPanel.classList.remove('hidden');
         welcomeMsg.textContent = `Welcome, ${user.displayName}`;
-        loadFileList(); // Load available VCF files on login
-        checkStatus(); // Show registration status immediately
+        loadFileList();
+        checkStatus();
       } catch (err) {
         console.error(err);
         loginMessage.textContent = err.message;
@@ -96,7 +104,7 @@
     // Logout
     document.getElementById('logoutBtn').addEventListener('click', async () => {
       await auth.signOut();
-      idToken = null;
+      currentUser = null;
       adminPanel.classList.add('hidden');
       loginDiv.classList.remove('hidden');
       loginMessage.textContent = "";
@@ -119,9 +127,10 @@
     // Toggle registration
     async function toggleRegistration(open) {
       try {
+        const token = await getIdToken();
         const res = await fetch(`${backendUrl}/admin/toggleRegistration`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
           body: JSON.stringify({ open })
         });
         const text = await res.text();
@@ -137,8 +146,9 @@
     // Download latest VCF
     document.getElementById('downloadLatest').addEventListener('click', async () => {
       try {
+        const token = await getIdToken();
         const res = await fetch(`${backendUrl}/admin/download-latest`, {
-          headers: { 'Authorization': 'Bearer ' + idToken }
+          headers: { 'Authorization': 'Bearer ' + token }
         });
         const data = await res.json();
         downloadLink.innerHTML = `<a href="${data.downloadUrl}" target="_blank" class="text-blue-500 underline">Download ${data.fileName}</a>`;
@@ -151,8 +161,9 @@
     // Load available files into dropdown
     async function loadFileList() {
       try {
+        const token = await getIdToken();
         const res = await fetch(`${backendUrl}/admin/files`, {
-          headers: { 'Authorization': 'Bearer ' + idToken }
+          headers: { 'Authorization': 'Bearer ' + token }
         });
         const files = await res.json();
         fileList.innerHTML = '<option value="">-- Select a VCF file --</option>';
@@ -172,8 +183,9 @@
       const selectedFile = fileList.value;
       if (!selectedFile) return alert("Select a file");
       try {
+        const token = await getIdToken();
         const res = await fetch(`${backendUrl}/admin/download?file=${selectedFile}`, {
-          headers: { 'Authorization': 'Bearer ' + idToken }
+          headers: { 'Authorization': 'Bearer ' + token }
         });
         const data = await res.json();
         downloadLink.innerHTML = `<a href="${data.downloadUrl}" target="_blank" class="text-blue-500 underline">Download ${selectedFile}</a>`;
@@ -182,7 +194,6 @@
         downloadLink.textContent = "Error fetching download link";
       }
     });
-
   </script>
 </body>
-          </html>
+  </html>
