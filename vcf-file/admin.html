@@ -10,22 +10,17 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
   <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
-    <h1 class="text-2xl font-bold mb-6 text-center">Admin Login</h1>
+    <h1 class="text-2xl font-bold mb-6 text-center">Admin Panel</h1>
 
-    <!-- Login Form -->
-    <div id="loginDiv" class="space-y-4">
-      <input type="email" id="email" placeholder="Admin Email" required
-        class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <input type="password" id="password" placeholder="Password" required
-        class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <button id="loginBtn" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Login</button>
-      <p id="loginMessage" class="text-center text-red-500"></p>
+    <!-- Login Section -->
+    <div id="loginDiv" class="text-center mb-4">
+      <button id="googleLoginBtn" class="bg-red-500 text-white p-2 rounded hover:bg-red-600">Login with Google</button>
+      <p id="loginMessage" class="mt-2 text-red-500"></p>
     </div>
 
     <!-- Admin Panel -->
     <div id="adminPanel" class="hidden">
-      <h2 class="text-xl font-bold mb-4 text-center">Admin Panel</h2>
-
+      <p class="text-center mb-4" id="welcomeMsg"></p>
       <button id="logoutBtn" class="w-full bg-gray-500 text-white p-2 rounded hover:bg-gray-600 mb-4">Logout</button>
 
       <div class="mb-4">
@@ -49,7 +44,7 @@
   <script>
     const backendUrl = 'https://vcf-backend.onrender.com';
 
-    // 🔹 Firebase config
+    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyDPOAvVsquRV_UCJXWbO4ArhFOeoTG6aSI",
       authDomain: "mod-apk-unlimited.firebaseapp.com",
@@ -62,33 +57,36 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
+    const ADMIN_EMAIL = "<ADMIN_EMAIL>"; // Replace with your admin email
+    let idToken = null;
+
     const loginDiv = document.getElementById('loginDiv');
     const adminPanel = document.getElementById('adminPanel');
     const loginMessage = document.getElementById('loginMessage');
-    let idToken = null;
-    const ADMIN_EMAIL = "lazaromtaju12@gmail.com"; // Replace with your admin email
+    const welcomeMsg = document.getElementById('welcomeMsg');
 
-    // 🔹 Login
-    document.getElementById('loginBtn').addEventListener('click', async () => {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
+    // Google login
+    document.getElementById('googleLoginBtn').addEventListener('click', async () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
       try {
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        if (email !== ADMIN_EMAIL) {
+        const result = await auth.signInWithPopup(provider);
+        const user = result.user;
+        if (user.email !== ADMIN_EMAIL) {
           loginMessage.textContent = "Unauthorized email";
           await auth.signOut();
           return;
         }
-        idToken = await userCredential.user.getIdToken();
+        idToken = await user.getIdToken();
         loginDiv.classList.add('hidden');
         adminPanel.classList.remove('hidden');
+        welcomeMsg.textContent = `Welcome, ${user.displayName}`;
       } catch (err) {
         console.error(err);
         loginMessage.textContent = err.message;
       }
     });
 
-    // 🔹 Logout
+    // Logout
     document.getElementById('logoutBtn').addEventListener('click', async () => {
       await auth.signOut();
       idToken = null;
@@ -97,7 +95,7 @@
       loginMessage.textContent = "";
     });
 
-    // 🔹 Admin actions
+    // Check registration status
     async function checkStatus() {
       try {
         const res = await fetch(`${backendUrl}/settings`);
@@ -110,6 +108,7 @@
     }
     document.getElementById('checkStatus').addEventListener('click', checkStatus);
 
+    // Toggle registration
     async function toggleRegistration(open) {
       try {
         const res = await fetch(`${backendUrl}/admin/toggleRegistration`, {
@@ -127,6 +126,7 @@
     document.getElementById('openReg').addEventListener('click', () => toggleRegistration(true));
     document.getElementById('closeReg').addEventListener('click', () => toggleRegistration(false));
 
+    // Download VCF
     document.getElementById('downloadFile').addEventListener('click', async () => {
       const fileName = document.getElementById('fileName').value.trim();
       if (!fileName) return alert("Enter a file name");
@@ -143,4 +143,4 @@
     });
   </script>
 </body>
-          </html>
+</html>
