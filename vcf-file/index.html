@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VCF Registration</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-6 text-center">Register Your Contact</h1>
+
+    <div id="statusMessage" class="text-red-500 mb-4 text-center"></div>
+
+    <form id="contactForm" class="space-y-4">
+      <input type="text" id="name" placeholder="Full Name" required
+        class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+      <input type="tel" id="number" placeholder="+1234567890" required
+        pattern="^\+[1-9]\d{1,14}$"
+        class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+      <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+        Submit
+      </button>
+    </form>
+
+    <div id="responseMessage" class="mt-4 text-center"></div>
+  </div>
+
+  <script>
+    const backendUrl = 'https://vcf-backend.onrender.com';
+
+    const statusMessage = document.getElementById('statusMessage');
+    const responseMessage = document.getElementById('responseMessage');
+    const contactForm = document.getElementById('contactForm');
+
+    // Check registration status
+    async function checkRegistration() {
+      try {
+        const res = await fetch(`${backendUrl}/settings`);
+        const data = await res.json();
+        if (!data.registrationOpen) {
+          statusMessage.textContent = "Registration is currently CLOSED.";
+          contactForm.querySelector('button').disabled = true;
+          contactForm.querySelector('button').classList.add('bg-gray-400', 'cursor-not-allowed');
+        }
+      } catch (err) {
+        console.error(err);
+        statusMessage.textContent = "Could not check registration status.";
+      }
+    }
+
+    checkRegistration();
+
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const number = document.getElementById('number').value.trim();
+      const intlPhoneRegex = /^\+[1-9]\d{1,14}$/;
+
+      if (!intlPhoneRegex.test(number)) {
+        responseMessage.textContent = "Please enter a valid international phone number.";
+        responseMessage.classList.add('text-red-500');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${backendUrl}/addContact`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, number })
+        });
+
+        if (res.status === 200) {
+          responseMessage.textContent = "✅ Contact submitted successfully!";
+          responseMessage.classList.remove('text-red-500');
+          responseMessage.classList.add('text-green-500');
+          contactForm.reset();
+        } else {
+          const text = await res.text();
+          responseMessage.textContent = "❌ " + text;
+          responseMessage.classList.remove('text-green-500');
+          responseMessage.classList.add('text-red-500');
+        }
+      } catch (err) {
+        console.error(err);
+        responseMessage.textContent = "❌ Could not submit contact.";
+        responseMessage.classList.add('text-red-500');
+      }
+    });
+  </script>
+</body>
+      </html>
