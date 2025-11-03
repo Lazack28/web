@@ -1,464 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Your Contact - VCF Generator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #dbeafe;
-            --success: #10b981;
-            --error: #ef4444;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-500: #6b7280;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --radius: 8px;
-            --transition: all 0.3s ease;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register Your Contact - VCF Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #dbeafe;
+  --success: #10b981;
+  --error: #ef4444;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-500: #6b7280;
+  --gray-700: #374151;
+  --gray-900: #111827;
+  --radius: 8px;
+  --transition: all 0.3s ease;
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--gray-50);
-            color: var(--gray-900);
-            line-height: 1.5;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 480px;
-            margin: 0 auto;
-        }
-
-        .card {
-            background-color: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            transition: var(--transition);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .header h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 0.5rem;
-        }
-
-        .header p {
-            color: var(--gray-500);
-            font-size: 1rem;
-        }
-
-        .counter {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--primary-light);
-            color: var(--primary);
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius);
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .counter:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .counter-icon {
-            margin-right: 0.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: var(--gray-700);
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--gray-200);
-            border-radius: var(--radius);
-            font-size: 1rem;
-            transition: var(--transition);
-            background-color: white;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .input-field::placeholder {
-            color: var(--gray-500);
-        }
-
-        .submit-btn {
-            width: 100%;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: var(--radius);
-            padding: 0.875rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .submit-btn:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .submit-btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-
-        .submit-btn:disabled {
-            background-color: var(--gray-500);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .btn-icon {
-            margin-right: 0.5rem;
-        }
-
-        .message {
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius);
-            margin-top: 1rem;
-            font-weight: 500;
-            text-align: center;
-            display: none;
-        }
-
-        .message.success {
-            background-color: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            display: block;
-        }
-
-        .message.error {
-            background-color: rgba(239, 68, 68, 0.1);
-            color: var(--error);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            display: block;
-        }
-
-        .whatsapp-section {
-            text-align: center;
-            padding: 1.5rem;
-            background-color: var(--gray-50);
-            border-radius: var(--radius);
-            margin-top: 1.5rem;
-        }
-
-        .whatsapp-section h3 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: var(--gray-900);
-        }
-
-        .whatsapp-section p {
-            color: var(--gray-500);
-            margin-bottom: 1rem;
-        }
-
-        .whatsapp-btn {
-            display: inline-flex;
-            align-items: center;
-            background-color: #25D366;
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius);
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .whatsapp-btn:hover {
-            background-color: #128C7E;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .whatsapp-btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.3);
-        }
-
-        .whatsapp-icon {
-            margin-right: 0.5rem;
-        }
-
-        .footer {
-            text-align: center;
-            color: var(--gray-500);
-            font-size: 0.875rem;
-            margin-top: 1.5rem;
-        }
-
-        @media (max-width: 480px) {
-            .card {
-                padding: 1.5rem;
-            }
-            
-            .header h1 {
-                font-size: 1.5rem;
-            }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+body { font-family: 'Inter', sans-serif; background-color: var(--gray-50); min-height:100vh; display:flex; justify-content:center; align-items:center; padding:1rem; }
+.container { max-width:480px; width:100%; }
+.card { background:white; border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:2rem; }
+.header { text-align:center; margin-bottom:2rem; }
+.header h1 { font-size:1.75rem; font-weight:700; color:var(--gray-900); margin-bottom:0.5rem; }
+.header p { color:var(--gray-500); font-size:1rem; }
+.counter { display:flex; justify-content:center; align-items:center; background:var(--primary-light); color:var(--primary); padding:0.75rem 1.5rem; border-radius:var(--radius); font-weight:600; margin-bottom:1.5rem; }
+.form-group { margin-bottom:1.5rem; }
+label { display:block; margin-bottom:0.5rem; font-weight:500; color:var(--gray-700); }
+.input-field { width:100%; padding:0.75rem 1rem; border:1px solid var(--gray-200); border-radius:var(--radius); font-size:1rem; transition:var(--transition); }
+.input-field:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,0.1); }
+.submit-btn { width:100%; background:var(--primary); color:white; border:none; border-radius:var(--radius); padding:0.875rem 1.5rem; font-weight:600; cursor:pointer; transition:var(--transition); }
+.submit-btn:hover { background:var(--primary-dark); transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.message { padding:0.75rem 1rem; border-radius:var(--radius); margin-top:1rem; font-weight:500; text-align:center; display:none; }
+.message.success { background-color: rgba(16,185,129,0.1); color:var(--success); border:1px solid rgba(16,185,129,0.2); display:block; }
+.message.error { background-color: rgba(239,68,68,0.1); color:var(--error); border:1px solid rgba(239,68,68,0.2); display:block; }
+.whatsapp-section { text-align:center; padding:1.5rem; background:var(--gray-50); border-radius:var(--radius); margin-top:1.5rem; }
+.whatsapp-btn { display:inline-flex; align-items:center; background-color:#25D366; color:white; text-decoration:none; padding:0.75rem 1.5rem; border-radius:var(--radius); font-weight:600; transition:var(--transition); }
+.whatsapp-btn:hover { background-color:#128C7E; transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.footer { text-align:center; color:var(--gray-500); font-size:0.875rem; margin-top:1.5rem; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="card fade-in">
-            <div class="header">
-                <h1>Register Your Contact</h1>
-                <p>Add your details to receive VCF files</p>
-            </div>
-            
-            <div class="counter">
-                <span class="counter-icon">📱</span>
-                <span id="contactCount">Loading registered contacts...</span>
-            </div>
-            
-            <form id="contactForm">
-                <div class="form-group">
-                    <label for="fullName">Full Name</label>
-                    <input 
-                        type="text" 
-                        id="fullName" 
-                        class="input-field" 
-                        placeholder="John Doe" 
-                        required
-                    >
-                </div>
-                
-                <div class="form-group">
-                    <label for="phoneNumber">Phone Number</label>
-                    <input 
-                        type="tel" 
-                        id="phoneNumber" 
-                        class="input-field" 
-                        placeholder="+1234567890 (International format)" 
-                        required
-                    >
-                    <small style="color: var(--gray-500); margin-top: 0.25rem; display: block;">
-                        Must start with + followed by country code
-                    </small>
-                </div>
-                
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <span class="btn-icon">✓</span>
-                    Register Contact
-                </button>
-                
-                <div id="message" class="message"></div>
-            </form>
-            
-            <div class="whatsapp-section fade-in">
-                <h3>Join Our WhatsApp Channel</h3>
-                <p>Get updates and receive your VCF files directly</p>
-                <a href="https://whatsapp.com/channel/0029ValRlNGCXC3EussN4b2E" target="_blank" class="whatsapp-btn">
-                    <span class="whatsapp-icon">📱</span>
-                    Join Channel
-                </a>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>VCF Contact Registration &copy; 2023</p>
-        </div>
+<div class="container">
+  <div class="card">
+    <div class="header">
+      <h1>Register Your Contact</h1>
+      <p>Add your details to receive VCF files</p>
     </div>
 
-    <script>
-        // Backend URL
-        const backendUrl = 'https://vcf-backend.onrender.com';
-        
-        // DOM elements
-        const contactForm = document.getElementById('contactForm');
-        const fullNameInput = document.getElementById('fullName');
-        const phoneNumberInput = document.getElementById('phoneNumber');
-        const submitBtn = document.getElementById('submitBtn');
-        const messageEl = document.getElementById('message');
-        const contactCountEl = document.getElementById('contactCount');
-        
-        // Update contact count on page load
-        async function updateContactCount() {
-            try {
-                const response = await fetch(`${backendUrl}/count`);
-                const data = await response.json();
-                
-                if (response.ok) {
-                    contactCountEl.textContent = `Total Registered Contacts: ${data.total}`;
-                } else {
-                    contactCountEl.textContent = "Unable to fetch contact count";
-                }
-            } catch (error) {
-                console.error("Error fetching contact count:", error);
-                contactCountEl.textContent = "Error loading contact count";
-            }
-        }
-        
-        // Check if registration is open
-        async function isRegistrationOpen() {
-            try {
-                const response = await fetch(`${backendUrl}/settings`);
-                const data = await response.json();
-                return data.registrationOpen;
-            } catch (error) {
-                console.error("Error checking registration status:", error);
-                return false;
-            }
-        }
-        
-        // Handle form submission
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            // Get form values
-            const name = fullNameInput.value.trim();
-            const number = phoneNumberInput.value.trim();
-            
-            // Validate inputs
-            if (!name || !number) {
-                showMessage('Please enter both name and phone number.', 'error');
-                return;
-            }
-            
-            // Validate phone number format
-            if (!number.startsWith('+')) {
-                showMessage('Phone number must start with + (e.g., +1234567890)', 'error');
-                return;
-            }
-            
-            // Check if registration is open
-            const registrationOpen = await isRegistrationOpen();
-            if (!registrationOpen) {
-                showMessage('Registration is currently closed. Please try again later.', 'error');
-                return;
-            }
-            
-            // Disable submit button
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Registering...';
-            
-            try {
-                // Send data to backend
-                const response = await fetch(`${backendUrl}/addContact`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ name, number })
-                });
-                
-                if (response.ok) {
-                    showMessage('Contact registered successfully! Redirecting to WhatsApp...', 'success');
-                    
-                    // Clear form
-                    contactForm.reset();
-                    
-                    // Update contact count
-                    updateContactCount();
-                    
-                    // Redirect to WhatsApp after delay
-                    setTimeout(() => {
-                        window.location.href = 'https://whatsapp.com/channel/0029ValRlNGCXC3EussN4b2E';
-                    }, 2000);
-                } else {
-                    const errorText = await response.text();
-                    showMessage(`Error: ${errorText}`, 'error');
-                }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                showMessage('Server error. Please try again later.', 'error');
-            } finally {
-                // Re-enable submit button
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<span class="btn-icon">✓</span> Register Contact';
-            }
-        });
-        
-        // Show message function
-        function showMessage(text, type) {
-            messageEl.textContent = text;
-            messageEl.className = 'message';
-            messageEl.classList.add(type);
-            
-            // Auto-hide success messages after 5 seconds
-            if (type === 'success') {
-                setTimeout(() => {
-                    messageEl.style.display = 'none';
-                }, 5000);
-            }
-        }
-        
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', () => {
-            updateContactCount();
-        });
-    </script>
+    <div class="counter">
+      <span class="counter-icon">📱</span>
+      <span id="contactCount">Loading registered contacts...</span>
+    </div>
+
+    <form id="contactForm">
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" class="input-field" placeholder="John Doe" required>
+      </div>
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="tel" id="phoneNumber" class="input-field" placeholder="+1234567890" required>
+        <small style="color: var(--gray-500); display:block; margin-top:0.25rem;">Must start with + followed by country code</small>
+      </div>
+      <button type="submit" class="submit-btn" id="submitBtn">Register Contact</button>
+      <div id="message" class="message"></div>
+    </form>
+
+    <div class="whatsapp-section">
+      <h3>Join Our WhatsApp Channel</h3>
+      <p>Get updates and receive your VCF files directly</p>
+      <a href="https://whatsapp.com/channel/0029ValRlNGCXC3EussN4b2E" target="_blank" class="whatsapp-btn">📱 Join Channel</a>
+    </div>
+  </div>
+  <div class="footer">VCF Contact Registration &copy; 2023</div>
+</div>
+
+<script>
+const backendUrl = 'https://vcf-backend.onrender.com';
+const contactForm = document.getElementById('contactForm');
+const fullNameInput = document.getElementById('fullName');
+const phoneNumberInput = document.getElementById('phoneNumber');
+const submitBtn = document.getElementById('submitBtn');
+const messageEl = document.getElementById('message');
+const contactCountEl = document.getElementById('contactCount');
+
+async function updateContactCount() {
+  try {
+    const res = await fetch(`${backendUrl}/count`);
+    const data = await res.json();
+    contactCountEl.textContent = `Total Registered Contacts: ${data.total ?? 0}`;
+  } catch (err) {
+    console.error(err);
+    contactCountEl.textContent = "Error loading contact count";
+  }
+}
+
+async function isRegistrationOpen() {
+  try {
+    const res = await fetch(`${backendUrl}/settings`);
+    const data = await res.json();
+    return data.registrationOpen;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
+
+contactForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = fullNameInput.value.trim();
+  const number = phoneNumberInput.value.trim();
+
+  if (!name || !number) {
+    showMessage('Please enter both name and phone number.', 'error');
+    return;
+  }
+
+  if (!number.startsWith('+')) {
+    showMessage('Phone number must start with +', 'error');
+    return;
+  }
+
+  const registrationOpen = await isRegistrationOpen();
+  if (!registrationOpen) {
+    showMessage('Registration is currently closed.', 'error');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Registering...';
+
+  try {
+    const res = await fetch(`${backendUrl}/addContact`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, number })
+    });
+
+    const text = await res.text();
+
+    if (res.ok) {
+      showMessage('Contact registered successfully! Redirecting...', 'success');
+      contactForm.reset();
+      updateContactCount();
+      setTimeout(() => {
+        window.location.href = 'https://whatsapp.com/channel/0029ValRlNGCXC3EussN4b2E';
+      }, 2000);
+    } else {
+      showMessage(text, 'error');
+    }
+  } catch (err) {
+    console.error(err);
+    showMessage('Server error. Try again later.', 'error');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Register Contact';
+  }
+});
+
+function showMessage(msg, type) {
+  messageEl.textContent = msg;
+  messageEl.className = 'message';
+  messageEl.classList.add(type);
+  messageEl.style.display = 'block';
+  if (type === 'success') setTimeout(() => { messageEl.style.display = 'none'; }, 5000);
+}
+
+document.addEventListener('DOMContentLoaded', updateContactCount);
+</script>
 </body>
-  </html>
+</html>
