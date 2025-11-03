@@ -3,46 +3,375 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel - VCF</title>
+  <title>Admin Panel - VCF Management</title>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #dbeafe;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-500: #6b7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 8px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      color: var(--gray-500);
+      font-size: 1rem;
+    }
+
+    .login-section {
+      text-align: center;
+    }
+
+    .google-login-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      background-color: white;
+      color: var(--gray-700);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius);
+      padding: 0.875rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 1rem;
+    }
+
+    .google-login-btn:hover {
+      background-color: var(--gray-50);
+      box-shadow: var(--shadow-md);
+    }
+
+    .google-login-btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.3);
+    }
+
+    .google-icon {
+      width: 18px;
+      height: 18px;
+      margin-right: 0.75rem;
+    }
+
+    .message {
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .message.error {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: var(--error);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .admin-panel {
+      display: none;
+    }
+
+    .welcome-section {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .welcome-text {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .user-email {
+      color: var(--gray-500);
+      font-size: 0.875rem;
+    }
+
+    .section {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--gray-700);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-success {
+      background-color: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background-color: #0da271;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-danger {
+      background-color: var(--error);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #dc2626;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+      background-color: var(--gray-500);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--gray-700);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .status-open {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-closed {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: var(--error);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .select-field {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      background-color: white;
+      margin-bottom: 1rem;
+    }
+
+    .select-field:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .download-link {
+      display: block;
+      padding: 1rem;
+      background-color: var(--gray-100);
+      border-radius: var(--radius);
+      text-align: center;
+      margin-top: 1rem;
+      word-break: break-all;
+    }
+
+    .download-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .download-link a:hover {
+      text-decoration: underline;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 1.5rem;
+      }
+      
+      .header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-
-  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
-    <h1 class="text-2xl font-bold mb-6 text-center">Admin Panel</h1>
-
-    <!-- Login Section -->
-    <div id="loginDiv" class="text-center mb-4">
-      <button id="googleLoginBtn" class="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-full">Login with Google</button>
-      <p id="loginMessage" class="mt-2 text-red-500"></p>
-    </div>
-
-    <!-- Admin Panel -->
-    <div id="adminPanel" class="hidden space-y-4">
-      <p class="text-center text-lg font-semibold" id="welcomeMsg"></p>
-      <button id="logoutBtn" class="w-full bg-gray-500 text-white p-2 rounded hover:bg-gray-600">Logout</button>
-
-      <div class="flex flex-col gap-2">
-        <button id="checkStatus" class="bg-gray-500 text-white p-2 rounded hover:bg-gray-600">Check Registration Status</button>
-        <p id="registrationStatus" class="text-center font-semibold"></p>
+<body>
+  <div class="container">
+    <div class="card fade-in">
+      <div class="header">
+        <h1>VCF Admin Panel</h1>
+        <p>Manage contact registrations and VCF files</p>
       </div>
 
-      <div class="flex gap-2">
-        <button id="openReg" class="flex-1 bg-green-500 text-white p-2 rounded hover:bg-green-600">Open Registration</button>
-        <button id="closeReg" class="flex-1 bg-red-500 text-white p-2 rounded hover:bg-red-600">Close Registration</button>
+      <!-- Login Section -->
+      <div id="loginDiv" class="login-section">
+        <button id="googleLoginBtn" class="google-login-btn">
+          <svg class="google-icon" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Sign in with Google
+        </button>
+        <p id="loginMessage" class="message"></p>
       </div>
 
-      <div class="flex flex-col gap-2">
-        <button id="downloadLatest" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Download Latest VCF</button>
+      <!-- Admin Panel -->
+      <div id="adminPanel" class="admin-panel fade-in">
+        <div class="welcome-section">
+          <p class="welcome-text" id="welcomeMsg">Welcome back!</p>
+          <p class="user-email" id="userEmail">user@example.com</p>
+          <button id="logoutBtn" class="btn btn-secondary btn-full mt-2">Logout</button>
+        </div>
 
-        <select id="fileList" class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-          <option value="">-- Select a VCF file --</option>
-        </select>
-        <button id="downloadSelected" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Download Selected VCF</button>
+        <!-- Registration Status Section -->
+        <div class="section">
+          <h3 class="section-title">Registration Status</h3>
+          <div id="registrationStatus" class="status-indicator status-closed">Checking status...</div>
+          <div class="btn-group">
+            <button id="openReg" class="btn btn-success flex-1">Open Registration</button>
+            <button id="closeReg" class="btn btn-danger flex-1">Close Registration</button>
+          </div>
+          <button id="checkStatus" class="btn btn-secondary btn-full mt-2">Refresh Status</button>
+        </div>
 
-        <p id="downloadLink" class="mt-2 text-center break-all"></p>
+        <!-- VCF Files Section -->
+        <div class="section">
+          <h3 class="section-title">VCF Files</h3>
+          <button id="downloadLatest" class="btn btn-primary btn-full mb-3">Download Latest VCF</button>
+          
+          <select id="fileList" class="select-field">
+            <option value="">-- Select a VCF file --</option>
+          </select>
+          
+          <button id="downloadSelected" class="btn btn-primary btn-full">Download Selected VCF</button>
+          
+          <div id="downloadLink" class="download-link">
+            Download link will appear here
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -58,16 +387,19 @@
       appId: "1:400394122333:web:183ded7ea62bd7f86749b4",
       measurementId: "G-8VCQGMD0HF"
     };
+    
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
     const ADMIN_EMAIL = "lazaromtaju12@gmail.com"; // Admin email
     let currentUser = null;
 
+    // DOM elements
     const loginDiv = document.getElementById('loginDiv');
     const adminPanel = document.getElementById('adminPanel');
     const loginMessage = document.getElementById('loginMessage');
     const welcomeMsg = document.getElementById('welcomeMsg');
+    const userEmail = document.getElementById('userEmail');
     const registrationStatus = document.getElementById('registrationStatus');
     const downloadLink = document.getElementById('downloadLink');
     const fileList = document.getElementById('fileList');
@@ -84,20 +416,26 @@
       try {
         const result = await auth.signInWithPopup(provider);
         const user = result.user;
+        
         if (user.email !== ADMIN_EMAIL) {
-          loginMessage.textContent = "Unauthorized email";
+          loginMessage.textContent = "Unauthorized email. Only administrators can access this panel.";
+          loginMessage.className = "message error";
           await auth.signOut();
           return;
         }
+        
         currentUser = user;
-        loginDiv.classList.add('hidden');
-        adminPanel.classList.remove('hidden');
-        welcomeMsg.textContent = `Welcome, ${user.displayName}`;
+        loginDiv.style.display = 'none';
+        adminPanel.style.display = 'block';
+        welcomeMsg.textContent = `Welcome, ${user.displayName || 'Admin'}`;
+        userEmail.textContent = user.email;
+        
         loadFileList();
         checkStatus();
       } catch (err) {
         console.error(err);
         loginMessage.textContent = err.message;
+        loginMessage.className = "message error";
       }
     });
 
@@ -105,10 +443,11 @@
     document.getElementById('logoutBtn').addEventListener('click', async () => {
       await auth.signOut();
       currentUser = null;
-      adminPanel.classList.add('hidden');
-      loginDiv.classList.remove('hidden');
+      adminPanel.style.display = 'none';
+      loginDiv.style.display = 'block';
       loginMessage.textContent = "";
-      downloadLink.textContent = "";
+      loginMessage.className = "";
+      downloadLink.innerHTML = "Download link will appear here";
     });
 
     // Check registration status
@@ -116,12 +455,21 @@
       try {
         const res = await fetch(`${backendUrl}/settings`);
         const data = await res.json();
-        registrationStatus.textContent = data.registrationOpen ? "✅ Registration OPEN" : "❌ Registration CLOSED";
+        
+        if (data.registrationOpen) {
+          registrationStatus.textContent = "✅ Registration is OPEN";
+          registrationStatus.className = "status-indicator status-open";
+        } else {
+          registrationStatus.textContent = "❌ Registration is CLOSED";
+          registrationStatus.className = "status-indicator status-closed";
+        }
       } catch (err) {
         console.error(err);
         registrationStatus.textContent = "Error fetching status";
+        registrationStatus.className = "status-indicator status-closed";
       }
     }
+    
     document.getElementById('checkStatus').addEventListener('click', checkStatus);
 
     // Toggle registration
@@ -130,16 +478,31 @@
         const token = await getIdToken();
         const res = await fetch(`${backendUrl}/admin/toggleRegistration`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': 'Bearer ' + token 
+          },
           body: JSON.stringify({ open })
         });
+        
         const text = await res.text();
         registrationStatus.textContent = text;
+        
+        if (open) {
+          registrationStatus.className = "status-indicator status-open";
+        } else {
+          registrationStatus.className = "status-indicator status-closed";
+        }
+        
+        // Refresh status after toggle
+        setTimeout(checkStatus, 500);
       } catch (err) {
         console.error(err);
         registrationStatus.textContent = "Error updating registration";
+        registrationStatus.className = "status-indicator status-closed";
       }
     }
+    
     document.getElementById('openReg').addEventListener('click', () => toggleRegistration(true));
     document.getElementById('closeReg').addEventListener('click', () => toggleRegistration(false));
 
@@ -150,11 +513,16 @@
         const res = await fetch(`${backendUrl}/admin/download-latest`, {
           headers: { 'Authorization': 'Bearer ' + token }
         });
+        
+        if (!res.ok) {
+          throw new Error(`Server returned ${res.status}: ${res.statusText}`);
+        }
+        
         const data = await res.json();
         downloadLink.innerHTML = `<a href="${data.downloadUrl}" target="_blank" class="text-blue-500 underline">Download ${data.fileName}</a>`;
       } catch (err) {
         console.error(err);
-        downloadLink.textContent = "Error fetching latest VCF";
+        downloadLink.innerHTML = `<span class="text-red-500">Error fetching latest VCF: ${err.message}</span>`;
       }
     });
 
@@ -165,8 +533,14 @@
         const res = await fetch(`${backendUrl}/admin/files`, {
           headers: { 'Authorization': 'Bearer ' + token }
         });
+        
+        if (!res.ok) {
+          throw new Error(`Server returned ${res.status}: ${res.statusText}`);
+        }
+        
         const files = await res.json();
         fileList.innerHTML = '<option value="">-- Select a VCF file --</option>';
+        
         files.forEach(f => {
           const opt = document.createElement('option');
           opt.value = f;
@@ -175,23 +549,46 @@
         });
       } catch (err) {
         console.error(err);
+        fileList.innerHTML = '<option value="">Error loading files</option>';
       }
     }
 
     // Download selected VCF
     document.getElementById('downloadSelected').addEventListener('click', async () => {
       const selectedFile = fileList.value;
-      if (!selectedFile) return alert("Select a file");
+      if (!selectedFile) {
+        alert("Please select a file first");
+        return;
+      }
+      
       try {
         const token = await getIdToken();
-        const res = await fetch(`${backendUrl}/admin/download?file=${selectedFile}`, {
+        const res = await fetch(`${backendUrl}/admin/download?file=${encodeURIComponent(selectedFile)}`, {
           headers: { 'Authorization': 'Bearer ' + token }
         });
+        
+        if (!res.ok) {
+          throw new Error(`Server returned ${res.status}: ${res.statusText}`);
+        }
+        
         const data = await res.json();
         downloadLink.innerHTML = `<a href="${data.downloadUrl}" target="_blank" class="text-blue-500 underline">Download ${selectedFile}</a>`;
       } catch (err) {
         console.error(err);
-        downloadLink.textContent = "Error fetching download link";
+        downloadLink.innerHTML = `<span class="text-red-500">Error fetching download link: ${err.message}</span>`;
+      }
+    });
+
+    // Check if user is already logged in on page load
+    auth.onAuthStateChanged((user) => {
+      if (user && user.email === ADMIN_EMAIL) {
+        currentUser = user;
+        loginDiv.style.display = 'none';
+        adminPanel.style.display = 'block';
+        welcomeMsg.textContent = `Welcome back, ${user.displayName || 'Admin'}`;
+        userEmail.textContent = user.email;
+        loadFileList();
+        checkStatus();
       }
     });
   </script>
