@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 | Lazack Solutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #1e40af;
+      --gray: #64748b;
+      --bg: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      flex-direction: column;
+      padding: 1.5rem;
+    }
+    .error-box {
+      background: #fff;
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      padding: 3rem 2rem;
+      max-width: 480px;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    .error-code {
+      font-size: 5rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .error-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 1rem 0 0.5rem;
+    }
+    .error-text {
+      color: var(--gray);
+      margin-bottom: 2rem;
+    }
+    .btn {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+  </style>
+</head>
+<body>
+  <div class="error-box">
+    <div class="error-code">404</div>
+    <div class="error-title">Page Not Found</div>
+    <p class="error-text">Oops! The page you’re looking for doesn’t exist or has been moved.</p>
+    <a href="/" class="btn"><i class="fas fa-home"></i> Back to Home</a>
+  </div>
+
+  <footer>
+    © <span id="year"></span> Lazack Solutions. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
