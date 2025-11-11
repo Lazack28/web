@@ -3,91 +3,523 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Register Your Contact - VCF Generator</title>
+<title>Contact Registration | VCF Generator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root {
   --primary: #2563eb;
   --primary-dark: #1d4ed8;
   --primary-light: #dbeafe;
+  --primary-ultralight: #eff6ff;
   --success: #10b981;
+  --success-light: #d1fae5;
   --error: #ef4444;
+  --error-light: #fee2e2;
+  --warning: #f59e0b;
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
   --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
   --gray-500: #6b7280;
   --gray-700: #374151;
   --gray-900: #111827;
-  --radius: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
   --transition: all 0.3s ease;
+  --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
   --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);
 }
 
-body { font-family: 'Inter', sans-serif; background-color: var(--gray-50); min-height:100vh; display:flex; justify-content:center; align-items:center; padding:1rem; }
-.container { max-width:480px; width:100%; }
-.card { background:white; border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:2rem; }
-.header { text-align:center; margin-bottom:2rem; }
-.header h1 { font-size:1.75rem; font-weight:700; color:var(--gray-900); margin-bottom:0.5rem; }
-.header p { color:var(--gray-500); font-size:1rem; }
-.counter { display:flex; justify-content:center; align-items:center; background:var(--primary-light); color:var(--primary); padding:0.75rem 1.5rem; border-radius:var(--radius); font-weight:600; margin-bottom:1.5rem; }
-.form-group { margin-bottom:1.5rem; }
-label { display:block; margin-bottom:0.5rem; font-weight:500; color:var(--gray-700); }
-.input-field { width:100%; padding:0.75rem 1rem; border:1px solid var(--gray-200); border-radius:var(--radius); font-size:1rem; transition:var(--transition); }
-.input-field:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,0.1); }
-.submit-btn { width:100%; background:var(--primary); color:white; border:none; border-radius:var(--radius); padding:0.875rem 1.5rem; font-weight:600; cursor:pointer; transition:var(--transition); }
-.submit-btn:hover { background:var(--primary-dark); transform:translateY(-2px); box-shadow:var(--shadow-md); }
-.message { padding:0.75rem 1rem; border-radius:var(--radius); margin-top:1rem; font-weight:500; text-align:center; display:none; }
-.message.success { background-color: rgba(16,185,129,0.1); color:var(--success); border:1px solid rgba(16,185,129,0.2); display:block; }
-.message.error { background-color: rgba(239,68,68,0.1); color:var(--error); border:1px solid rgba(239,68,68,0.2); display:block; }
-.whatsapp-section { text-align:center; padding:1.5rem; background:var(--gray-50); border-radius:var(--radius); margin-top:1.5rem; }
-.whatsapp-btn { display:inline-flex; align-items:center; background-color:#25D366; color:white; text-decoration:none; padding:0.75rem 1.5rem; border-radius:var(--radius); font-weight:600; transition:var(--transition); }
-.whatsapp-btn:hover { background-color:#128C7E; transform:translateY(-2px); box-shadow:var(--shadow-md); }
-.footer { text-align:center; color:var(--gray-500); font-size:0.875rem; margin-top:1.5rem; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, var(--primary-ultralight) 0%, var(--gray-50) 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin: 0 auto;
+}
+
+.card {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: 2.5rem;
+  transition: var(--transition);
+  height: fit-content;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header p {
+  color: var(--gray-500);
+  font-size: 1.1rem;
+}
+
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.progress-chart {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin-bottom: 1.5rem;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.progress-ring-circle {
+  fill: transparent;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease;
+}
+
+.progress-ring-bg {
+  stroke: var(--gray-200);
+}
+
+.progress-ring-fill {
+  stroke: var(--primary);
+}
+
+.progress-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.progress-percent {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.progress-label {
+  font-size: 0.875rem;
+  color: var(--gray-500);
+  margin-top: 0.25rem;
+}
+
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.stat {
+  text-align: center;
+  flex: 1;
+  padding: 0.75rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--gray-500);
+  margin-top: 0.25rem;
+}
+
+.stat-divider {
+  width: 1px;
+  background: var(--gray-200);
+  margin: 0 1rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--gray-700);
+}
+
+.input-container {
+  position: relative;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 2.5rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: var(--transition);
+  background-color: var(--gray-50);
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background-color: white;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-500);
+}
+
+.input-hint {
+  color: var(--gray-500);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.input-hint i {
+  margin-right: 0.25rem;
+}
+
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.message {
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius);
+  margin-top: 1rem;
+  font-weight: 500;
+  text-align: center;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.message.success {
+  background-color: var(--success-light);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  display: flex;
+}
+
+.message.error {
+  background-color: var(--error-light);
+  color: var(--error);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  display: flex;
+}
+
+.cta-section {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--gray-50);
+  border-radius: var(--radius);
+  margin-top: 1.5rem;
+  transition: var(--transition);
+}
+
+.cta-section:hover {
+  background: var(--gray-100);
+}
+
+.cta-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 0.5rem;
+}
+
+.cta-section p {
+  color: var(--gray-500);
+  margin-bottom: 1rem;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #25D366;
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: var(--transition);
+  width: 100%;
+  max-width: 250px;
+}
+
+.cta-btn:hover {
+  background-color: #128C7E;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.cta-btn.channel {
+  background-color: var(--primary);
+}
+
+.cta-btn.channel:hover {
+  background-color: var(--primary-dark);
+}
+
+.footer {
+  text-align: center;
+  color: var(--gray-500);
+  font-size: 0.875rem;
+  margin-top: 2rem;
+  grid-column: 1 / -1;
+}
+
+.cta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .progress-chart {
+    width: 180px;
+    height: 180px;
+  }
+  
+  .progress-percent {
+    font-size: 2rem;
+  }
+}
+
+/* Animation for the progress ring */
+@keyframes progressFill {
+  from {
+    stroke-dashoffset: 565.48;
+  }
+  to {
+    stroke-dashoffset: var(--dash-offset);
+  }
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.loading {
+  animation: pulse 1.5s infinite;
+}
 </style>
 </head>
 <body>
 <div class="container">
   <div class="card">
     <div class="header">
-      <h1>Register Your Contact</h1>
-      <p>Add your details to receive VCF files</p>
+      <h1>Contact Registration</h1>
+      <p>Join our network and receive your VCF file</p>
     </div>
 
-    <div class="counter">
-      <span class="counter-icon">📱</span>
-      <span id="contactCount">Loading registered contacts...</span>
+    <div class="progress-container">
+      <div class="progress-chart">
+        <svg class="progress-ring" viewBox="0 0 100 100">
+          <circle class="progress-ring-circle progress-ring-bg" cx="50" cy="50" r="45" stroke-width="8"></circle>
+          <circle class="progress-ring-circle progress-ring-fill" cx="50" cy="50" r="45" stroke-width="8" 
+                  stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
+        </svg>
+        <div class="progress-center">
+          <div class="progress-percent" id="progressPercent">0%</div>
+          <div class="progress-label">Goal Progress</div>
+        </div>
+      </div>
+      
+      <div class="progress-stats">
+        <div class="stat">
+          <div class="stat-value" id="currentCount">0</div>
+          <div class="stat-label">Registered</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value" id="remainingCount">500</div>
+          <div class="stat-label">Remaining</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value">500</div>
+          <div class="stat-label">Target</div>
+        </div>
+      </div>
     </div>
 
     <form id="contactForm">
       <div class="form-group">
         <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" class="input-field" placeholder="Lazack tech" required>
+        <div class="input-container">
+          <i class="fas fa-user input-icon"></i>
+          <input type="text" id="fullName" class="input-field" placeholder="Enter your full name" required>
+        </div>
+        <div class="input-hint">
+          <i class="fas fa-info-circle"></i> Please use your real name as it will appear in contacts
+        </div>
       </div>
+      
       <div class="form-group">
         <label for="phoneNumber">Phone Number</label>
-        <input type="tel" id="phoneNumber" class="input-field" placeholder="+1234567890" required>
-        <small style="color: var(--gray-500); display:block; margin-top:0.25rem;">Must start with + followed by country code</small>
+        <div class="input-container">
+          <i class="fas fa-phone input-icon"></i>
+          <input type="tel" id="phoneNumber" class="input-field" placeholder="+1234567890" required>
+        </div>
+        <div class="input-hint">
+          <i class="fas fa-exclamation-circle"></i> Must start with + followed by country code
+        </div>
       </div>
-      <button type="submit" class="submit-btn" id="submitBtn">Register Contact</button>
+      
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <i class="fas fa-user-plus"></i> Register Contact
+      </button>
+      
       <div id="message" class="message"></div>
     </form>
+  </div>
 
-    <div class="whatsapp-section">
-      <h3>Join Vcf Group For The file</h3>
-      <p>Get updates and receive your VCF files directly</p>
-      <a href="https://chat.whatsapp.com/Kh8fCIPTtqAFvVla9M0OQO?mode=ems_copy_t" target="_blank" class="whatsapp-btn">📱 Join Vcf Group</a>
+  <div class="card">
+    <div class="header">
+      <h1>Join Our Community</h1>
+      <p>Connect with us for updates and file delivery</p>
     </div>
-
-    <div class="whatsapp-section">
-      <h3>Join Our WhatsApp Channel</h3>
-      <p>Get updates and receive your VCF files directly</p>
-      <a href="https://whatsapp.com/channel/0029ValRlNGCXC3EussN4b2E" target="_blank" class="whatsapp-btn">📱 Join Channel</a>
+    
+    <div class="cta-section">
+      <h3>WhatsApp Group</h3>
+      <p>Join our community for updates and discussions</p>
+      <a href="https://chat.whatsapp.com/Kh8fCIPTtqAFvVla9M0OQO?mode=ems_copy_t" target="_blank" class="cta-btn">
+        <i class="fab fa-whatsapp"></i> Join Group
+      </a>
+    </div>
+    
+    <div class="cta-section">
+      <h3>WhatsApp Channel</h3>
+      <p>Get official updates and announcements</p>
+      <a href="https://whatsapp.com/channel/0029ValRlNGCXC3EussN4b2E" target="_blank" class="cta-btn channel">
+        <i class="fas fa-broadcast-tower"></i> Join Channel
+      </a>
+    </div>
+    
+    <div class="cta-grid">
+      <div class="cta-section">
+        <h3>Need Help?</h3>
+        <p>Contact our support team for assistance</p>
+        <a href="mailto:support@vcfgenerator.com" class="cta-btn channel">
+          <i class="fas fa-envelope"></i> Contact Support
+        </a>
+      </div>
     </div>
   </div>
-  <div class="footer">VCF Contact Registration &copy; 2025</div>
+  
+  <div class="footer">
+    <p>VCF Contact Registration System &copy; 2025 | Designed for Professional Use</p>
+  </div>
 </div>
 
 <script>
@@ -97,19 +529,68 @@ const fullNameInput = document.getElementById('fullName');
 const phoneNumberInput = document.getElementById('phoneNumber');
 const submitBtn = document.getElementById('submitBtn');
 const messageEl = document.getElementById('message');
-const contactCountEl = document.getElementById('contactCount');
+const progressPercentEl = document.getElementById('progressPercent');
+const currentCountEl = document.getElementById('currentCount');
+const remainingCountEl = document.getElementById('remainingCount');
+const progressRing = document.querySelector('.progress-ring-fill');
+const TARGET_CONTACTS = 500;
 
+// Initialize the progress ring
+function initializeProgressRing() {
+  const radius = progressRing.r.baseVal.value;
+  const circumference = 2 * Math.PI * radius;
+  
+  progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+  progressRing.style.strokeDashoffset = circumference;
+  
+  return circumference;
+}
+
+// Update the progress ring
+function updateProgressRing(percent, circumference) {
+  const offset = circumference - (percent / 100) * circumference;
+  progressRing.style.strokeDashoffset = offset;
+  
+  // Add animation
+  progressRing.style.animation = `progressFill 1.5s ease-out forwards`;
+  progressRing.style.setProperty('--dash-offset', offset);
+}
+
+// Update contact count and progress
 async function updateContactCount() {
   try {
     const res = await fetch(`${backendUrl}/count`);
     const data = await res.json();
-    contactCountEl.textContent = `Total Registered Contacts: ${data.total ?? 0}`;
+    const currentCount = data.total ?? 0;
+    const remainingCount = Math.max(0, TARGET_CONTACTS - currentCount);
+    const progressPercent = Math.min(100, Math.round((currentCount / TARGET_CONTACTS) * 100));
+    
+    currentCountEl.textContent = currentCount;
+    remainingCountEl.textContent = remainingCount;
+    progressPercentEl.textContent = `${progressPercent}%`;
+    
+    // Update progress ring
+    const circumference = initializeProgressRing();
+    updateProgressRing(progressPercent, circumference);
+    
+    // Add visual feedback when approaching goal
+    if (progressPercent >= 90) {
+      progressRing.style.stroke = 'var(--success)';
+      progressPercentEl.style.color = 'var(--success)';
+    } else {
+      progressRing.style.stroke = 'var(--primary)';
+      progressPercentEl.style.color = 'var(--primary)';
+    }
+    
   } catch (err) {
     console.error(err);
-    contactCountEl.textContent = "Error loading contact count";
+    currentCountEl.textContent = "Error";
+    remainingCountEl.textContent = "Error";
+    progressPercentEl.textContent = "Error";
   }
 }
 
+// Check if registration is open
 async function isRegistrationOpen() {
   try {
     const res = await fetch(`${backendUrl}/settings`);
@@ -121,6 +602,7 @@ async function isRegistrationOpen() {
   }
 }
 
+// Form submission handler
 contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const name = fullNameInput.value.trim();
@@ -132,18 +614,18 @@ contactForm.addEventListener('submit', async (e) => {
   }
 
   if (!number.startsWith('+')) {
-    showMessage('Phone number must start with +', 'error');
+    showMessage('Phone number must start with + followed by country code.', 'error');
     return;
   }
 
   const registrationOpen = await isRegistrationOpen();
   if (!registrationOpen) {
-    showMessage('Registration is currently closed.', 'error');
+    showMessage('Registration is currently closed. Please try again later.', 'error');
     return;
   }
 
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Registering...';
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
 
   try {
     const res = await fetch(`${backendUrl}/addContact`, {
@@ -155,33 +637,65 @@ contactForm.addEventListener('submit', async (e) => {
     const text = await res.text();
 
     if (res.ok) {
-      showMessage('Contact registered successfully! Redirecting...', 'success');
+      showMessage('Contact registered successfully! You will be redirected shortly.', 'success');
       contactForm.reset();
       updateContactCount();
+      
+      // Redirect after a short delay
       setTimeout(() => {
         window.location.href = 'https://chat.whatsapp.com/Kh8fCIPTtqAFvVla9M0OQO?mode=ems_copy_t';
-      }, 2000);
+      }, 2500);
     } else {
       showMessage(text, 'error');
     }
   } catch (err) {
     console.error(err);
-    showMessage('Server error. Try again later.', 'error');
+    showMessage('Server error. Please try again later.', 'error');
   } finally {
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Register Contact';
+    submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Register Contact';
   }
 });
 
+// Show message with icon
 function showMessage(msg, type) {
-  messageEl.textContent = msg;
+  messageEl.innerHTML = '';
+  
+  const icon = document.createElement('i');
+  icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+  
+  const text = document.createElement('span');
+  text.textContent = msg;
+  
+  messageEl.appendChild(icon);
+  messageEl.appendChild(text);
   messageEl.className = 'message';
   messageEl.classList.add(type);
-  messageEl.style.display = 'block';
-  if (type === 'success') setTimeout(() => { messageEl.style.display = 'none'; }, 5000);
+  
+  if (type === 'success') {
+    setTimeout(() => {
+      messageEl.style.display = 'none';
+    }, 5000);
+  }
 }
 
-document.addEventListener('DOMContentLoaded', updateContactCount);
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+  updateContactCount();
+  
+  // Add subtle animation to cards on load
+  const cards = document.querySelectorAll('.card');
+  cards.forEach((card, index) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    
+    setTimeout(() => {
+      card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, index * 200);
+  });
+});
 </script>
 </body>
-</html>
+  </html>
