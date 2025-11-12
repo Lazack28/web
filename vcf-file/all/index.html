@@ -3,23 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact Directory | Lazack Organisation</title>
+  <title>Contact Management Dashboard | Lazack Organisation</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary: #1e293b;
       --primary-dark: #0f172a;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
+      --secondary: #3b82f6;
+      --secondary-dark: #1d4ed8;
       --light: #f8fafc;
-      --white: #ffffff;
       --gray-light: #e2e8f0;
       --gray: #64748b;
-      --gray-dark: #334155;
       --success: #10b981;
       --danger: #ef4444;
       --border-radius: 8px;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow: 0 4px 15px rgba(0,0,0,0.1);
       --transition: all 0.3s ease;
     }
 
@@ -30,17 +28,19 @@
     }
 
     body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f5f7;
-      color: var(--gray-dark);
-      line-height: 1.6;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      margin: 0;
+      padding: 0;
+      color: #333;
+      min-height: 100vh;
     }
 
     header {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-      color: var(--white);
+      background: var(--primary);
+      color: #fff;
       padding: 1.5rem 0;
-      box-shadow: var(--shadow);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -49,142 +49,150 @@
     .header-content {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 0 20px;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 10px;
     }
 
     .logo i {
       font-size: 1.8rem;
-      color: var(--accent);
+      color: var(--secondary);
     }
 
     .logo h1 {
-      font-size: 1.5rem;
+      margin: 0;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
       font-weight: 600;
-      letter-spacing: 0.5px;
     }
 
     .header-actions {
       display: flex;
-      gap: 1rem;
+      gap: 15px;
     }
 
-    .btn {
-      padding: 0.5rem 1rem;
+    .header-actions button {
+      background: var(--secondary);
+      color: white;
       border: none;
+      padding: 8px 16px;
       border-radius: var(--border-radius);
-      font-weight: 500;
       cursor: pointer;
       transition: var(--transition);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 5px;
+      font-weight: 500;
     }
 
-    .btn-primary {
-      background: var(--accent);
-      color: var(--white);
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-hover);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--white);
-      border: 1px solid var(--white);
-    }
-
-    .btn-outline:hover {
-      background: rgba(255, 255, 255, 0.1);
+    .header-actions button:hover {
+      background: var(--secondary-dark);
     }
 
     .container {
       max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
+      margin: 40px auto;
+      padding: 0 20px;
     }
 
     .dashboard {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
+      grid-template-columns: 1fr 3fr;
+      gap: 25px;
     }
 
-    .card {
-      background: var(--white);
+    .sidebar {
+      background: white;
       border-radius: var(--border-radius);
       box-shadow: var(--shadow);
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
+      padding: 25px;
+      height: fit-content;
     }
 
-    .card-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
+    .sidebar h2 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: var(--primary);
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
+      gap: 10px;
     }
 
-    .card-icon.primary {
-      background: rgba(59, 130, 246, 0.1);
-      color: var(--accent);
+    .sidebar h2 i {
+      color: var(--secondary);
     }
 
-    .card-icon.success {
-      background: rgba(16, 185, 129, 0.1);
-      color: var(--success);
+    .stats {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
 
-    .card-value {
-      font-size: 1.75rem;
-      font-weight: 700;
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-light);
     }
 
-    .card-title {
+    .stat-item:last-child {
+      border-bottom: none;
+    }
+
+    .stat-label {
       color: var(--gray);
-      font-size: 0.875rem;
       font-weight: 500;
     }
 
+    .stat-value {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
     .main-content {
-      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .card {
+      background: #fff;
       border-radius: var(--border-radius);
       box-shadow: var(--shadow);
       overflow: hidden;
     }
 
-    .table-header {
-      padding: 1.5rem;
-      border-bottom: 1px solid var(--gray-light);
+    .card-header {
+      background: var(--primary);
+      color: white;
+      padding: 18px 25px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .table-title {
-      font-size: 1.25rem;
+    .card-header h2 {
+      font-size: 1.4rem;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .table-controls {
+    .card-header h2 i {
+      color: var(--secondary);
+    }
+
+    .controls {
       display: flex;
-      gap: 1rem;
+      gap: 15px;
       align-items: center;
     }
 
@@ -193,26 +201,37 @@
     }
 
     .search-box input {
-      padding: 0.5rem 1rem 0.5rem 2.5rem;
+      padding: 10px 15px 10px 40px;
       border: 1px solid var(--gray-light);
       border-radius: var(--border-radius);
       width: 250px;
-      font-size: 0.875rem;
       transition: var(--transition);
     }
 
     .search-box input:focus {
       outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
     }
 
     .search-box i {
       position: absolute;
-      left: 0.75rem;
+      left: 15px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--gray);
+    }
+
+    .filter-select {
+      padding: 10px 15px;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--border-radius);
+      background: white;
+      cursor: pointer;
+    }
+
+    .card-body {
+      padding: 0;
     }
 
     table {
@@ -221,24 +240,14 @@
     }
 
     thead {
-      background: var(--light);
+      background: var(--primary-dark);
+      color: #fff;
     }
 
-    th {
-      padding: 1rem 1.25rem;
+    th, td {
+      padding: 16px 20px;
       text-align: left;
-      font-weight: 600;
-      font-size: 0.875rem;
-      color: var(--gray-dark);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
       border-bottom: 1px solid var(--gray-light);
-    }
-
-    td {
-      padding: 1rem 1.25rem;
-      border-bottom: 1px solid var(--gray-light);
-      font-size: 0.9rem;
     }
 
     tbody tr {
@@ -246,190 +255,147 @@
     }
 
     tbody tr:hover {
-      background: rgba(59, 130, 246, 0.03);
+      background: #f8fafc;
     }
 
     .contact-name {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 10px;
     }
 
     .avatar {
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: var(--accent);
+      background: var(--secondary);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--white);
+      color: white;
       font-weight: 600;
-      font-size: 0.875rem;
+      font-size: 0.9rem;
     }
 
-    .phone-cell {
+    .actions {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .phone-cell i {
-      color: var(--success);
-    }
-
-    .date-cell {
-      color: var(--gray);
-      font-size: 0.85rem;
-    }
-
-    .actions-cell {
-      display: flex;
-      gap: 0.5rem;
+      gap: 10px;
     }
 
     .action-btn {
-      background: transparent;
+      background: none;
       border: none;
-      color: var(--gray);
       cursor: pointer;
-      padding: 0.25rem;
-      border-radius: 4px;
+      color: var(--gray);
       transition: var(--transition);
+      padding: 5px;
+      border-radius: 4px;
     }
 
     .action-btn:hover {
-      background: var(--light);
-      color: var(--accent);
-    }
-
-    .pagination-container {
-      padding: 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid var(--gray-light);
-    }
-
-    .pagination-info {
-      font-size: 0.875rem;
-      color: var(--gray);
+      color: var(--secondary);
+      background: rgba(59, 130, 246, 0.1);
     }
 
     .pagination {
       display: flex;
-      gap: 0.5rem;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: #fff;
+      border-top: 1px solid var(--gray-light);
+    }
+
+    .pagination-info {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .pagination-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
     }
 
     .pagination button {
-      background: var(--white);
-      border: 1px solid var(--gray-light);
-      color: var(--gray-dark);
-      padding: 0.5rem 0.75rem;
-      border-radius: var(--border-radius);
+      background: var(--secondary);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
       cursor: pointer;
       transition: var(--transition);
-      font-size: 0.875rem;
       display: flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 5px;
     }
 
-    .pagination button:hover:not(:disabled) {
-      background: var(--light);
-      border-color: var(--gray);
-    }
-
-    .pagination button.active {
-      background: var(--accent);
-      color: var(--white);
-      border-color: var(--accent);
+    .pagination button:hover {
+      background: var(--secondary-dark);
     }
 
     .pagination button:disabled {
-      color: var(--gray-light);
+      background: #94a3b8;
       cursor: not-allowed;
     }
 
-    .empty-state {
-      padding: 3rem 1.5rem;
+    .page-numbers {
+      display: flex;
+      gap: 5px;
+    }
+
+    .page-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      background: white;
+      border: 1px solid var(--gray-light);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .page-btn.active {
+      background: var(--secondary);
+      color: white;
+      border-color: var(--secondary);
+    }
+
+    .page-btn:hover:not(.active) {
+      background: var(--gray-light);
+    }
+
+    .footer {
       text-align: center;
+      padding: 20px;
       color: var(--gray);
+      font-size: 0.9rem;
+      margin-top: 40px;
     }
 
-    .empty-state i {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      color: var(--gray-light);
-    }
-
-    .empty-state h3 {
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .loading {
-      padding: 2rem;
-      text-align: center;
-      color: var(--gray);
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(59, 130, 246, 0.2);
-      border-left: 4px solid var(--accent);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 1rem;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @media (max-width: 992px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        order: 2;
+      }
+      
+      .main-content {
+        order: 1;
+      }
     }
 
     @media (max-width: 768px) {
       .header-content {
         flex-direction: column;
-        gap: 1rem;
-        text-align: center;
+        gap: 15px;
       }
       
-      .table-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-      }
-      
-      .search-box input {
-        width: 100%;
-      }
-      
-      .dashboard {
-        grid-template-columns: 1fr;
-      }
-      
-      .pagination-container {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      
-      th, td {
-        padding: 0.75rem 0.5rem;
-      }
-      
-      .actions-cell {
-        flex-direction: column;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .container {
-        padding: 0 1rem;
-      }
-      
-      .table-controls {
+      .controls {
         flex-direction: column;
         width: 100%;
       }
@@ -441,6 +407,37 @@
       .search-box input {
         width: 100%;
       }
+      
+      .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .pagination {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      th, td {
+        padding: 12px 15px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .container {
+        margin: 20px auto;
+        padding: 0 15px;
+      }
+      
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+      
+      .page-numbers {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -450,166 +447,121 @@
     <div class="header-content">
       <div class="logo">
         <i class="fas fa-address-book"></i>
-        <h1>Contact Directory</h1>
+        <h1>Contact Management</h1>
       </div>
       <div class="header-actions">
-        <button class="btn btn-outline">
-          <i class="fas fa-download"></i> Export
-        </button>
-        <button class="btn btn-primary">
-          <i class="fas fa-plus"></i> Add Contact
-        </button>
+        <button><i class="fas fa-download"></i> Export</button>
+        <button><i class="fas fa-plus"></i> Add Contact</button>
       </div>
     </div>
   </header>
 
   <div class="container">
     <div class="dashboard">
-      <div class="card">
-        <div class="card-icon primary">
-          <i class="fas fa-users"></i>
-        </div>
-        <div class="card-value" id="totalCount">0</div>
-        <div class="card-title">Total Contacts</div>
-      </div>
-      <div class="card">
-        <div class="card-icon success">
-          <i class="fas fa-calendar-day"></i>
-        </div>
-        <div class="card-value" id="todayCount">0</div>
-        <div class="card-title">Added Today</div>
-      </div>
-      <div class="card">
-        <div class="card-icon">
-          <i class="fas fa-sync-alt"></i>
-        </div>
-        <div class="card-value" id="lastUpdate">Just now</div>
-        <div class="card-title">Last Updated</div>
-      </div>
-    </div>
-
-    <div class="main-content">
-      <div class="table-header">
-        <h2 class="table-title">All Contacts</h2>
-        <div class="table-controls">
-          <div class="search-box">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Search contacts...">
+      <div class="sidebar">
+        <h2><i class="fas fa-chart-bar"></i> Dashboard</h2>
+        <div class="stats">
+          <div class="stat-item">
+            <span class="stat-label">Total Contacts</span>
+            <span class="stat-value" id="totalCount">0</span>
           </div>
-          <select id="rowsPerPage">
-            <option value="10">10 per page</option>
-            <option value="25" selected>25 per page</option>
-            <option value="50">50 per page</option>
-            <option value="100">100 per page</option>
-          </select>
+          <div class="stat-item">
+            <span class="stat-label">This Month</span>
+            <span class="stat-value">24</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Last Month</span>
+            <span class="stat-value">42</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Growth Rate</span>
+            <span class="stat-value" style="color: var(--success);">+12.5%</span>
+          </div>
         </div>
       </div>
 
-      <table id="contactsTable">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Phone Number</th>
-            <th>Registered At</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <tr>
-            <td colspan="4" class="loading">
-              <div class="spinner"></div>
-              Loading contacts...
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="pagination-container">
-        <div class="pagination-info" id="paginationInfo">
-          Showing 0 of 0 entries
-        </div>
-        <div class="pagination" id="pagination">
-          <!-- Pagination buttons will be inserted here -->
+      <div class="main-content">
+        <div class="card">
+          <div class="card-header">
+            <h2><i class="fas fa-users"></i> Registered Contacts</h2>
+            <div class="controls">
+              <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search contacts...">
+              </div>
+              <select class="filter-select" id="filterSelect">
+                <option value="all">All Contacts</option>
+                <option value="recent">Recently Added</option>
+                <option value="name">Sort by Name</option>
+                <option value="date">Sort by Date</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-body">
+            <table id="contactsTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Phone Number</th>
+                  <th>Registered At</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr><td colspan="5" style="text-align:center; padding:30px;">Loading contacts...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <div class="pagination-info" id="paginationInfo">Showing 0 of 0 contacts</div>
+            <div class="pagination-controls">
+              <button id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+              <div class="page-numbers" id="pageNumbers"></div>
+              <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
+  <div class="footer">
+    <p>&copy; 2023 Lazack Organisation. All rights reserved.</p>
+  </div>
+
   <script>
     const API_URL = "https://vcf-backend.onrender.com/contacts";
+    const rowsPerPage = 10;
     let contacts = [];
-    let filteredContacts = [];
     let currentPage = 1;
-    let rowsPerPage = 25;
-    let searchTerm = "";
+    let totalPages = 1;
 
-    // Format date for display
-    function formatDate(dateString) {
-      const options = { year: 'numeric', month: 'short', day: 'numeric' };
-      return new Date(dateString).toLocaleDateString(undefined, options);
-    }
-
-    // Get initials for avatar
-    function getInitials(name) {
-      return name.split(' ').map(n => n[0]).join('').toUpperCase();
-    }
-
-    // Update dashboard stats
-    function updateDashboardStats() {
-      document.getElementById('totalCount').textContent = contacts.length;
-      
-      // Calculate today's registrations (mock data for demo)
-      const todayCount = Math.floor(Math.random() * 5) + 1;
-      document.getElementById('todayCount').textContent = todayCount;
-      
-      // Update last updated time
-      document.getElementById('lastUpdate').textContent = 'Just now';
-    }
-
-    // Filter contacts based on search term
-    function filterContacts() {
-      if (!searchTerm) {
-        filteredContacts = [...contacts];
-        return;
-      }
-      
-      const term = searchTerm.toLowerCase();
-      filteredContacts = contacts.filter(contact => 
-        contact.name.toLowerCase().includes(term) || 
-        contact.number.includes(term)
-      );
-    }
-
-    // Fetch contacts from API
     async function fetchContacts() {
       try {
+        document.getElementById("tableBody").innerHTML = 
+          `<tr><td colspan="5" style="text-align:center; padding:30px;"><i class="fas fa-spinner fa-spin"></i> Loading contacts...</td></tr>`;
+        
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error("Failed to fetch contacts");
         const data = await res.json();
         contacts = data.contacts;
-        updateDashboardStats();
-        filterContacts();
+        document.getElementById("totalCount").textContent = data.total;
         renderTable();
         renderPagination();
       } catch (error) {
-        document.getElementById("tableBody").innerHTML = `
-          <tr>
-            <td colspan="4" class="empty-state">
-              <i class="fas fa-exclamation-circle"></i>
-              <h3>Error loading contacts</h3>
-              <p>Please try again later</p>
-            </td>
-          </tr>
-        `;
+        document.getElementById("tableBody").innerHTML =
+          `<tr><td colspan="5" style="text-align:center; color:var(--danger); padding:30px;">
+            <i class="fas fa-exclamation-circle"></i> Error loading contacts
+          </td></tr>`;
         console.error(error);
       }
     }
 
-    // Render the table with current page data
     function renderTable() {
       const start = (currentPage - 1) * rowsPerPage;
       const end = start + rowsPerPage;
-      const currentContacts = filteredContacts.slice(start, end);
+      const currentContacts = contacts.slice(start, end);
 
       const tbody = document.getElementById("tableBody");
       tbody.innerHTML = "";
@@ -617,131 +569,144 @@
       if (currentContacts.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="4" class="empty-state">
-              <i class="fas fa-search"></i>
-              <h3>No contacts found</h3>
-              <p>Try adjusting your search or filters</p>
+            <td colspan="5" style="text-align:center; padding:30px;">
+              <i class="fas fa-inbox"></i> No contacts found
             </td>
-          </tr>
-        `;
+          </tr>`;
         return;
       }
 
-      currentContacts.forEach((contact, index) => {
+      currentContacts.forEach((c, index) => {
         const row = document.createElement("tr");
+        const initials = c.name.split(' ').map(n => n[0]).join('').toUpperCase();
+        
         row.innerHTML = `
+          <td>${start + index + 1}</td>
           <td>
             <div class="contact-name">
-              <div class="avatar">${getInitials(contact.name)}</div>
-              <div>${contact.name}</div>
+              <div class="avatar">${initials}</div>
+              ${c.name}
             </div>
           </td>
-          <td class="phone-cell">
-            <i class="fas fa-phone"></i>
-            ${contact.number}
-          </td>
-          <td class="date-cell">${formatDate(contact.createdAt)}</td>
-          <td class="actions-cell">
-            <button class="action-btn" title="View">
-              <i class="fas fa-eye"></i>
-            </button>
-            <button class="action-btn" title="Edit">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="action-btn" title="Delete">
-              <i class="fas fa-trash"></i>
-            </button>
+          <td>${c.number}</td>
+          <td>${formatDate(c.createdAt)}</td>
+          <td>
+            <div class="actions">
+              <button class="action-btn" title="View"><i class="fas fa-eye"></i></button>
+              <button class="action-btn" title="Edit"><i class="fas fa-edit"></i></button>
+              <button class="action-btn" title="Delete"><i class="fas fa-trash"></i></button>
+            </div>
           </td>
         `;
         tbody.appendChild(row);
       });
     }
 
-    // Render pagination controls
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
+
     function renderPagination() {
-      const pageCount = Math.ceil(filteredContacts.length / rowsPerPage);
-      const pagination = document.getElementById("pagination");
-      pagination.innerHTML = "";
-
-      // Previous button
-      const prev = document.createElement("button");
-      prev.innerHTML = '<i class="fas fa-chevron-left"></i> Prev';
-      prev.disabled = currentPage === 1;
-      prev.onclick = () => { 
-        if (currentPage > 1) {
-          currentPage--; 
-          renderTable(); 
-          renderPagination(); 
-        }
-      };
-      pagination.appendChild(prev);
-
-      // Page numbers
-      const maxVisiblePages = 5;
-      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-      let endPage = Math.min(pageCount, startPage + maxVisiblePages - 1);
+      totalPages = Math.ceil(contacts.length / rowsPerPage);
+      const paginationInfo = document.getElementById("paginationInfo");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const pageNumbers = document.getElementById("pageNumbers");
       
-      if (endPage - startPage + 1 < maxVisiblePages) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
-      }
-
-      for (let i = startPage; i <= endPage; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = i;
-        btn.classList.toggle("active", i === currentPage);
-        btn.onclick = () => { 
-          currentPage = i; 
-          renderTable(); 
-          renderPagination(); 
-        };
-        pagination.appendChild(btn);
-      }
-
-      // Next button
-      const next = document.createElement("button");
-      next.innerHTML = 'Next <i class="fas fa-chevron-right"></i>';
-      next.disabled = currentPage === pageCount || pageCount === 0;
-      next.onclick = () => { 
-        if (currentPage < pageCount) {
-          currentPage++; 
-          renderTable(); 
-          renderPagination(); 
-        }
-      };
-      pagination.appendChild(next);
-
       // Update pagination info
-      const startItem = (currentPage - 1) * rowsPerPage + 1;
-      const endItem = Math.min(currentPage * rowsPerPage, filteredContacts.length);
-      document.getElementById("paginationInfo").textContent = 
-        `Showing ${startItem} to ${endItem} of ${filteredContacts.length} entries`;
+      const start = (currentPage - 1) * rowsPerPage + 1;
+      const end = Math.min(currentPage * rowsPerPage, contacts.length);
+      paginationInfo.textContent = `Showing ${start}-${end} of ${contacts.length} contacts`;
+      
+      // Update prev/next buttons
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages;
+      
+      // Update page numbers
+      pageNumbers.innerHTML = "";
+      
+      // Always show first page
+      addPageButton(1, pageNumbers);
+      
+      // Show ellipsis if needed
+      if (currentPage > 3) {
+        const ellipsis = document.createElement("span");
+        ellipsis.textContent = "...";
+        ellipsis.style.padding = "0 5px";
+        pageNumbers.appendChild(ellipsis);
+      }
+      
+      // Show pages around current page
+      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+        addPageButton(i, pageNumbers);
+      }
+      
+      // Show ellipsis if needed
+      if (currentPage < totalPages - 2) {
+        const ellipsis = document.createElement("span");
+        ellipsis.textContent = "...";
+        ellipsis.style.padding = "0 5px";
+        pageNumbers.appendChild(ellipsis);
+      }
+      
+      // Always show last page if there is more than one page
+      if (totalPages > 1) {
+        addPageButton(totalPages, pageNumbers);
+      }
     }
 
-    // Initialize the application
-    function init() {
-      fetchContacts();
-      
-      // Search functionality
-      document.getElementById('searchInput').addEventListener('input', (e) => {
-        searchTerm = e.target.value;
-        currentPage = 1;
-        filterContacts();
+    function addPageButton(page, container) {
+      const btn = document.createElement("button");
+      btn.className = "page-btn" + (page === currentPage ? " active" : "");
+      btn.textContent = page;
+      btn.onclick = () => {
+        currentPage = page;
         renderTable();
         renderPagination();
-      });
-      
-      // Rows per page selector
-      document.getElementById('rowsPerPage').addEventListener('change', (e) => {
-        rowsPerPage = parseInt(e.target.value);
-        currentPage = 1;
-        renderTable();
-        renderPagination();
-      });
+      };
+      container.appendChild(btn);
     }
 
-    // Start the application when DOM is loaded
-    document.addEventListener('DOMContentLoaded', init);
+    // Event listeners
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+        renderPagination();
+      }
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable();
+        renderPagination();
+      }
+    });
+
+    // Search functionality
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      // In a real application, you would filter the contacts here
+      // For now, we'll just log the search term
+      console.log("Searching for:", searchTerm);
+    });
+
+    // Filter functionality
+    document.getElementById("filterSelect").addEventListener("change", (e) => {
+      const filterValue = e.target.value;
+      // In a real application, you would apply the filter here
+      console.log("Filtering by:", filterValue);
+    });
+
+    // Initialize
+    fetchContacts();
   </script>
 
 </body>
-  </html>
+                                          </html>
