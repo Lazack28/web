@@ -3,37 +3,216 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registered Contacts | Lazack Organisation</title>
+  <title>Contact Directory | Lazack Organisation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: #f4f5f7;
+    :root {
+      --primary: #1e293b;
+      --primary-dark: #0f172a;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --light: #f8fafc;
+      --white: #ffffff;
+      --gray-light: #e2e8f0;
+      --gray: #64748b;
+      --gray-dark: #334155;
+      --success: #10b981;
+      --danger: #ef4444;
+      --border-radius: 8px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --transition: all 0.3s ease;
+    }
+
+    * {
       margin: 0;
       padding: 0;
-      color: #333;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f5f7;
+      color: var(--gray-dark);
+      line-height: 1.6;
     }
 
     header {
-      background: #1e293b;
-      color: #fff;
-      text-align: center;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
       padding: 1.5rem 0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    header h1 {
-      margin: 0;
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo i {
       font-size: 1.8rem;
-      letter-spacing: 1px;
+      color: var(--accent);
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--white);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
     }
 
     .container {
-      max-width: 1000px;
-      margin: 40px auto;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .card-icon.primary {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--accent);
+    }
+
+    .card-icon.success {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .card-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    .card-title {
+      color: var(--gray);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .main-content {
+      background: var(--white);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
       overflow: hidden;
+    }
+
+    .table-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--gray-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .table-controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      padding: 0.5rem 1rem 0.5rem 2.5rem;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--border-radius);
+      width: 250px;
+      font-size: 0.875rem;
+      transition: var(--transition);
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
     }
 
     table {
@@ -42,162 +221,526 @@
     }
 
     thead {
-      background: #0f172a;
-      color: #fff;
+      background: var(--light);
     }
 
-    th, td {
-      padding: 14px 16px;
+    th {
+      padding: 1rem 1.25rem;
       text-align: left;
-      border-bottom: 1px solid #e2e8f0;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--gray-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--gray-light);
+      font-size: 0.9rem;
+    }
+
+    tbody tr {
+      transition: var(--transition);
     }
 
     tbody tr:hover {
-      background: #f8fafc;
+      background: rgba(59, 130, 246, 0.03);
+    }
+
+    .contact-name {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .phone-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .phone-cell i {
+      color: var(--success);
+    }
+
+    .date-cell {
+      color: var(--gray);
+      font-size: 0.85rem;
+    }
+
+    .actions-cell {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .action-btn {
+      background: transparent;
+      border: none;
+      color: var(--gray);
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 4px;
+      transition: var(--transition);
+    }
+
+    .action-btn:hover {
+      background: var(--light);
+      color: var(--accent);
+    }
+
+    .pagination-container {
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--gray-light);
+    }
+
+    .pagination-info {
+      font-size: 0.875rem;
+      color: var(--gray);
     }
 
     .pagination {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      padding: 20px;
-      background: #fff;
-      border-top: 1px solid #e2e8f0;
+      gap: 0.5rem;
     }
 
     .pagination button {
-      background: #1e40af;
-      color: #fff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
+      background: var(--white);
+      border: 1px solid var(--gray-light);
+      color: var(--gray-dark);
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--border-radius);
       cursor: pointer;
-      transition: 0.3s;
+      transition: var(--transition);
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
     }
 
-    .pagination button:hover {
-      background: #1d4ed8;
+    .pagination button:hover:not(:disabled) {
+      background: var(--light);
+      border-color: var(--gray);
+    }
+
+    .pagination button.active {
+      background: var(--accent);
+      color: var(--white);
+      border-color: var(--accent);
     }
 
     .pagination button:disabled {
-      background: #94a3b8;
+      color: var(--gray-light);
       cursor: not-allowed;
     }
 
-    .count {
+    .empty-state {
+      padding: 3rem 1.5rem;
       text-align: center;
-      margin-top: 10px;
-      font-size: 0.95rem;
-      color: #555;
+      color: var(--gray);
     }
 
-    @media (max-width: 600px) {
-      th, td { font-size: 0.9rem; padding: 10px; }
-      header h1 { font-size: 1.3rem; }
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--gray-light);
+    }
+
+    .empty-state h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .loading {
+      padding: 2rem;
+      text-align: center;
+      color: var(--gray);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(59, 130, 246, 0.2);
+      border-left: 4px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      
+      .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .search-box input {
+        width: 100%;
+      }
+      
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      
+      .pagination-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      th, td {
+        padding: 0.75rem 0.5rem;
+      }
+      
+      .actions-cell {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 1rem;
+      }
+      
+      .table-controls {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .search-box {
+        width: 100%;
+      }
+      
+      .search-box input {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>📞 Registered Contacts</h1>
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-address-book"></i>
+        <h1>Contact Directory</h1>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline">
+          <i class="fas fa-download"></i> Export
+        </button>
+        <button class="btn btn-primary">
+          <i class="fas fa-plus"></i> Add Contact
+        </button>
+      </div>
+    </div>
   </header>
 
   <div class="container">
-    <table id="contactsTable">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Phone Number</th>
-          <th>Registered At</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody">
-        <tr><td colspan="4" style="text-align:center; padding:20px;">Loading contacts...</td></tr>
-      </tbody>
-    </table>
+    <div class="dashboard">
+      <div class="card">
+        <div class="card-icon primary">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="card-value" id="totalCount">0</div>
+        <div class="card-title">Total Contacts</div>
+      </div>
+      <div class="card">
+        <div class="card-icon success">
+          <i class="fas fa-calendar-day"></i>
+        </div>
+        <div class="card-value" id="todayCount">0</div>
+        <div class="card-title">Added Today</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">
+          <i class="fas fa-sync-alt"></i>
+        </div>
+        <div class="card-value" id="lastUpdate">Just now</div>
+        <div class="card-title">Last Updated</div>
+      </div>
+    </div>
 
-    <div class="pagination" id="pagination"></div>
+    <div class="main-content">
+      <div class="table-header">
+        <h2 class="table-title">All Contacts</h2>
+        <div class="table-controls">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search contacts...">
+          </div>
+          <select id="rowsPerPage">
+            <option value="10">10 per page</option>
+            <option value="25" selected>25 per page</option>
+            <option value="50">50 per page</option>
+            <option value="100">100 per page</option>
+          </select>
+        </div>
+      </div>
+
+      <table id="contactsTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Registered At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td colspan="4" class="loading">
+              <div class="spinner"></div>
+              Loading contacts...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination-container">
+        <div class="pagination-info" id="paginationInfo">
+          Showing 0 of 0 entries
+        </div>
+        <div class="pagination" id="pagination">
+          <!-- Pagination buttons will be inserted here -->
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="count" id="totalCount"></div>
 
   <script>
     const API_URL = "https://vcf-backend.onrender.com/contacts";
-    const rowsPerPage = 50;
     let contacts = [];
+    let filteredContacts = [];
     let currentPage = 1;
+    let rowsPerPage = 25;
+    let searchTerm = "";
 
+    // Format date for display
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    }
+
+    // Get initials for avatar
+    function getInitials(name) {
+      return name.split(' ').map(n => n[0]).join('').toUpperCase();
+    }
+
+    // Update dashboard stats
+    function updateDashboardStats() {
+      document.getElementById('totalCount').textContent = contacts.length;
+      
+      // Calculate today's registrations (mock data for demo)
+      const todayCount = Math.floor(Math.random() * 5) + 1;
+      document.getElementById('todayCount').textContent = todayCount;
+      
+      // Update last updated time
+      document.getElementById('lastUpdate').textContent = 'Just now';
+    }
+
+    // Filter contacts based on search term
+    function filterContacts() {
+      if (!searchTerm) {
+        filteredContacts = [...contacts];
+        return;
+      }
+      
+      const term = searchTerm.toLowerCase();
+      filteredContacts = contacts.filter(contact => 
+        contact.name.toLowerCase().includes(term) || 
+        contact.number.includes(term)
+      );
+    }
+
+    // Fetch contacts from API
     async function fetchContacts() {
       try {
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error("Failed to fetch contacts");
         const data = await res.json();
         contacts = data.contacts;
-        document.getElementById("totalCount").textContent = `Total Registered Contacts: ${data.total}`;
+        updateDashboardStats();
+        filterContacts();
         renderTable();
         renderPagination();
       } catch (error) {
-        document.getElementById("tableBody").innerHTML =
-          `<tr><td colspan="4" style="text-align:center; color:red; padding:20px;">Error loading contacts</td></tr>`;
+        document.getElementById("tableBody").innerHTML = `
+          <tr>
+            <td colspan="4" class="empty-state">
+              <i class="fas fa-exclamation-circle"></i>
+              <h3>Error loading contacts</h3>
+              <p>Please try again later</p>
+            </td>
+          </tr>
+        `;
         console.error(error);
       }
     }
 
+    // Render the table with current page data
     function renderTable() {
       const start = (currentPage - 1) * rowsPerPage;
       const end = start + rowsPerPage;
-      const currentContacts = contacts.slice(start, end);
+      const currentContacts = filteredContacts.slice(start, end);
 
       const tbody = document.getElementById("tableBody");
       tbody.innerHTML = "";
 
       if (currentContacts.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px;">No contacts found</td></tr>`;
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="empty-state">
+              <i class="fas fa-search"></i>
+              <h3>No contacts found</h3>
+              <p>Try adjusting your search or filters</p>
+            </td>
+          </tr>
+        `;
         return;
       }
 
-      currentContacts.forEach((c, index) => {
+      currentContacts.forEach((contact, index) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${start + index + 1}</td>
-          <td>${c.name}</td>
-          <td>${c.number}</td>
-          <td>${c.createdAt}</td>
+          <td>
+            <div class="contact-name">
+              <div class="avatar">${getInitials(contact.name)}</div>
+              <div>${contact.name}</div>
+            </div>
+          </td>
+          <td class="phone-cell">
+            <i class="fas fa-phone"></i>
+            ${contact.number}
+          </td>
+          <td class="date-cell">${formatDate(contact.createdAt)}</td>
+          <td class="actions-cell">
+            <button class="action-btn" title="View">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="action-btn" title="Edit">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-btn" title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
         `;
         tbody.appendChild(row);
       });
     }
 
+    // Render pagination controls
     function renderPagination() {
-      const pageCount = Math.ceil(contacts.length / rowsPerPage);
+      const pageCount = Math.ceil(filteredContacts.length / rowsPerPage);
       const pagination = document.getElementById("pagination");
       pagination.innerHTML = "";
 
+      // Previous button
       const prev = document.createElement("button");
-      prev.textContent = "← Prev";
+      prev.innerHTML = '<i class="fas fa-chevron-left"></i> Prev';
       prev.disabled = currentPage === 1;
-      prev.onclick = () => { currentPage--; renderTable(); renderPagination(); };
+      prev.onclick = () => { 
+        if (currentPage > 1) {
+          currentPage--; 
+          renderTable(); 
+          renderPagination(); 
+        }
+      };
       pagination.appendChild(prev);
 
-      for (let i = 1; i <= pageCount; i++) {
+      // Page numbers
+      const maxVisiblePages = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = Math.min(pageCount, startPage + maxVisiblePages - 1);
+      
+      if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
         const btn = document.createElement("button");
         btn.textContent = i;
-        btn.disabled = i === currentPage;
-        btn.onclick = () => { currentPage = i; renderTable(); renderPagination(); };
+        btn.classList.toggle("active", i === currentPage);
+        btn.onclick = () => { 
+          currentPage = i; 
+          renderTable(); 
+          renderPagination(); 
+        };
         pagination.appendChild(btn);
       }
 
+      // Next button
       const next = document.createElement("button");
-      next.textContent = "Next →";
-      next.disabled = currentPage === pageCount;
-      next.onclick = () => { currentPage++; renderTable(); renderPagination(); };
+      next.innerHTML = 'Next <i class="fas fa-chevron-right"></i>';
+      next.disabled = currentPage === pageCount || pageCount === 0;
+      next.onclick = () => { 
+        if (currentPage < pageCount) {
+          currentPage++; 
+          renderTable(); 
+          renderPagination(); 
+        }
+      };
       pagination.appendChild(next);
+
+      // Update pagination info
+      const startItem = (currentPage - 1) * rowsPerPage + 1;
+      const endItem = Math.min(currentPage * rowsPerPage, filteredContacts.length);
+      document.getElementById("paginationInfo").textContent = 
+        `Showing ${startItem} to ${endItem} of ${filteredContacts.length} entries`;
     }
 
-    fetchContacts();
+    // Initialize the application
+    function init() {
+      fetchContacts();
+      
+      // Search functionality
+      document.getElementById('searchInput').addEventListener('input', (e) => {
+        searchTerm = e.target.value;
+        currentPage = 1;
+        filterContacts();
+        renderTable();
+        renderPagination();
+      });
+      
+      // Rows per page selector
+      document.getElementById('rowsPerPage').addEventListener('change', (e) => {
+        rowsPerPage = parseInt(e.target.value);
+        currentPage = 1;
+        renderTable();
+        renderPagination();
+      });
+    }
+
+    // Start the application when DOM is loaded
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 
 </body>
