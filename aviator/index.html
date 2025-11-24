@@ -51,7 +51,48 @@
     position:absolute; top:-5px; right:-5px; background:red; width:20px; height:20px; border-radius:50%; display:flex;
     justify-content:center; align-items:center; font-size:12px; font-weight:bold;
   }
-  @media (max-width:600px){header{font-size:1rem}.site-box{padding:15px}}
+  
+  /* WhatsApp Channel Modal Styles */
+  #whatsappModal {
+    position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); 
+    display: none; align-items:center; justify-content:center; z-index:9998; padding:20px;
+  }
+  #whatsappModal.show {display:flex;}
+  .whatsapp-modal-content {
+    background: #111; border-radius:12px; padding:25px; width:100%; max-width:350px; text-align:center;
+    border: 2px solid #25D366; box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
+  }
+  .whatsapp-modal-content h3 {
+    color: #25D366; margin-bottom:15px; font-size:1.4rem; text-transform:uppercase;
+  }
+  .whatsapp-modal-content p {
+    color: #fff; margin-bottom:25px; line-height:1.5;
+  }
+  .whatsapp-buttons {
+    display: flex; justify-content: space-between; gap:15px;
+  }
+  .whatsapp-buttons button {
+    flex:1; padding:12px 0; border:none; border-radius:25px; font-weight:bold; cursor:pointer;
+    transition: all 0.3s ease;
+  }
+  .join-btn {
+    background: #25D366; color: #000;
+  }
+  .join-btn:hover {
+    background: #1da851; transform: scale(1.05);
+  }
+  .cancel-btn {
+    background: #ff3333; color: #fff;
+  }
+  .cancel-btn:hover {
+    background: #e60000; transform: scale(1.05);
+  }
+  
+  @media (max-width:600px){
+    header{font-size:1rem}
+    .site-box{padding:15px}
+    .whatsapp-modal-content {max-width:300px; padding:20px;}
+  }
 </style>
 </head>
 <body>
@@ -59,7 +100,17 @@
 <div id="loading-screen">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M476.864 3.7L35.164 240.8c-11.4 6.1-11.3 22.3.2 28.3l116.3 62.4L430.064 69.4c3.5-3.4 9.1-3.3 12.5.2 3.4 3.5 3.3 9.1-.2 12.5L164.364 343.3l13.4 129.1c1.1 10.4 13.9 14.2 20.2 6l45.9-58.1 103.4 55.5c7.8 4.2 17.3-2.2 15.9-11l-16.6-103.5 148.4-155.3c2.9-3 3.6-7.5 1.8-11.3-1.8-3.8-5.8-6.2-10-6L476.864 3.7z"></path></svg>
   <h1>AVIATOR PREDICTOR v12.0.5</h1>
-  <p style="color: #fff; margin-top: 20px; font-size: 1.2rem; text-align: center;">JOIN OUR WHATSAPP CHANNEL</p>
+</div>
+
+<div id="whatsappModal">
+  <div class="whatsapp-modal-content">
+    <h3>JOIN OUR CHANNEL</h3>
+    <p>Join our WhatsApp channel to get the latest Aviator predictions and updates!</p>
+    <div class="whatsapp-buttons">
+      <button class="cancel-btn" id="cancelBtn">CANCEL</button>
+      <button class="join-btn" id="joinBtn">JOIN</button>
+    </div>
+  </div>
 </div>
 
 <div id="dashboard">
@@ -119,13 +170,38 @@
   const submitBtn = document.getElementById('submitBtn');
   const appIdInput = document.getElementById('appIdInput');
   const errorMsg = document.getElementById('errorMsg');
+  
+  // WhatsApp modal elements
+  const whatsappModal = document.getElementById('whatsappModal');
+  const joinBtn = document.getElementById('joinBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  
   let selectedLink = '';
 
   window.addEventListener('load', () => {
     setTimeout(() => {
       loadingScreen.style.opacity='0';
-      setTimeout(()=>{ loadingScreen.style.display='none'; dashboard.style.display='flex'; }, 1000);
+      setTimeout(()=>{ 
+        loadingScreen.style.display='none'; 
+        // Show WhatsApp modal first
+        whatsappModal.classList.add('show'); 
+      }, 1000);
     },3000);
+  });
+
+  // WhatsApp modal button handlers
+  joinBtn.addEventListener('click', () => {
+    whatsappModal.classList.remove('show');
+    // Redirect to WhatsApp channel
+    window.open('https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A', '_blank');
+    // Show dashboard after joining
+    dashboard.style.display='flex';
+  });
+  
+  cancelBtn.addEventListener('click', () => {
+    whatsappModal.classList.remove('show');
+    // Show dashboard after canceling
+    dashboard.style.display='flex';
   });
 
   document.querySelectorAll('.site-box').forEach(box=>{
@@ -170,4 +246,4 @@
   }
 </script>
 </body>
-</html>
+ </html>
