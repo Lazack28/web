@@ -3,119 +3,634 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aviator Predictor v12.0.5</title>
+<title>Aviator Predictor Pro v12.0.5</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family: 'Roboto', Arial, sans-serif;}
-  body {background:#000; color:#fff; overflow-x:hidden;}
+  :root {
+    --primary: #e53935;
+    --primary-dark: #b71c1c;
+    --secondary: #1a1a1a;
+    --accent: #ff9800;
+    --text: #ffffff;
+    --text-secondary: #b0b0b0;
+    --card-bg: #1e1e1e;
+    --success: #4caf50;
+    --warning: #ffc107;
+    --gradient: linear-gradient(135deg, #e53935 0%, #b71c1c 100%);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    --radius: 12px;
+  }
+  
+  * { 
+    margin:0; 
+    padding:0; 
+    box-sizing:border-box; 
+    font-family: 'Poppins', Arial, sans-serif;
+  }
+  
+  body {
+    background: #0a0a0a; 
+    color: var(--text); 
+    overflow-x: hidden;
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(229, 57, 53, 0.1) 0%, transparent 20%),
+      radial-gradient(circle at 90% 80%, rgba(183, 28, 28, 0.1) 0%, transparent 20%);
+  }
+  
   #loading-screen {
-    position: fixed; top:0; left:0; width:100%; height:100%; background:#000;
-    display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:9999;
+    position: fixed; 
+    top:0; 
+    left:0; 
+    width:100%; 
+    height:100%; 
+    background: var(--secondary);
+    display:flex; 
+    flex-direction:column; 
+    justify-content:center; 
+    align-items:center; 
+    z-index:9999;
     transition: opacity 1s ease;
   }
-  #loading-screen svg {width:80px; height:80px; fill:red; animation: pulse 1.5s infinite ease-in-out;}
-  #loading-screen h1 {color:red; font-size:1.2rem; font-weight:bold; margin-top:15px; letter-spacing:2px; text-transform:uppercase;}
-  @keyframes pulse {0%,100%{transform:scale(1);opacity:0.9}50%{transform:scale(1.2);opacity:1}}
-  #dashboard {display:none; flex-direction:column; align-items:center; padding:20px; min-height:100vh;}
-  header {background:red;color:#fff;width:100%;text-align:center;padding:15px 10px;font-size:1.3rem;font-weight:bold;text-transform:uppercase;border-bottom:3px solid #700;}
-  h2 {margin-top:10px;color:#aaa;font-size:1rem;letter-spacing:1px;text-transform:uppercase;}
-  .sites-container {display:grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap:15px; margin-top:30px; width:100%; max-width:800px;}
+  
+  .logo-container {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .logo-plane {
+    width: 120px;
+    height: 120px;
+    fill: var(--primary);
+    animation: float 3s infinite ease-in-out;
+    filter: drop-shadow(0 0 10px rgba(229, 57, 53, 0.5));
+  }
+  
+  .loading-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  
+  .loading-dots {
+    display: flex;
+    margin-top: 20px;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary);
+    margin: 0 5px;
+    animation: bounce 1.5s infinite ease-in-out;
+  }
+  
+  .dot:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .dot:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.3); opacity: 1; }
+  }
+  
+  #dashboard {
+    display: none; 
+    flex-direction: column; 
+    align-items: center; 
+    padding: 20px; 
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  header {
+    background: var(--gradient);
+    color: var(--text);
+    width: 100%;
+    text-align: center;
+    padding: 20px 10px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shine 3s infinite;
+  }
+  
+  @keyframes shine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+  
+  .subtitle {
+    margin: 10px 0 30px;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  
+  .subtitle::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: var(--gradient);
+    border-radius: 3px;
+  }
+  
+  .stats-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 30px;
+    gap: 15px;
+  }
+  
+  .stat-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 15px;
+    flex: 1;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--primary);
+  }
+  
+  .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 5px;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+  }
+  
+  .sites-container {
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+    gap: 20px; 
+    margin-top: 20px; 
+    width: 100%;
+  }
+  
   .site-box {
-    display:flex; justify-content:center; align-items:center; padding:20px; border-radius:12px;
-    cursor:pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; color:#fff; text-transform:uppercase; font-weight:bold; text-align:center;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 25px 15px; 
+    border-radius: var(--radius);
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    color: var(--text); 
+    text-transform: uppercase; 
+    font-weight: 600; 
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,0.05);
   }
-  .site-box:hover {transform:scale(1.05); box-shadow:0 0 15px red;}
-  .betway {background:#1f1f1f;} .sportpesa {background:#001f5b;} .betika {background:#ffcc00;color:#000;} 
-  .meridianbet {background:#d71a28;} .betpawa {background:#009739;} .parimatch {background:#ffea00;color:#000;} 
-  .galabet {background:#2a2a2a;} .mcheza {background:#3c0d73;} .xbet1 {background:#0071c2;} .bet365 {background:#125c3e;} 
-  .melbet {background:#e5b700;color:#000;} .palmsbet {background:#0066cc;} .bet22 {background:#066b54;} .betlion {background:#b41c18;} 
-  .betikaextra {background:#ff9900;color:#000;} .odibets {background:#4caf50;} .powerbets {background:#ff002b;} .mobet {background:#001d34;} 
-  .bet888 {background:#ff6600;} .wasafibet {background:#c40000;}
-  footer {background:red;color:#fff;text-align:center;padding:15px;margin-top:40px;font-size:0.9rem;border-top:3px solid #700;}
-  footer a {color:#fff;font-weight:bold;text-decoration:underline;}
+  
+  .site-box::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .site-box:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+  }
+  
+  .site-box:hover::before {
+    opacity: 1;
+  }
+  
+  .site-box.betway { background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%); } 
+  .site-box.sportpesa { background: linear-gradient(135deg, #001f5b 0%, #003399 100%); } 
+  .site-box.betika { background: linear-gradient(135deg, #ffcc00 0%, #ffaa00 100%); color:#000; } 
+  .site-box.meridianbet { background: linear-gradient(135deg, #d71a28 0%, #a3141f 100%); } 
+  .site-box.betpawa { background: linear-gradient(135deg, #009739 0%, #00752d 100%); } 
+  .site-box.parimatch { background: linear-gradient(135deg, #ffea00 0%, #ffd700 100%); color:#000; } 
+  .site-box.galabet { background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); } 
+  .site-box.mcheza { background: linear-gradient(135deg, #3c0d73 0%, #2a0952 100%); } 
+  .site-box.xbet1 { background: linear-gradient(135deg, #0071c2 0%, #005a9e 100%); } 
+  .site-box.bet365 { background: linear-gradient(135deg, #125c3e 0%, #0e4a31 100%); } 
+  .site-box.melbet { background: linear-gradient(135deg, #e5b700 0%, #cc9f00 100%); color:#000; } 
+  .site-box.palmsbet { background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); } 
+  .site-box.bet22 { background: linear-gradient(135deg, #066b54 0%, #055244 100%); } 
+  .site-box.betlion { background: linear-gradient(135deg, #b41c18 0%, #8f1512 100%); } 
+  .site-box.betikaextra { background: linear-gradient(135deg, #ff9900 0%, #e68500 100%); color:#000; } 
+  .site-box.odibets { background: linear-gradient(135deg, #4caf50 0%, #3d8b40 100%); } 
+  .site-box.powerbets { background: linear-gradient(135deg, #ff002b 0%, #cc0022 100%); } 
+  .site-box.mobet { background: linear-gradient(135deg, #001d34 0%, #001225 100%); } 
+  .site-box.bet888 { background: linear-gradient(135deg, #ff6600 0%, #cc5500 100%); } 
+  .site-box.wasafibet { background: linear-gradient(135deg, #c40000 0%, #9d0000 100%); }
+  
+  footer {
+    background: var(--gradient);
+    color: var(--text);
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    font-size: 0.9rem;
+    border-radius: var(--radius);
+    width: 100%;
+    box-shadow: var(--shadow);
+  }
+  
+  footer a {
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid transparent;
+  }
+  
+  footer a:hover {
+    border-bottom: 1px solid var(--text);
+  }
+  
   #modalBack {
-    position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.85); z-index:1000; padding:20px;
+    position: fixed; 
+    inset: 0; 
+    display: none; 
+    align-items: center; 
+    justify-content: center; 
+    background: rgba(0,0,0,0.85); 
+    z-index: 1000; 
+    padding: 20px;
+    backdrop-filter: blur(5px);
   }
-  #modalBack.show {display:flex;}
-  .modal {background:#111; border-radius:12px; padding:20px; width:100%; max-width:400px; text-align:center; position:relative;}
-  .modal h3 {color:red; margin-bottom:15px;}
-  .modal input {width:100%; padding:12px; border-radius:10px; border:none; margin-bottom:12px; font-size:1rem;}
-  .modal button {padding:12px 20px; border:none; border-radius:25px; background:red; color:#000; font-weight:bold; cursor:pointer;}
-  .closeBtn {position:absolute; top:10px; right:12px; background:transparent; border:none; color:#fff; font-size:1.2rem; cursor:pointer;}
-  .errorMsg {color:red; font-weight:bold; min-height:20px;}
+  
+  #modalBack.show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .modal {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 30px;
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    position: relative;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,0.1);
+    animation: modalSlideIn 0.3s ease;
+  }
+  
+  @keyframes modalSlideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  .modal h3 {
+    color: var(--primary);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+  }
+  
+  .modal input {
+    width: 100%; 
+    padding: 15px; 
+    border-radius: var(--radius); 
+    border: 2px solid rgba(255,255,255,0.1);
+    margin-bottom: 20px; 
+    font-size: 1rem;
+    background: rgba(0,0,0,0.3);
+    color: var(--text);
+    transition: all 0.3s ease;
+  }
+  
+  .modal input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.2);
+  }
+  
+  .modal button {
+    padding: 15px 30px; 
+    border: none; 
+    border-radius: 50px; 
+    background: var(--gradient);
+    color: var(--text); 
+    font-weight: 600; 
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .modal button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(229, 57, 53, 0.4);
+  }
+  
+  .closeBtn {
+    position: absolute; 
+    top: 15px; 
+    right: 15px; 
+    background: transparent; 
+    border: none; 
+    color: var(--text-secondary); 
+    font-size: 1.5rem; 
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .closeBtn:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.1);
+  }
+  
+  .errorMsg {
+    color: var(--primary);
+    font-weight: 500;
+    min-height: 20px;
+    margin-top: 10px;
+  }
+  
   .whatsapp-btn {
-    position: fixed; bottom:20px; right:20px; width:60px; height:60px; border-radius:50%; background:#25D366; display:flex;
-    justify-content:center; align-items:center; color:#fff; font-size:28px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3);
-    z-index:1000;
+    position: fixed; 
+    bottom: 20px; 
+    right: 20px; 
+    width: 70px; 
+    height: 70px; 
+    border-radius: 50%; 
+    background: var(--success);
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    color: var(--text); 
+    font-size: 32px; 
+    cursor: pointer; 
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: all 0.3s ease;
+    animation: pulse-green 2s infinite;
   }
+  
+  .whatsapp-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+  }
+  
+  @keyframes pulse-green {
+    0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(76, 175, 80, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+  }
+  
   .whatsapp-badge {
-    position:absolute; top:-5px; right:-5px; background:red; width:20px; height:20px; border-radius:50%; display:flex;
-    justify-content:center; align-items:center; font-size:12px; font-weight:bold;
+    position: absolute; 
+    top: -5px; 
+    right: -5px; 
+    background: var(--primary); 
+    width: 25px; 
+    height: 25px; 
+    border-radius: 50%; 
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    font-size: 12px; 
+    font-weight: bold;
+    animation: pulse 1.5s infinite;
   }
   
   /* WhatsApp Channel Modal Styles */
   #whatsappModal {
-    position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); 
-    display: none; align-items:center; justify-content:center; z-index:9998; padding:20px;
-  }
-  #whatsappModal.show {display:flex;}
-  .whatsapp-modal-content {
-    background: #111; border-radius:12px; padding:25px; width:100%; max-width:350px; text-align:center;
-    border: 2px solid #25D366; box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
-  }
-  .whatsapp-modal-content h3 {
-    color: #25D366; margin-bottom:15px; font-size:1.4rem; text-transform:uppercase;
-  }
-  .whatsapp-modal-content p {
-    color: #fff; margin-bottom:25px; line-height:1.5;
-  }
-  .whatsapp-buttons {
-    display: flex; justify-content: space-between; gap:15px;
-  }
-  .whatsapp-buttons button {
-    flex:1; padding:12px 0; border:none; border-radius:25px; font-weight:bold; cursor:pointer;
-    transition: all 0.3s ease;
-  }
-  .join-btn {
-    background: #25D366; color: #000;
-  }
-  .join-btn:hover {
-    background: #1da851; transform: scale(1.05);
-  }
-  .cancel-btn {
-    background: #ff3333; color: #fff;
-  }
-  .cancel-btn:hover {
-    background: #e60000; transform: scale(1.05);
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.9); 
+    display: none; 
+    align-items: center; 
+    justify-content: center; 
+    z-index: 9998; 
+    padding: 20px;
+    backdrop-filter: blur(5px);
   }
   
-  @media (max-width:600px){
-    header{font-size:1rem}
-    .site-box{padding:15px}
-    .whatsapp-modal-content {max-width:300px; padding:20px;}
+  #whatsappModal.show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .whatsapp-modal-content {
+    background: var(--card-bg); 
+    border-radius: var(--radius); 
+    padding: 30px; 
+    width: 100%; 
+    max-width: 400px; 
+    text-align: center;
+    border: 2px solid var(--success); 
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    animation: modalSlideIn 0.3s ease;
+  }
+  
+  .whatsapp-modal-content h3 {
+    color: var(--success); 
+    margin-bottom: 15px; 
+    font-size: 1.5rem; 
+    text-transform: uppercase;
+  }
+  
+  .whatsapp-modal-content p {
+    color: var(--text-secondary); 
+    margin-bottom: 25px; 
+    line-height: 1.6;
+  }
+  
+  .whatsapp-buttons {
+    display: flex; 
+    justify-content: space-between; 
+    gap: 15px;
+  }
+  
+  .whatsapp-buttons button {
+    flex: 1; 
+    padding: 15px 0; 
+    border: none; 
+    border-radius: 50px; 
+    font-weight: 600; 
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .join-btn {
+    background: var(--success); 
+    color: var(--text);
+  }
+  
+  .join-btn:hover {
+    background: #3d8b40; 
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+  }
+  
+  .cancel-btn {
+    background: rgba(255,255,255,0.1); 
+    color: var(--text);
+  }
+  
+  .cancel-btn:hover {
+    background: rgba(255,255,255,0.2); 
+    transform: translateY(-2px);
+  }
+  
+  @media (max-width: 768px) {
+    .stats-container {
+      flex-direction: column;
+    }
+    
+    .sites-container {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 15px;
+    }
+    
+    .site-box {
+      padding: 20px 10px;
+    }
+    
+    header {
+      font-size: 1.2rem;
+      padding: 15px 10px;
+    }
+    
+    .whatsapp-modal-content {
+      max-width: 350px;
+      padding: 25px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .sites-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .whatsapp-modal-content {
+      max-width: 300px;
+      padding: 20px;
+    }
+    
+    .whatsapp-buttons {
+      flex-direction: column;
+    }
   }
 </style>
 </head>
 <body>
 
 <div id="loading-screen">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M476.864 3.7L35.164 240.8c-11.4 6.1-11.3 22.3.2 28.3l116.3 62.4L430.064 69.4c3.5-3.4 9.1-3.3 12.5.2 3.4 3.5 3.3 9.1-.2 12.5L164.364 343.3l13.4 129.1c1.1 10.4 13.9 14.2 20.2 6l45.9-58.1 103.4 55.5c7.8 4.2 17.3-2.2 15.9-11l-16.6-103.5 148.4-155.3c2.9-3 3.6-7.5 1.8-11.3-1.8-3.8-5.8-6.2-10-6L476.864 3.7z"></path></svg>
-  <h1>AVIATOR PREDICTOR v12.0.5</h1>
+  <div class="logo-container">
+    <svg class="logo-plane" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <path d="M476.864 3.7L35.164 240.8c-11.4 6.1-11.3 22.3.2 28.3l116.3 62.4L430.064 69.4c3.5-3.4 9.1-3.3 12.5.2 3.4 3.5 3.3 9.1-.2 12.5L164.364 343.3l13.4 129.1c1.1 10.4 13.9 14.2 20.2 6l45.9-58.1 103.4 55.5c7.8 4.2 17.3-2.2 15.9-11l-16.6-103.5 148.4-155.3c2.9-3 3.6-7.5 1.8-11.3-1.8-3.8-5.8-6.2-10-6L476.864 3.7z"></path>
+    </svg>
+  </div>
+  <h1 class="loading-text">AVIATOR PREDICTOR PRO</h1>
+  <p style="color: var(--text-secondary); margin-top: 10px; text-align: center;">v12.0.5 - Premium Predictions</p>
+  <div class="loading-dots">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
 </div>
 
 <div id="whatsappModal">
   <div class="whatsapp-modal-content">
     <h3>JOIN OUR CHANNEL</h3>
-    <p>Join our WhatsApp channel to get the latest Aviator predictions and updates!</p>
+    <p>Join our exclusive WhatsApp channel to get real-time Aviator predictions, winning strategies, and exclusive tips!</p>
     <div class="whatsapp-buttons">
       <button class="cancel-btn" id="cancelBtn">CANCEL</button>
-      <button class="join-btn" id="joinBtn">JOIN</button>
+      <button class="join-btn" id="joinBtn">JOIN NOW</button>
     </div>
   </div>
 </div>
 
 <div id="dashboard">
-  <header>CHAGUA TOVUTI YAKO YA KUBETI</header>
-  <h2>Aviator Predictor V12.0.5</h2>
+  <header>
+    <div>CHAGUA TOVUTI YAKO YA KUBETI</div>
+  </header>
+  
+  <h2 class="subtitle">Aviator Predictor V12.0.5</h2>
+  
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-value">97%</div>
+      <div class="stat-label">Accuracy Rate</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">12.5x</div>
+      <div class="stat-label">Avg. Multiplier</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">24/7</div>
+      <div class="stat-label">Active Predictions</div>
+    </div>
+  </div>
 
   <div class="sites-container">
     <div class="site-box betway" data-link="https://v0-html-code-deployment-snowy.vercel.app/">Betway</div>
@@ -141,23 +656,23 @@
   </div>
 
   <footer>
-    Click link👉🏿 <a href="https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A" target="_blank">https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A</a>
-    to join our WhatsApp group <b>AVIATOR|PREDICTOR</b>
+    <p>Click link👉🏿 <a href="https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A" target="_blank">https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A</a></p>
+    <p>to join our WhatsApp channel <b>AVIATOR|PREDICTOR PRO</b></p>
   </footer>
 </div>
 
 <div id="modalBack">
   <div class="modal">
     <button class="closeBtn">×</button>
-    <h3>ENTER APP ID</h3>
-    <input type="text" id="appIdInput" placeholder="Enter Access ID">
-    <button id="submitBtn">CONTINUE</button>
+    <h3>ENTER ACCESS CODE</h3>
+    <input type="text" id="appIdInput" placeholder="Enter your access code">
+    <button id="submitBtn">CONTINUE TO PREDICTIONS</button>
     <div class="errorMsg" id="errorMsg"></div>
   </div>
 </div>
 
 <div class="whatsapp-btn" onclick="window.open('https://wa.me/255783394967','_blank')">
-  <span>📞</span>
+  <span>💬</span>
   <div class="whatsapp-badge">1</div>
 </div>
 
@@ -201,6 +716,12 @@
   cancelBtn.addEventListener('click', () => {
     whatsappModal.classList.remove('show');
     // Show dashboard after canceling
+ dashboard.style.display='flex';
+  });
+  
+  cancelBtn.addEventListener('click', () => {
+    whatsappModal.classList.remove('show');
+    // Show dashboard after canceling
     dashboard.style.display='flex';
   });
 
@@ -219,12 +740,12 @@
   function handleSubmit(){
     const val = appIdInput.value.trim().toUpperCase();
     if(ACCESS_CODES.includes(val)){
-      const expiry = Date.now() + (30 * 24 * 60 * 60 * 1000); // siku 30
+      const expiry = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 days
       localStorage.setItem('aviatorAccess', JSON.stringify({id: val, expiry}));
       modalBack.classList.remove('show');
       window.location.href = selectedLink;
     } else {
-      errorMsg.textContent = 'Invalid App ID, please try again.';
+      errorMsg.textContent = 'Invalid Access Code. Please try again.';
     }
   }
 
@@ -242,8 +763,10 @@
       }catch(e){ localStorage.removeItem('aviatorAccess'); }
     }
     modalBack.classList.add('show');
-    errorMsg.textContent=''; appIdInput.value=''; appIdInput.focus();
+    errorMsg.textContent=''; 
+    appIdInput.value=''; 
+    appIdInput.focus();
   }
 </script>
 </body>
- </html>
+</html>
