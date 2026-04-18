@@ -8,1193 +8,783 @@
   <meta name="author" content="Lazack Organisation">
   <meta property="og:title" content="Lazack Organisation - Technology Solutions">
   <meta property="og:description" content="Premium technology solutions including WhatsApp bots, modded APKs, and digital products.">
-  <meta property="og:image" content="./mtaju.png" />
-  <meta property="og:url" content="https://lazackorganisation.my.id" />
-  <meta name="facebook-domain-verification" content="lmpm0fgqoscbbrbkpv0so1e9ft6ovy" />
+  <meta property="og:image" content="./mtaju.jpg">
+  <meta property="og:url" content="https://lazackorganisation.my.id">
+  <meta name="facebook-domain-verification" content="lmpm0fgqoscbbrbkpv0so1e9ft6ovy">
   <meta property="og:type" content="website">
-  <title>Lazack Organisation</title>
+  <title>Lazack Organisation — Technology Solutions</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --secondary: #7e22ce;
-      --accent: #f97316;
-      --dark: #1e293b;
-      --light: #f8fafc;
-      --gray: #64748b;
-      --success: #22c55e;
-      --warning: #eab308;
-      --error: #ef4444;
-      --transition: all 0.3s ease;
-      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --radius: 12px;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-      color: var(--dark);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    /* Header & Navigation */
-    header {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-      padding: 15px 0;
-      transition: var(--transition);
-    }
-
-    header.scrolled {
-      padding: 10px 0;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .nav-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--primary);
-      text-decoration: none;
-    }
-
-    .logo span {
-      color: var(--secondary);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 30px;
-    }
-
-    .nav-link {
-      font-weight: 500;
-      color: var(--dark);
-      text-decoration: none;
-      transition: var(--transition);
-      position: relative;
-    }
-
-    .nav-link:hover {
-      color: var(--primary);
-    }
-
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--primary);
-      transition: var(--transition);
-    }
-
-    .nav-link:hover::after {
-      width: 100%;
-    }
-
-    .nav-cta {
-      background: var(--primary);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 50px;
-      font-weight: 600;
-      transition: var(--transition);
-    }
-
-    .nav-cta:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
-    }
-
-    .hamburger {
-      display: none;
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      color: var(--dark);
-    }
-
-    /* Hero Section */
-    .hero {
-      padding: 160px 0 100px;
-      background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -100px;
-      right: -100px;
-      width: 500px;
-      height: 500px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      opacity: 0.1;
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -100px;
-      left: -100px;
-      width: 400px;
-      height: 400px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
-      opacity: 0.1;
-    }
-
-    .hero-content {
-      max-width: 650px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero-title {
-      font-size: 3.5rem;
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 20px;
-      color: var(--dark);
-    }
-
-    .hero-subtitle {
-      font-size: 1.25rem;
-      color: var(--gray);
-      margin-bottom: 30px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 28px;
-      border-radius: 50px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: var(--transition);
-      cursor: pointer;
-      border: none;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow);
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--primary);
-      border: 2px solid var(--primary);
-    }
-
-    .btn-secondary:hover {
-      background: var(--primary);
-      color: white;
-      transform: translateY(-3px);
-      box-shadow: var(--shadow);
-    }
-
-    /* Section Styles */
-    .section {
-      padding: 80px 0;
-    }
-
-    .section-title {
-      font-size: 2.5rem;
-      text-align: center;
-      margin-bottom: 50px;
-      position: relative;
-    }
-
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 4px;
-      background: var(--primary);
-      border-radius: 2px;
-    }
-
-    /* About Section */
-    .about-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
-    }
-
-    .about-image {
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      height: 400px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 1.5rem;
-      font-weight: 700;
-    }
-
-    .about-text {
-      font-size: 1.1rem;
-      color: var(--gray);
-    }
-
-    /* Services Section */
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-    }
-
-    .service-card {
-      background: white;
-      padding: 30px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      text-align: center;
-    }
-
-    .service-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-
-    .service-icon {
-      font-size: 2.5rem;
-      color: var(--primary);
-      margin-bottom: 20px;
-    }
-
-    .service-title {
-      font-size: 1.5rem;
-      margin-bottom: 15px;
-      color: var(--dark);
-    }
-
-    .service-description {
-      color: var(--gray);
-    }
-
-    /* Contact Section */
-    .contact {
-      background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
-    }
-
-    .contact-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-    }
-
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .contact-icon {
-      width: 50px;
-      height: 50px;
-      background: var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 1.2rem;
-    }
-
-    .contact-form {
-      background: white;
-      padding: 30px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-    }
-
-    textarea.form-input {
-      min-height: 150px;
-      resize: vertical;
-    }
-
-    /* Legal Section */
-    .legal-links {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-    }
-
-    .legal-link {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 500;
-      transition: var(--transition);
-    }
-
-    .legal-link:hover {
-      color: var(--secondary);
-      text-decoration: underline;
-    }
-
-    /* Footer */
-    footer {
-      background: var(--dark);
-      color: white;
-      padding: 50px 0 20px;
-    }
-
-    .footer-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 40px;
-      margin-bottom: 40px;
-    }
-
-    .footer-logo {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 15px;
-      color: white;
-    }
-
-    .footer-description {
-      color: #94a3b8;
-      margin-bottom: 20px;
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 15px;
-    }
-
-    .social-link {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition);
-      color: white;
-      text-decoration: none;
-    }
-
-    .social-link:hover {
-      background: var(--primary);
-      transform: translateY(-3px);
-    }
-
-    .footer-heading {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      color: white;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .footer-link {
-      color: #94a3b8;
-      text-decoration: none;
-      transition: var(--transition);
-    }
-
-    .footer-link:hover {
-      color: white;
-    }
-
-    .footer-bottom {
-      text-align: center;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      color: #94a3b8;
-    }
-
-    /* Back to Top Button */
-    .back-to-top {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 50px;
-      height: 50px;
-      background: var(--primary);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      opacity: 0;
-      visibility: hidden;
-      z-index: 999;
-    }
-
-    .back-to-top.visible {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .back-to-top:hover {
-      background: var(--primary-dark);
-      transform: translateY(-3px);
-    }
-
-    /* Responsive Design */
-    @media (max-width: 968px) {
-      .hero-title {
-        font-size: 2.8rem;
-      }
-      
-      .about-content {
-        grid-template-columns: 1fr;
-      }
-      
-      .contact-container {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .nav-links {
-        position: fixed;
-        top: 70px;
-        left: -100%;
-        width: 100%;
-        height: calc(100vh - 70px);
-        background: white;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 3rem;
-        transition: var(--transition);
-      }
-      
-      .nav-links.active {
-        left: 0;
-      }
-      
-      .hamburger {
-        display: block;
-        z-index: 1001;
-      }
-      
-      .hero-title {
-        font-size: 2.5rem;
-      }
-      
-      .hero-subtitle {
-        font-size: 1.2rem;
-      }
-      
-      .section-title {
-        font-size: 2rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .hero-title {
-        font-size: 2rem;
-      }
-      
-      .hero-buttons {
-        flex-direction: column;
-      }
-      
-      .btn {
-        width: 100%;
-        justify-content: center;
-      }
-      
-      .service-card {
-        padding: 20px;
-      }
-    }
-
-    /* Animation Classes */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Loading Animation */
-    .loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
-    }
-
-    .loader.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    .loader-spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+      --ink:     #0a0f1e;
+      --ink-2:   #1c2440;
+      --muted:   #6b7491;
+      --surface: #ffffff;
+      --soft:    #f4f6fc;
+      --border:  #e4e8f5;
+      --blue:    #2563eb;
+      --blue-d:  #1a45b8;
+      --blue-gl: rgba(37,99,235,.1);
+      --violet:  #7c3aed;
+      --cyan:    #0ea5e9;
+      --amber:   #f59e0b;
+      --green:   #10b981;
+      --r-sm:10px; --r-md:16px; --r-lg:24px; --r-xl:40px;
+      --shadow-sm:0 2px 8px rgba(10,15,30,.06);
+      --shadow-md:0 8px 32px rgba(10,15,30,.10);
+      --shadow-lg:0 24px 64px rgba(10,15,30,.14);
+      --ease:cubic-bezier(.22,.68,0,1.2);
+      --ease-out:cubic-bezier(.16,1,.3,1);
+      --dur:.35s;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+    body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--ink);line-height:1.6;overflow-x:hidden;}
+    a{text-decoration:none;color:inherit;}
+    ul{list-style:none;}
+
+    /* LOADER */
+    #loader{position:fixed;inset:0;background:var(--surface);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .6s ease,visibility .6s ease;}
+    #loader.hidden{opacity:0;visibility:hidden;}
+    .loader-ring{width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    /* TOAST */
+    #toast{position:fixed;bottom:80px;right:28px;background:var(--ink-2);color:#fff;padding:14px 20px;border-radius:var(--r-md);font-size:.875rem;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;transform:translateX(120%);transition:transform .4s var(--ease-out);z-index:9998;max-width:320px;}
+    #toast.show{transform:translateX(0);}
+
+    /* BACK TO TOP */
+    #btt{position:fixed;bottom:28px;right:28px;width:46px;height:46px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.9rem;box-shadow:var(--shadow-md);cursor:pointer;border:none;opacity:0;visibility:hidden;pointer-events:none;transition:all var(--dur) ease;z-index:999;}
+    #btt.show{opacity:1;visibility:visible;pointer-events:auto;}
+    #btt:hover{background:var(--blue-d);transform:translateY(-3px);}
+
+    /* NAV */
+    #header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 24px;transition:background var(--dur) ease,box-shadow var(--dur) ease;}
+    #header.scrolled{background:rgba(255,255,255,.93);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 1px 0 var(--border),var(--shadow-sm);}
+    .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px;}
+    .logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:-.02em;}
+    .logo-mark{width:36px;height:36px;background:linear-gradient(135deg,var(--blue),var(--violet));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.9rem;}
+    .logo-text em{font-style:normal;color:var(--blue);}
+    .nav-links{display:flex;align-items:center;gap:6px;}
+    .nav-link{font-size:.9rem;font-weight:500;color:var(--muted);padding:8px 14px;border-radius:var(--r-sm);transition:color var(--dur) ease,background var(--dur) ease;}
+    .nav-link:hover{color:var(--ink);background:var(--soft);}
+    .nav-link.active{color:var(--blue);}
+    .nav-cta{background:var(--blue) !important;color:#fff !important;border-radius:var(--r-xl) !important;padding:9px 20px !important;font-weight:600 !important;transition:background var(--dur) ease,transform var(--dur) var(--ease),box-shadow var(--dur) ease !important;}
+    .nav-cta:hover{background:var(--blue-d) !important;transform:translateY(-1px);box-shadow:0 4px 20px rgba(37,99,235,.35);}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;border:none;background:none;}
+    .hamburger span{display:block;width:24px;height:2px;background:var(--ink);border-radius:2px;transition:transform .3s ease,opacity .3s ease;}
+    .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .hamburger.open span:nth-child(2){opacity:0;}
+    .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    @media(max-width:768px){
+      .hamburger{display:flex;}
+      .nav-links{position:fixed;top:68px;left:0;right:0;background:var(--surface);flex-direction:column;align-items:flex-start;padding:20px 24px 32px;gap:4px;transform:translateY(-110%);transition:transform .4s var(--ease-out);border-bottom:1px solid var(--border);box-shadow:var(--shadow-md);}
+      .nav-links.open{transform:translateY(0);}
+      .nav-link{width:100%;padding:12px 16px;font-size:1rem;}
+      .nav-cta{margin-top:12px;width:100%;justify-content:center;text-align:center;}
+    }
+
+    /* HERO */
+    .hero{min-height:100vh;display:flex;align-items:center;padding:120px 24px 80px;position:relative;overflow:hidden;}
+    .hero-blob{position:absolute;border-radius:50%;filter:blur(80px);animation:blob-move 8s ease-in-out infinite alternate;opacity:.55;}
+    .hero-blob-1{width:560px;height:560px;background:radial-gradient(circle,#dbeafe,transparent 70%);top:-120px;right:-140px;}
+    .hero-blob-2{width:420px;height:420px;background:radial-gradient(circle,#ede9fe,transparent 70%);bottom:-60px;left:-80px;animation-delay:-3s;}
+    .hero-blob-3{width:300px;height:300px;background:radial-gradient(circle,#cffafe,transparent 70%);top:40%;right:20%;animation-delay:-5s;}
+    @keyframes blob-move{from{transform:scale(1) translate(0,0);}to{transform:scale(1.15) translate(20px,-20px);}}
+    .hero-inner{max-width:1200px;margin:0 auto;width:100%;position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:var(--blue-gl);color:var(--blue);border-radius:var(--r-xl);font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:24px;}
+    .hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--blue);animation:pulse-dot 2s ease-in-out infinite;}
+    @keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.5);opacity:.6;}}
+    .hero-title{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:24px;}
+    .hero-title .accent{color:var(--blue);}
+    .hero-title .line2{color:var(--violet);}
+    .hero-sub{font-size:1.05rem;color:var(--muted);line-height:1.7;margin-bottom:40px;max-width:480px;}
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:var(--r-xl);font-size:.95rem;font-weight:600;transition:all var(--dur) var(--ease);cursor:pointer;border:none;}
+    .btn-primary{background:var(--blue);color:#fff;box-shadow:0 4px 20px rgba(37,99,235,.25);}
+    .btn-primary:hover{background:var(--blue-d);transform:translateY(-2px);box-shadow:0 8px 30px rgba(37,99,235,.4);}
+    .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--border);}
+    .btn-ghost:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-gl);transform:translateY(-2px);}
+    .hero-stats{display:flex;gap:32px;margin-top:48px;}
+    .stat-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--ink);line-height:1;}
+    .stat-label{font-size:.82rem;color:var(--muted);margin-top:4px;}
+    .hero-visual{position:relative;display:flex;justify-content:center;}
+    .hero-card-stack{position:relative;width:340px;height:380px;}
+    .h-card{position:absolute;background:var(--surface);border-radius:var(--r-lg);border:1.5px solid var(--border);box-shadow:var(--shadow-md);padding:24px;}
+    .h-card-1{width:280px;top:0;left:0;animation:float-1 5s ease-in-out infinite;}
+    .h-card-2{width:260px;bottom:0;right:0;animation:float-2 6s ease-in-out infinite;}
+    .h-card-3{width:220px;top:50%;left:50%;transform:translate(-50%,-50%);animation:float-3 7s ease-in-out infinite;background:linear-gradient(135deg,var(--blue),var(--violet));border:none;color:#fff;}
+    @keyframes float-1{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-12px) rotate(-2deg);}}
+    @keyframes float-2{0%,100%{transform:translateY(0) rotate(3deg);}50%{transform:translateY(-8px) rotate(3deg);}}
+    @keyframes float-3{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-54%) scale(1.02);}}
+    .h-card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:14px;}
+    .h-card-1 .h-card-icon{background:var(--blue-gl);color:var(--blue);}
+    .h-card-2 .h-card-icon{background:#fef3c7;color:var(--amber);}
+    .h-card-3 .h-card-icon{background:rgba(255,255,255,.2);color:#fff;}
+    .h-card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:6px;}
+    .h-card-3 .h-card-title{color:#fff;}
+    .h-card-desc{font-size:.82rem;color:var(--muted);}
+    .h-card-3 .h-card-desc{color:rgba(255,255,255,.75);}
+    @media(max-width:900px){.hero-inner{grid-template-columns:1fr;gap:48px;}.hero-visual{display:none;}}
+    @media(max-width:480px){.hero-stats{gap:20px;}.stat-num{font-size:1.5rem;}}
+
+    /* SHARED SECTION */
+    .section{padding:100px 24px;position:relative;}
+    .section-inner{max-width:1200px;margin:0 auto;}
+    .sec-label{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;}
+    .sec-heading{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:16px;}
+    .sec-sub{font-size:1.05rem;color:var(--muted);line-height:1.7;max-width:560px;}
+    .sec-header{margin-bottom:60px;}
+    .sec-header.centered{text-align:center;}
+    .sec-header.centered .sec-sub{margin:0 auto;}
+
+    /* ABOUT */
+    #about{background:var(--soft);}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;}
+    .about-img-wrap{position:relative;}
+    .about-img-bg{width:100%;aspect-ratio:4/3;border-radius:var(--r-lg);background:linear-gradient(135deg,var(--blue) 0%,var(--violet) 100%);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;letter-spacing:-.02em;overflow:hidden;position:relative;}
+    .about-img-bg .geo{position:absolute;border-radius:50%;background:rgba(255,255,255,.08);}
+    .about-img-bg .geo-1{width:200px;height:200px;top:-60px;right:-40px;}
+    .about-img-bg .geo-2{width:140px;height:140px;bottom:-40px;left:-30px;}
+    .about-badge{position:absolute;bottom:-20px;right:-20px;background:var(--surface);border-radius:var(--r-md);border:1.5px solid var(--border);box-shadow:var(--shadow-md);padding:16px 20px;display:flex;align-items:center;gap:12px;}
+    .ab-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--blue),var(--cyan));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;}
+    .ab-num{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;line-height:1;}
+    .ab-text{font-size:.78rem;color:var(--muted);}
+    .about-list{display:flex;flex-direction:column;gap:20px;margin-top:32px;}
+    .about-item{display:flex;gap:16px;align-items:flex-start;}
+    .about-item-icon{width:44px;height:44px;flex-shrink:0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+    .about-item-icon.blue{background:var(--blue-gl);color:var(--blue);}
+    .about-item-icon.violet{background:rgba(124,58,237,.1);color:var(--violet);}
+    .about-item-icon.green{background:rgba(16,185,129,.1);color:var(--green);}
+    .about-item-text h4{font-weight:700;margin-bottom:4px;font-size:.95rem;}
+    .about-item-text p{font-size:.875rem;color:var(--muted);line-height:1.6;}
+    @media(max-width:800px){.about-grid{grid-template-columns:1fr;gap:48px;}.about-img-wrap{max-width:500px;margin:0 auto;}}
+
+    /* SERVICES */
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;}
+    .service-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:28px;transition:transform var(--dur) var(--ease),box-shadow var(--dur) ease,border-color var(--dur) ease;}
+    .service-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md);border-color:var(--blue);}
+    .svc-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:20px;}
+    .svc-icon.blue{background:var(--blue-gl);color:var(--blue);}
+    .svc-icon.violet{background:rgba(124,58,237,.1);color:var(--violet);}
+    .svc-icon.green{background:rgba(16,185,129,.1);color:var(--green);}
+    .svc-icon.amber{background:rgba(245,158,11,.1);color:var(--amber);}
+    .svc-icon.cyan{background:rgba(14,165,233,.1);color:var(--cyan);}
+    .svc-icon.red{background:rgba(239,68,68,.1);color:#ef4444;}
+    .svc-icon.pink{background:rgba(236,72,153,.1);color:#ec4899;}
+    .svc-icon.teal{background:rgba(20,184,166,.1);color:#14b8a6;}
+    .service-card h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:10px;}
+    .service-card p{font-size:.875rem;color:var(--muted);line-height:1.65;}
+
+    /* PLATFORMS — DARK SECTION */
+    #platforms{background:var(--ink);color:#fff;overflow:hidden;position:relative;padding:100px 24px;}
+    #platforms .sec-label{color:#93c5fd;}
+    #platforms .sec-heading{color:#fff;}
+    #platforms .sec-sub{color:#94a3b8;}
+    #platforms::before{content:'';position:absolute;width:800px;height:800px;border-radius:50%;border:1px solid rgba(255,255,255,.04);top:-200px;right:-200px;pointer-events:none;}
+    #platforms::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;border:1px solid rgba(255,255,255,.04);bottom:-150px;left:-150px;pointer-events:none;}
+    .platforms-inner{max-width:1200px;margin:0 auto;position:relative;z-index:1;}
+    .platforms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+    @media(max-width:900px){.platforms-grid{grid-template-columns:1fr;}}
+    @media(max-width:640px){.platforms-grid{grid-template-columns:1fr;}}
+
+    .platform-card{border-radius:var(--r-lg);padding:36px 32px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:flex;flex-direction:column;transition:background var(--dur) ease,transform var(--dur) var(--ease),border-color var(--dur) ease;position:relative;overflow:hidden;}
+    .platform-card::before{content:'';position:absolute;inset:0;background:var(--card-glow,none);opacity:0;transition:opacity .4s ease;border-radius:inherit;}
+    .platform-card:hover{transform:translateY(-8px);border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.07);}
+    .platform-card:hover::before{opacity:1;}
+    .platform-card.boost{--card-glow:radial-gradient(circle at 30% 30%,rgba(37,99,235,.2),transparent 70%);}
+    .platform-card.vcf{--card-glow:radial-gradient(circle at 30% 30%,rgba(16,185,129,.2),transparent 70%);}
+    .platform-card.bets{--card-glow:radial-gradient(circle at 30% 30%,rgba(245,158,11,.2),transparent 70%);}
+
+    .platform-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:var(--r-xl);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:28px;align-self:flex-start;}
+    .platform-badge.b-blue{background:rgba(37,99,235,.2);color:#93c5fd;}
+    .platform-badge.b-green{background:rgba(16,185,129,.2);color:#6ee7b7;}
+    .platform-badge.b-amber{background:rgba(245,158,11,.2);color:#fcd34d;}
+    .platform-badge-dot{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block;animation:pulse-dot 2s ease-in-out infinite;}
+
+    .platform-icon-wrap{width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:24px;}
+    .boost .platform-icon-wrap{background:rgba(37,99,235,.2);color:#93c5fd;}
+    .vcf   .platform-icon-wrap{background:rgba(16,185,129,.2);color:#6ee7b7;}
+    .bets  .platform-icon-wrap{background:rgba(245,158,11,.2);color:#fcd34d;}
+
+    .platform-name{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff;margin-bottom:12px;letter-spacing:-.02em;}
+    .platform-desc{font-size:.9rem;color:#94a3b8;line-height:1.7;flex:1;}
+    .platform-features{display:flex;flex-direction:column;gap:10px;margin:24px 0;}
+    .platform-feat{display:flex;align-items:center;gap:10px;font-size:.85rem;color:#cbd5e1;}
+    .platform-feat-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+    .boost .platform-feat-dot{background:#60a5fa;}
+    .vcf   .platform-feat-dot{background:#34d399;}
+    .bets  .platform-feat-dot{background:#fbbf24;}
+
+    .platform-link{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:var(--r-xl);font-size:.9rem;font-weight:700;margin-top:auto;transition:all var(--dur) var(--ease);align-self:flex-start;}
+    .boost .platform-link{background:rgba(37,99,235,.25);color:#93c5fd;border:1px solid rgba(37,99,235,.4);}
+    .vcf   .platform-link{background:rgba(16,185,129,.25);color:#6ee7b7;border:1px solid rgba(16,185,129,.4);}
+    .bets  .platform-link{background:rgba(245,158,11,.25);color:#fcd34d;border:1px solid rgba(245,158,11,.4);}
+    .platform-link:hover{transform:translateX(4px);}
+    .boost .platform-link:hover{background:rgba(37,99,235,.45);}
+    .vcf   .platform-link:hover{background:rgba(16,185,129,.45);}
+    .bets  .platform-link:hover{background:rgba(245,158,11,.45);}
+    .platform-link i{transition:transform .25s ease;}
+    .platform-link:hover i{transform:translateX(4px);}
+
+    .platforms-cta{margin-top:60px;padding:40px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-lg);display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+    .platforms-cta-text h3{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;color:#fff;margin-bottom:6px;}
+    .platforms-cta-text p{font-size:.9rem;color:#94a3b8;}
+    .btn-white{background:#fff !important;color:var(--ink) !important;}
+    .btn-white:hover{background:#f1f5f9 !important;transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,255,255,.15);}
+
+    /* TRAINING */
+    #training{background:var(--soft);}
+    .training-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;}
+    .training-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:28px;transition:transform var(--dur) var(--ease),box-shadow var(--dur) ease;}
+    .training-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);}
+    .training-card h3{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:16px;}
+    .training-card ul{display:flex;flex-direction:column;gap:9px;}
+    .training-card ul li{font-size:.875rem;color:var(--muted);display:flex;align-items:flex-start;gap:8px;}
+    .training-card ul li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;}
+    .training-price{display:inline-block;margin-top:16px;padding:5px 14px;background:rgba(16,185,129,.1);color:var(--green);border-radius:var(--r-xl);font-size:.82rem;font-weight:700;}
+    .tc-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:18px;}
+    .tc-icon.blue{background:var(--blue-gl);color:var(--blue);}
+    .tc-icon.amber{background:rgba(245,158,11,.1);color:var(--amber);}
+    .tc-icon.green{background:rgba(16,185,129,.1);color:var(--green);}
+
+    /* CONTACT */
+    .contact-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:60px;align-items:start;}
+    .contact-info{display:flex;flex-direction:column;gap:24px;}
+    .c-item{display:flex;gap:16px;align-items:flex-start;}
+    .c-icon{width:46px;height:46px;flex-shrink:0;background:var(--blue-gl);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:1rem;}
+    .c-item-body h4{font-weight:700;margin-bottom:4px;font-size:.95rem;}
+    .c-item-body p,.c-item-body a{font-size:.875rem;color:var(--muted);}
+    .c-item-body a:hover{color:var(--blue);}
+    .contact-form-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-lg);padding:36px;box-shadow:var(--shadow-sm);}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+    .form-group label{font-size:.85rem;font-weight:600;color:var(--ink-2);}
+    .form-group input,.form-group textarea{padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--r-sm);font-size:.9rem;font-family:inherit;color:var(--ink);background:var(--soft);transition:border-color var(--dur) ease,box-shadow var(--dur) ease;outline:none;}
+    .form-group input:focus,.form-group textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.12);background:var(--surface);}
+    .form-group textarea{resize:vertical;min-height:120px;}
+    .btn-submit{width:100%;justify-content:center;}
+    @media(max-width:800px){.contact-grid{grid-template-columns:1fr;}.form-row{grid-template-columns:1fr;}}
+
+    /* LEGAL */
+    #legal{padding:60px 24px;}
+    .legal-inner{max-width:1200px;margin:0 auto;text-align:center;}
+    .legal-links-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+    .legal-link{padding:8px 18px;border-radius:var(--r-xl);border:1.5px solid var(--border);font-size:.875rem;font-weight:500;color:var(--muted);transition:all var(--dur) ease;}
+    .legal-link:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-gl);}
+
+    /* FOOTER */
+    footer{background:var(--ink-2);color:#fff;padding:64px 24px 32px;}
+    .footer-inner{max-width:1200px;margin:0 auto;}
+    .footer-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1.4fr;gap:48px;margin-bottom:56px;}
+    @media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px;}}
+    @media(max-width:580px){.footer-grid{grid-template-columns:1fr;}}
+    .footer-logo-wrap{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+    .footer-logo-wrap .logo-mark{width:32px;height:32px;}
+    .footer-logo-name{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;}
+    .footer-desc{font-size:.875rem;color:#94a3b8;line-height:1.7;margin-bottom:24px;}
+    .footer-socials{display:flex;gap:10px;}
+    .social-btn{width:38px;height:38px;background:rgba(255,255,255,.08);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:.9rem;transition:background var(--dur) ease,color var(--dur) ease,transform var(--dur) var(--ease);}
+    .social-btn:hover{background:var(--blue);color:#fff;transform:translateY(-3px);}
+    .footer-heading{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:#fff;margin-bottom:20px;}
+    .footer-links-col{display:flex;flex-direction:column;gap:12px;}
+    .footer-links-col a{font-size:.875rem;color:#94a3b8;transition:color var(--dur) ease;}
+    .footer-links-col a:hover{color:#fff;}
+    .newsletter-form{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
+    .newsletter-form input{padding:11px 16px;border-radius:var(--r-sm);border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#fff;font-size:.875rem;outline:none;transition:border-color var(--dur) ease;}
+    .newsletter-form input::placeholder{color:#64748b;}
+    .newsletter-form input:focus{border-color:var(--blue);}
+    .btn-newsletter{padding:11px 20px;background:var(--blue);color:#fff;border:none;border-radius:var(--r-sm);font-size:.875rem;font-weight:600;cursor:pointer;transition:background var(--dur) ease,transform var(--dur) ease;}
+    .btn-newsletter:hover{background:var(--blue-d);transform:translateY(-1px);}
+    .footer-divider{height:1px;background:rgba(255,255,255,.07);margin-bottom:28px;}
+    .footer-bottom{display:flex;align-items:center;justify-content:space-between;font-size:.82rem;color:#64748b;flex-wrap:wrap;gap:12px;}
+
+    /* SCROLL REVEAL */
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out);}
+    .reveal.revealed{opacity:1;transform:translateY(0);}
+    .reveal-d1{transition-delay:.1s;}
+    .reveal-d2{transition-delay:.2s;}
+    .reveal-d3{transition-delay:.3s;}
+    .reveal-d4{transition-delay:.4s;}
+    .reveal-d5{transition-delay:.5s;}
   </style>
 </head>
 <body>
-  <!-- Loading Animation -->
-  <div class="loader">
-    <div class="loader-spinner"></div>
+
+<div id="loader"><div class="loader-ring"></div></div>
+<div id="toast"><i class="fas fa-check-circle" style="color:#10b981;"></i><span id="toast-msg">Done!</span></div>
+<button id="btt" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<!-- NAV -->
+<header id="header">
+  <div class="nav-inner">
+    <a href="#home" class="logo">
+      <div class="logo-mark"><i class="fas fa-bolt"></i></div>
+      <span class="logo-text">Lazack<em>Org</em></span>
+    </a>
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home"      class="nav-link">Home</a></li>
+        <li><a href="#about"     class="nav-link">About</a></li>
+        <li><a href="#services"  class="nav-link">Services</a></li>
+        <li><a href="#platforms" class="nav-link">Platforms</a></li>
+        <li><a href="#contact"   class="nav-link">Contact</a></li>
+        <li><a href="#contact"   class="nav-link nav-cta">Get in Touch &nbsp;<i class="fas fa-arrow-right"></i></a></li>
+      </ul>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+</header>
 
-  <!-- Header & Navigation -->
-  <header id="header">
-    <div class="container nav-container">
-      <a href="#" class="logo">
-        <i class="fas fa-rocket"></i>
-        Lazack<span>Org</span>
-      </a>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="#home" class="nav-link">Home</a></li>
-          <li><a href="#about" class="nav-link">About</a></li>
-          <li><a href="#services" class="nav-link">Services</a></li>
-          <li><a href="#contact" class="nav-link">Contact</a></li>
-          <li><a href="#legal" class="nav-link">Legal</a></li>
-        </ul>
-      </nav>
-      <button class="hamburger">
-        <i class="fas fa-bars"></i>
-      </button>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero" id="home">
-    <div class="container hero-content">
-      <h1 class="hero-title fade-in">Premium Technology Solutions for the Digital Age</h1>
-      <p class="hero-subtitle fade-in">Lazack Organisation specializes in cutting-edge WhatsApp bots, modded APKs, and digital products that empower businesses and individuals.</p>
-      <div class="hero-buttons">
-        <a href="#services" class="btn btn-primary fade-in">
-          <i class="fas fa-concierge-bell"></i> Our Services
-        </a>
-        <a href="#contact" class="btn btn-secondary fade-in">
-          <i class="fas fa-phone-alt"></i> Contact Us
-        </a>
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-blob hero-blob-3"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow reveal">Based in Tanzania &middot; Global Reach</div>
+      <h1 class="hero-title reveal reveal-d1">Premium<br><span class="accent">Technology</span><br><span class="line2">Solutions</span></h1>
+      <p class="hero-sub reveal reveal-d2">Lazack Organisation builds cutting-edge digital tools — WhatsApp bots, modded APKs, web platforms, and more — empowering businesses and individuals worldwide.</p>
+      <div class="hero-actions reveal reveal-d3">
+        <a href="#platforms" class="btn btn-primary"><i class="fas fa-th-large"></i> Our Platforms</a>
+        <a href="#contact"   class="btn btn-ghost"><i class="fas fa-phone-alt"></i> Contact Us</a>
+      </div>
+      <div class="hero-stats reveal reveal-d4">
+        <div><div class="stat-num">3+</div><div class="stat-label">Live Platforms</div></div>
+        <div><div class="stat-num">24/7</div><div class="stat-label">Online Support</div></div>
+        <div><div class="stat-num">100%</div><div class="stat-label">Satisfaction Focus</div></div>
       </div>
     </div>
-  </section>
-
-  <!-- About Section -->
-  <section class="section" id="about">
-    <div class="container">
-      <h2 class="section-title fade-in">About Us</h2>
-      <div class="about-content">
-        <div class="about-image fade-in">
-          <span>Technology Solutions</span>
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <div class="h-card h-card-1">
+          <div class="h-card-icon"><i class="fab fa-whatsapp"></i></div>
+          <div class="h-card-title">WhatsApp Bots</div>
+          <div class="h-card-desc">Automate your business communications at scale.</div>
         </div>
-      <div class="about-text fade-in">
-  <p>Lazack Organisation is a forward-thinking tech company based in Dodoma, Tanzania, with a global reach. We specialize in providing a wide range of digital solutions to help businesses and individuals thrive in the digital landscape.</p>
-  <p>Our services include WhatsApp bot development, modded APKs, payment integration, online services, website coding and hosting, collaboration coding, domain purchases, PDF management, editing, and more. We are committed to delivering high-quality, reliable, and innovative products that empower our clients.</p>
-  <p>With a focus on user experience, performance, and security, we ensure that all our solutions meet the highest standards of quality and reliability.</p>
-</div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Services Section -->
-  <section class="section" id="services" style="background-color: #f1f5f9;">
-  <div class="container">
-    <h2 class="section-title fade-in">Our Services</h2>
-    <div class="services-grid">
-
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fab fa-whatsapp"></i>
+        <div class="h-card h-card-3">
+          <div class="h-card-icon"><i class="fas fa-rocket"></i></div>
+          <div class="h-card-title">Lazack Boost</div>
+          <div class="h-card-desc">Digital tools &amp; modded apps</div>
         </div>
-        <h3 class="service-title">WhatsApp Bot Development</h3>
-        <p class="service-description">Custom WhatsApp bots to automate customer service, notifications, marketing campaigns, and advanced business features.</p>
-      </div>
-
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fas fa-mobile-alt"></i>
+        <div class="h-card h-card-2">
+          <div class="h-card-icon"><i class="fas fa-mobile-alt"></i></div>
+          <div class="h-card-title">Modded APKs</div>
+          <div class="h-card-desc">Premium apps with unlocked features.</div>
         </div>
-        <h3 class="service-title">Modded APKs</h3>
-        <p class="service-description">Premium modded Android applications with enhanced functionality, ad-free experience, and exclusive features.</p>
       </div>
-
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fas fa-credit-card"></i>
-        </div>
-        <h3 class="service-title">Payment Integration</h3>
-        <p class="service-description">Secure payment integration solutions for websites, apps, and online services, including mobile and card payments.</p>
-      </div>
-
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fas fa-globe"></i>
-        </div>
-        <h3 class="service-title">Website Development & Hosting</h3>
-        <p class="service-description">Professional website coding, hosting, and maintenance services to ensure a seamless online presence.</p>
-      </div>
-
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fas fa-users-cog"></i>
-        </div>
-        <h3 class="service-title">Collaboration Coding</h3>
-        <p class="service-description">Partner with our developers for joint coding projects, custom software development, and tech collaborations.</p>
-      </div>
-
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fas fa-domain"></i>
-        </div>
-        <h3 class="service-title">Domain Purchases</h3>
-        <p class="service-description">Assistance with buying, managing, and integrating domains for your business or online projects.</p>
-      </div>
-
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fas fa-file-pdf"></i>
-        </div>
-        <h3 class="service-title">PDF Services & Editing</h3>
-        <p class="service-description">Create, manage, and edit PDFs for business documents, reports, and online services efficiently.</p>
-      </div>
-
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fas fa-tools"></i>
-        </div>
-        <h3 class="service-title">Other Online Services</h3>
-        <p class="service-description">Additional digital services including software tools, online solutions, and tech support tailored to your needs.</p>
-      </div>
-
     </div>
   </div>
-  </section>
+</section>
 
-  <!-- Lazack Solutions Training Section -->
-<section class="section" id="training" style="background-color: #f8fafc;">
-  <div class="container">
-    <h2 class="section-title fade-in">Lazack Solutions Training & Services</h2>
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-img-wrap reveal">
+        <div class="about-img-bg">
+          <div class="geo geo-1"></div>
+          <div class="geo geo-2"></div>
+          <span>Lazack Organisation</span>
+        </div>
+        <div class="about-badge">
+          <div class="ab-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div><div class="ab-num">TZ</div><div class="ab-text">Tanzania, Africa</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-header reveal">
+          <span class="sec-label">Who We Are</span>
+          <h2 class="sec-heading">Built on Technology.<br>Driven by Innovation.</h2>
+          <p class="sec-sub">A forward-thinking tech company based in Dodoma, Tanzania. We specialize in digital solutions that help businesses and individuals thrive in a connected world.</p>
+        </div>
+        <div class="about-list">
+          <div class="about-item reveal reveal-d1">
+            <div class="about-item-icon blue"><i class="fas fa-robot"></i></div>
+            <div class="about-item-text"><h4>Automation &amp; Bots</h4><p>Custom WhatsApp bots for customer service, marketing, and notifications at scale.</p></div>
+          </div>
+          <div class="about-item reveal reveal-d2">
+            <div class="about-item-icon violet"><i class="fas fa-code"></i></div>
+            <div class="about-item-text"><h4>Web Development</h4><p>Professional websites, payment integrations, and full-stack web solutions.</p></div>
+          </div>
+          <div class="about-item reveal reveal-d3">
+            <div class="about-item-icon green"><i class="fas fa-shield-alt"></i></div>
+            <div class="about-item-text"><h4>Security &amp; Quality</h4><p>All solutions are built to the highest standards of security, reliability, and performance.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- SERVICES -->
+<section class="section" id="services" style="background:var(--soft);">
+  <div class="section-inner">
+    <div class="sec-header centered">
+      <span class="sec-label reveal">What We Do</span>
+      <h2 class="sec-heading reveal reveal-d1">Our Core Services</h2>
+      <p class="sec-sub reveal reveal-d2">From automation to app development — we cover the full digital spectrum.</p>
+    </div>
     <div class="services-grid">
+      <div class="service-card reveal"><div class="svc-icon blue"><i class="fab fa-whatsapp"></i></div><h3>WhatsApp Bot Development</h3><p>Custom bots to automate customer service, notifications, and marketing campaigns with advanced business features.</p></div>
+      <div class="service-card reveal reveal-d1"><div class="svc-icon violet"><i class="fas fa-mobile-alt"></i></div><h3>Modded APKs</h3><p>Premium modded Android applications with enhanced functionality, ad-free experience, and exclusive features.</p></div>
+      <div class="service-card reveal reveal-d2"><div class="svc-icon cyan"><i class="fas fa-credit-card"></i></div><h3>Payment Integration</h3><p>Secure payment solutions for websites and apps including Zenopay, Mpesa, Airtel, Tigo, and more.</p></div>
+      <div class="service-card reveal reveal-d3"><div class="svc-icon green"><i class="fas fa-globe"></i></div><h3>Website Development &amp; Hosting</h3><p>Professional website coding, hosting, and maintenance for a seamless and fast online presence.</p></div>
+      <div class="service-card reveal reveal-d4"><div class="svc-icon amber"><i class="fas fa-users-cog"></i></div><h3>Collaboration Coding</h3><p>Partner with our developers for joint projects, custom software, and technical collaborations.</p></div>
+      <div class="service-card reveal reveal-d5"><div class="svc-icon red"><i class="fas fa-file-pdf"></i></div><h3>PDF Services &amp; Editing</h3><p>Create, manage, and edit PDFs for business documents, reports, and digital services efficiently.</p></div>
+      <div class="service-card reveal"><div class="svc-icon teal"><i class="fas fa-server"></i></div><h3>Domain &amp; Hosting</h3><p>Assistance with buying, managing, and integrating domains and hosting for your projects.</p></div>
+      <div class="service-card reveal reveal-d1"><div class="svc-icon pink"><i class="fas fa-tools"></i></div><h3>Tech Support &amp; More</h3><p>Additional digital services including software tools, online solutions, and tailored tech support.</p></div>
+    </div>
+  </div>
+</section>
 
-      <!-- Card 1: Mafunzo ya Awali -->
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fas fa-laptop-code"></i>
+<!-- PLATFORMS -->
+<section id="platforms">
+  <div class="platforms-inner">
+    <div class="sec-header reveal">
+      <span class="sec-label">Live Products</span>
+      <h2 class="sec-heading">Our Platforms</h2>
+      <p class="sec-sub">Three dedicated tools — each purpose-built to solve a specific problem. Click any card to visit the platform.</p>
+    </div>
+
+    <div class="platforms-grid">
+
+      <!-- BOOST -->
+      <div class="platform-card boost reveal">
+        <span class="platform-badge b-blue"><span class="platform-badge-dot"></span> Live</span>
+        <div class="platform-icon-wrap"><i class="fas fa-rocket"></i></div>
+        <div class="platform-name">Lazack Boost</div>
+        <p class="platform-desc">Your go-to hub for digital enhancements — modded apps, exclusive tools, and premium tech resources designed to supercharge your experience.</p>
+        <div class="platform-features">
+          <div class="platform-feat"><span class="platform-feat-dot"></span>Modded &amp; unlocked applications</div>
+          <div class="platform-feat"><span class="platform-feat-dot"></span>Exclusive digital tools</div>
+          <div class="platform-feat"><span class="platform-feat-dot"></span>Regular updates &amp; new releases</div>
         </div>
-        <h3 class="service-title">🧠 Mafunzo ya Awali</h3>
-        <p class="service-description"><strong>Kila moja 5,000/-</strong></p>
-        <ul style="text-align: left; margin-top: 10px; color: var(--gray);">
-          <li>Kuelewa <em>GitHub</em></li>
-          <li>Kutengeneza <em>Simple Website</em></li>
-          <li>Kutumia <em>AI kwenye Coding</em></li>
-          <li>Ujuzi mdogo kama:
-            <ul>
-              <li>SMS Hacks</li>
-              <li>Aviator Predictor App</li>
-              <li>Meta Security, n.k.</li>
-            </ul>
-          </li>
-          <li><em>Firestore Database Integration</em> kwenye website</li>
-          <li><em>Payment Integration</em> kwa kutumia <em>Zenopay</em></li>
-        </ul>
+        <a href="https://boost.lazackorganisation.my.id" target="_blank" rel="noopener" class="platform-link">
+          Visit Lazack Boost <i class="fas fa-arrow-right"></i>
+        </a>
       </div>
 
-      <!-- Card 2: Mafunzo Mengine -->
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fas fa-book"></i>
+      <!-- VCF -->
+      <div class="platform-card vcf reveal reveal-d2">
+        <span class="platform-badge b-green"><span class="platform-badge-dot"></span> Live</span>
+        <div class="platform-icon-wrap"><i class="fas fa-address-book"></i></div>
+        <div class="platform-name">VCF Tool</div>
+        <p class="platform-desc">A powerful contact management utility. Generate, organize, and export VCF contact files in bulk — perfect for WhatsApp campaigns and contact migration.</p>
+        <div class="platform-features">
+          <div class="platform-feat"><span class="platform-feat-dot"></span>Bulk VCF file generation</div>
+          <div class="platform-feat"><span class="platform-feat-dot"></span>WhatsApp-ready contact exports</div>
+          <div class="platform-feat"><span class="platform-feat-dot"></span>Fast &amp; easy to use</div>
         </div>
-        <h3 class="service-title">📘 Mafunzo Mengine</h3>
-        <ul style="text-align: left; margin-top: 10px; color: var(--gray);">
-          <li>Kutengeneza <em>TIN Number</em> – 3,000/-</li>
-          <li>Usajili wa <em>jina la biashara</em> – 10,000/-</li>
-          <li><em>Bot coding</em>, encryption, debug n.k – 4,000/-</li>
-        </ul>
+        <a href="https://vcf.lazackorganisation.my.id" target="_blank" rel="noopener" class="platform-link">
+          Visit VCF Tool <i class="fas fa-arrow-right"></i>
+        </a>
       </div>
 
-      <!-- Card 3: Huduma Nyingine -->
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fas fa-briefcase"></i>
+      <!-- BETTING SLIPS -->
+      <div class="platform-card bets reveal reveal-d4">
+        <span class="platform-badge b-amber"><span class="platform-badge-dot"></span> Live</span>
+        <div class="platform-icon-wrap"><i class="fas fa-ticket-alt"></i></div>
+        <div class="platform-name">Betting Slips</div>
+        <p class="platform-desc">Create, customize, and share professional-looking betting slip previews. Ideal for tipsters and sports content creators who need clean, shareable visuals.</p>
+        <div class="platform-features">
+          <div class="platform-feat"><span class="platform-feat-dot"></span>Custom slip designer</div>
+          <div class="platform-feat"><span class="platform-feat-dot"></span>Shareable image exports</div>
+          <div class="platform-feat"><span class="platform-feat-dot"></span>Multiple slip templates</div>
         </div>
-        <h3 class="service-title">💼 Huduma Nyingine</h3>
-        <ul style="text-align: left; margin-top: 10px; color: var(--gray);">
-          <li>LIPA kwa: <em>Mpesa, Airtel, Halotel, Tigo</em></li>
-          <li>SME ya: <em>Vodacom & Airtel</em></li>
+        <a href="https://betslips.lazackorganisation.my.id" target="_blank" rel="noopener" class="platform-link">
+          Visit Betting Slips <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="platforms-cta reveal">
+      <div class="platforms-cta-text">
+        <h3>Need a custom platform built for you?</h3>
+        <p>We design and develop bespoke web tools tailored to your exact requirements.</p>
+      </div>
+      <a href="#contact" class="btn btn-white"><i class="fas fa-paper-plane"></i> Let's Talk</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINING -->
+<section class="section" id="training">
+  <div class="section-inner">
+    <div class="sec-header centered">
+      <span class="sec-label reveal">Lazack Solutions</span>
+      <h2 class="sec-heading reveal reveal-d1">Training &amp; Local Services</h2>
+      <p class="sec-sub reveal reveal-d2">Hands-on tech training in Tanzania — beginner-friendly, practical, and affordable.</p>
+    </div>
+    <div class="training-grid">
+      <div class="training-card reveal">
+        <div class="tc-icon blue"><i class="fas fa-laptop-code"></i></div>
+        <h3>🧠 Mafunzo ya Awali — 5,000/=</h3>
+        <ul>
+          <li>Kuelewa GitHub</li>
+          <li>Kutengeneza Simple Website</li>
+          <li>Kutumia AI kwenye Coding</li>
+          <li>SMS Hacks, Aviator Predictor, Meta Security</li>
+          <li>Firestore Database Integration</li>
+          <li>Payment Integration (Zenopay)</li>
+        </ul>
+        <span class="training-price">TZS 5,000/=</span>
+      </div>
+      <div class="training-card reveal reveal-d2">
+        <div class="tc-icon amber"><i class="fas fa-book"></i></div>
+        <h3>📘 Mafunzo Mengine</h3>
+        <ul>
+          <li>Kutengeneza TIN Number — 3,000/=</li>
+          <li>Usajili wa jina la biashara — 10,000/=</li>
+          <li>Bot coding, encryption, debug — 4,000/=</li>
+        </ul>
+        <span class="training-price">From TZS 3,000/=</span>
+      </div>
+      <div class="training-card reveal reveal-d4">
+        <div class="tc-icon green"><i class="fas fa-briefcase"></i></div>
+        <h3>💼 Huduma Nyingine</h3>
+        <ul>
+          <li>LIPA: Mpesa, Airtel, Halotel, Tigo</li>
+          <li>SME ya Vodacom &amp; Airtel</li>
           <li>Uwakala Activation</li>
         </ul>
-        <div style="margin-top: 20px; text-align: center;">
-          <p><strong>Karibu Lazack Solutions</strong></p>
-          <p>Tumesajiliwa rasmi kutoa huduma hizi.</p>
-          <p>📞 <strong>0734 980 103 / 0613 868 502</strong></p>
+        <div style="margin-top:20px;padding:16px;background:var(--soft);border-radius:12px;">
+          <p style="font-size:.85rem;font-weight:700;margin-bottom:6px;">📞 Wasiliana Nasi</p>
+          <p style="font-size:.85rem;color:var(--muted);">0734 980 103 / 0613 868 502</p>
+          <p style="font-size:.82rem;color:var(--muted);margin-top:6px;">Tumesajiliwa rasmi kutoa huduma hizi.</p>
         </div>
       </div>
-
-    </div>
-
-    <div style="text-align:center; margin-top:40px;">
-      <h3 style="color: var(--primary-dark); font-weight:700;">Je, Unatamani Kuwa Beginner Katika Coding?</h3>
-      <p style="font-size:1.1rem;">Karibu ujifunze ujuzi wa IT wa kujitegemea na Lazack Solutions!</p>
     </div>
   </div>
 </section>
 
-  <!-- Boost with Care Section -->
-<section class="section" id="boost" style="background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);">
-  <div class="container">
-    <h2 class="section-title fade-in">Boost with Care</h2>
-
-    <div class="services-grid">
-
-      <!-- Card 1: Boost Promo -->
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fas fa-rocket"></i>
+<!-- CONTACT -->
+<section class="section" id="contact" style="background:var(--soft);">
+  <div class="section-inner">
+    <div class="sec-header reveal">
+      <span class="sec-label">Get in Touch</span>
+      <h2 class="sec-heading">Let's Work Together</h2>
+      <p class="sec-sub">Have a project in mind or questions about our services? We'd love to hear from you.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="c-item">
+          <div class="c-icon"><i class="fas fa-envelope"></i></div>
+          <div class="c-item-body"><h4>Email</h4><a href="mailto:support@lazackorganisation.my.id">support@lazackorganisation.my.id</a></div>
         </div>
-        <h3 class="service-title">🔥 For Sale – Modded Apps Available</h3>
-        <ul style="text-align:left; color:var(--gray); margin-top:10px;">
-          <li>📺 <em>Startimes Application</em></li>
-          <li>🎰 <em>Betting Application</em></li>
-        </ul>
-
-        <div style="margin-top:20px; text-align:center;">
-          <p><strong>📩 Contact:</strong> +255 734 980 103</p>
-          <p style="color: var(--accent); font-weight:600;">Limited offer – grab yours now!</p>
+        <div class="c-item">
+          <div class="c-icon"><i class="fas fa-phone"></i></div>
+          <div class="c-item-body"><h4>Phone</h4><p>+255 734 980 103</p><p>+255 613 868 502</p></div>
+        </div>
+        <div class="c-item">
+          <div class="c-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div class="c-item-body"><h4>Location</h4><p>Dodoma, Tanzania</p><p>Musoma, Tanzania</p></div>
+        </div>
+        <div class="c-item">
+          <div class="c-icon"><i class="fas fa-clock"></i></div>
+          <div class="c-item-body"><h4>Hours</h4><p>Mon – Fri: 9AM – 6PM</p><p>Saturday: 10AM – 4PM</p><p>Online: 24/7</p></div>
+        </div>
+        <div class="c-item">
+          <div class="c-icon" style="background:rgba(37,211,102,.1);color:#25d366;"><i class="fab fa-whatsapp"></i></div>
+          <div class="c-item-body"><h4>WhatsApp</h4><a href="https://wa.me/255734980103" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
         </div>
       </div>
-
-      <!-- Card 2: Visit Boost Site -->
-      <div class="service-card fade-in">
-        <div class="service-icon">
-          <i class="fas fa-globe"></i>
-        </div>
-        <h3 class="service-title">🌐 Visit Our Boost Platform</h3>
-        <p class="service-description" style="margin-bottom:15px;">
-          Explore exclusive tools, modded apps, and digital enhancements designed to make your tech experience smoother and more powerful.
-        </p>
-        <a href="https://boost.lazackorganisation.my.id" target="_blank" class="btn btn-primary">
-          <i class="fas fa-external-link-alt"></i> Visit Boost
-        </a>
+      <div class="contact-form-wrap reveal reveal-d2">
+        <form id="contactForm">
+          <div class="form-row">
+            <div class="form-group"><label for="name">Your Name</label><input type="text" id="name" placeholder="John Doe" required></div>
+            <div class="form-group"><label for="email">Your Email</label><input type="email" id="email" placeholder="john@email.com" required></div>
+          </div>
+          <div class="form-group"><label for="subject">Subject</label><input type="text" id="subject" placeholder="How can we help?" required></div>
+          <div class="form-group"><label for="message">Message</label><textarea id="message" placeholder="Tell us more about your project..." required></textarea></div>
+          <button type="submit" class="btn btn-primary btn-submit"><i class="fas fa-paper-plane"></i> Send Message</button>
+        </form>
       </div>
-
     </div>
   </div>
 </section>
 
+<!-- LEGAL -->
+<section id="legal">
+  <div class="legal-inner">
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:20px;">Legal Documents</p>
+    <div class="legal-links-row">
+      <a href="privacy"    class="legal-link">Privacy Policy</a>
+      <a href="terms"      class="legal-link">Terms &amp; Conditions</a>
+      <a href="disclaimer" class="legal-link">Disclaimer</a>
+      <a href="refund"     class="legal-link">Refund Policy</a>
+    </div>
+  </div>
+</section>
 
-  <!-- Contact Section -->
-  <section class="section contact" id="contact">
-    <div class="container">
-      <h2 class="section-title fade-in">Contact Us</h2>
-      <div class="contact-container">
-        <div class="contact-info">
-          <div class="contact-item fade-in">
-            <div class="contact-icon">
-              <i class="fas fa-envelope"></i>
-            </div>
-            <div>
-              <h3>Email</h3>
-              <p><a href="mailto:support@lazackorganisation.my.id">support@lazackorganisation.my.id</a></p>
-            </div>
-          </div>
-          
-          <div class="contact-item fade-in">
-            <div class="contact-icon">
-              <i class="fas fa-phone"></i>
-            </div>
-            <div>
-              <h3>Phone</h3>
-              <p>+255 734 980 103</p>
-              <p>+255 613 868 502</p>
-            </div>
-          </div>
-          
-          <div class="contact-item fade-in">
-            <div class="contact-icon">
-              <i class="fas fa-map-marker-alt"></i>
-            </div>
-            <div>
-              <h3>Address</h3>
-              <p>Dodoma, Tanzania</p>
-              <p>Musoma, Tanzania</p>
-            </div>
-          </div>
-          
-          <div class="contact-item fade-in">
-            <div class="contact-icon">
-              <i class="fas fa-clock"></i>
-            </div>
-            <div>
-              <h3>Business Hours</h3>
-              <p>Monday - Friday: 9AM - 6PM</p>
-              <p>Saturday: 10AM - 4PM</p>
-              <p>Online 24/7</p>
-            </div>
-          </div>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo-wrap">
+          <div class="logo-mark"><i class="fas fa-bolt"></i></div>
+          <span class="footer-logo-name">Lazack Organisation</span>
         </div>
-        
-        <div class="contact-form fade-in">
-          <form id="contactForm">
-            <div class="form-group">
-              <label for="name" class="form-label">Your Name</label>
-              <input type="text" id="name" class="form-input" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="email" class="form-label">Your Email</label>
-              <input type="email" id="email" class="form-input" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="subject" class="form-label">Subject</label>
-              <input type="text" id="subject" class="form-input" required>
-            </div>
-            
-            <div class="form-group">
-              <label for="message" class="form-label">Message</label>
-              <textarea id="message" class="form-input" required></textarea>
-            </div>
-            
-            <button type="submit" class="btn btn-primary">
-              <i class="fas fa-paper-plane"></i> Send Message
-            </button>
-          </form>
+        <p class="footer-desc">Providing cutting-edge technology solutions and digital products to empower businesses and individuals worldwide.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-btn" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" class="social-btn" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Quick Links</div>
+        <div class="footer-links-col">
+          <a href="#home">Home</a>
+          <a href="#about">About Us</a>
+          <a href="#services">Services</a>
+          <a href="#platforms">Platforms</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Our Platforms</div>
+        <div class="footer-links-col">
+          <a href="https://boost.lazackorganisation.my.id" target="_blank" rel="noopener">Lazack Boost ↗</a>
+          <a href="https://vcf.lazackorganisation.my.id"   target="_blank" rel="noopener">VCF Tool ↗</a>
+          <a href="https://betslips.lazackorganisation.my.id" target="_blank" rel="noopener">Betting Slips ↗</a>
+        </div>
+        <div class="footer-heading" style="margin-top:28px;">Legal</div>
+        <div class="footer-links-col">
+          <a href="privacy">Privacy Policy</a>
+          <a href="terms">Terms &amp; Conditions</a>
+          <a href="disclaimer">Disclaimer</a>
+          <a href="refund">Refund Policy</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Stay Updated</div>
+        <p class="footer-desc" style="margin-bottom:16px;">Subscribe to get the latest products and service updates.</p>
+        <div class="newsletter-form">
+          <input type="email" id="nlEmail" placeholder="Your email address">
+          <button class="btn-newsletter" onclick="subscribeNewsletter()"><i class="fas fa-paper-plane"></i> Subscribe</button>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Legal Section -->
-  <section class="section" id="legal">
-    <div class="container">
-      <h2 class="section-title fade-in">Legal Information</h2>
-      <div class="legal-links fade-in">
-        <a href="privacy" class="legal-link">Privacy Policy</a>
-        <a href="terms" class="legal-link">Terms & Conditions</a>
-        <a href="disclaimer" class="legal-link">Disclaimer</a>
-        <a href="refund" class="legal-link">Refund Policy</a>
-      </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Lazack Organisation. All rights reserved.</span>
+      <span>Made with <i class="fas fa-heart" style="color:#ef4444;"></i> in Tanzania</span>
     </div>
-  </section>
+  </div>
+</footer>
 
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="footer-content">
-        <div>
-          <div class="footer-logo">Lazack Organisation</div>
-          <p class="footer-description">Providing cutting-edge technology solutions and digital products to empower businesses and individuals worldwide.</p>
-          <div class="footer-social">
-            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-            <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
-          </div>
-        </div>
-        
-        <div>
-          <h3 class="footer-heading">Quick Links</h3>
-          <div class="footer-links">
-            <a href="#home" class="footer-link">Home</a>
-            <a href="#about" class="footer-link">About Us</a>
-            <a href="#services" class="footer-link">Services</a>
-            <a href="#contact" class="footer-link">Contact</a>
-            <a href="#legal" class="footer-link">Legal</a>
-          </div>
-        </div>
-        
-        <div>
-          <h3 class="footer-heading">Services</h3>
-          <div class="footer-links">
-            <a href="#services" class="footer-link">WhatsApp Bots</a>
-            <a href="#services" class="footer-link">Modded APKs</a>
-            <a href="#services" class="footer-link">Digital Products</a>
-            <a href="#services" class="footer-link">Tech Solutions</a>
-          </div>
-        </div>
-        
-        <div>
-          <h3 class="footer-heading">Newsletter</h3>
-          <p class="footer-description">Subscribe to our newsletter to get updates on our latest products and services.</p>
-          <form>
-            <div class="form-group">
-              <input type="email" class="form-input" placeholder="Your Email" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Subscribe</button>
-          </form>
-        </div>
-      </div>
-      
-      <div class="footer-bottom">
-        <p>&copy; 2025 Lazack Organisation. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-  <!-- Back to Top Button -->
-  <a href="#" class="back-to-top">
-    <i class="fas fa-arrow-up"></i>
-  </a>
- <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
- 
-  <script>
-    // Wait for the DOM to be fully loaded
-    document.addEventListener('DOMContentLoaded', function() {
-      // Hide loader after page load
-      setTimeout(function() {
-        document.querySelector('.loader').classList.add('hidden');
-      }, 1500);
-      
-      // Mobile menu toggle
-      const hamburger = document.querySelector('.hamburger');
-      const navLinks = document.querySelector('.nav-links');
-      
-      hamburger.addEventListener('click', function() {
-        navLinks.classList.toggle('active');
-        hamburger.innerHTML = navLinks.classList.contains('active') ? 
-          '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-      });
-      
-      // Header scroll effect
-      const header = document.getElementById('header');
-      
-      window.addEventListener('scroll', function() {
-        if (window.scrollY > 50) {
-          header.classList.add('scrolled');
-        } else {
-          header.classList.remove('scrolled');
-        }
-      });
-      
-      // Back to top button
-      const backToTop = document.querySelector('.back-to-top');
-      
-      window.addEventListener('scroll', function() {
-        if (window.scrollY > 300) {
-          backToTop.classList.add('visible');
-        } else {
-          backToTop.classList.remove('visible');
-        }
-      });
-      
-      backToTop.addEventListener('click', function(e) {
-        e.preventDefault();
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      });
-      
-      // Smooth scrolling for navigation links
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-          e.preventDefault();
-          
-          const targetId = this.getAttribute('href');
-          if (targetId === '#') return;
-          
-          const targetElement = document.querySelector(targetId);
-          if (targetElement) {
-            // Close mobile menu if open
-            if (navLinks.classList.contains('active')) {
-              navLinks.classList.remove('active');
-              hamburger.innerHTML = '<i class="fas fa-bars"></i>';
-            }
-            
-            window.scrollTo({
-              top: targetElement.offsetTop - 80,
-              behavior: 'smooth'
-            });
-          }
-        });
-      });
-  
+  // Loader
+  window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('loader').classList.add('hidden'), 600);
+  });
 
-      //snding email
-  
-    // Initialize EmailJS with your user ID (get it from your EmailJS dashboard)
-  emailjs.init('GCqWR_iPIjGj8IZfy');
+  // Nav
+  const header    = document.getElementById('header');
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  const allNavLinks = navLinks.querySelectorAll('a');
 
-  const contactForm = document.getElementById('contactForm');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+  allNavLinks.forEach(l => l.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('open');
+  }));
 
-  if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+    document.getElementById('btt').classList.toggle('show', window.scrollY > 400);
+    // active link
+    const ids = ['home','about','services','platforms','training','contact'];
+    let cur = '';
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - 130) cur = id;
+    });
+    allNavLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + cur));
+  }, { passive: true });
+
+  document.getElementById('btt').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (!t) return;
       e.preventDefault();
+      window.scrollTo({ top: t.offsetTop - 68, behavior: 'smooth' });
+    });
+  });
 
-      // Get form values
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const subject = document.getElementById('subject').value;
-      const message = document.getElementById('message').value;
+  // Scroll reveal
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('revealed'); ro.unobserve(entry.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
 
-      if (name && email && subject && message) {
-        // Send email via EmailJS
-        emailjs.send('service_hrbf3gf', 'template_60sh00g', {
-          from_name: name,
-          from_email: email,
-          subject: subject,
-          message: message,
-        })
-        emailjs.send('service_hrbf3gf', 'template_2b3j2xd', {
-  from_name: name,
-  from_email: email,
-  subject: subject,
-  message: message,
-  to_email: email  // important: user’s email
-        }).then(() => {
-          alert('Thank you for your message! We will get back to you soon.');
-          contactForm.reset();
-        }).catch((err) => {
-          console.error(err);
-          alert('Failed to send message. Please try again.');
-        });
-      } else {
-        alert('Please fill in all fields.');
-      }
+  // Toast
+  function showToast(msg, err = false) {
+    const t = document.getElementById('toast');
+    const i = t.querySelector('i');
+    document.getElementById('toast-msg').textContent = msg;
+    i.className = err ? 'fas fa-times-circle' : 'fas fa-check-circle';
+    i.style.color = err ? '#ef4444' : '#10b981';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4200);
+  }
+
+  // EmailJS
+  try { emailjs.init('GCqWR_iPIjGj8IZfy'); } catch(e) {}
+
+  const cf = document.getElementById('contactForm');
+  if (cf) {
+    cf.addEventListener('submit', e => {
+      e.preventDefault();
+      const name    = document.getElementById('name').value.trim();
+      const email   = document.getElementById('email').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      const message = document.getElementById('message').value.trim();
+      if (!name || !email || !subject || !message) { showToast('Please fill in all fields.', true); return; }
+      const btn = cf.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sending…';
+      const p = { from_name: name, from_email: email, subject, message };
+      Promise.all([
+        emailjs.send('service_hrbf3gf', 'template_60sh00g', p),
+        emailjs.send('service_hrbf3gf', 'template_2b3j2xd', { ...p, to_email: email })
+      ]).then(() => { showToast("Message sent! We'll get back to you soon."); cf.reset(); })
+        .catch(() => showToast('Failed to send. Please try again.', true))
+        .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message'; });
     });
   }
-      // Intersection Observer for fade-in animations
-      const fadeElements = document.querySelectorAll('.fade-in');
-      
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      }, {
-        threshold: 0.1
-      });
-      
-      fadeElements.forEach(element => {
-        observer.observe(element);
-      });
-      
-      // Language support - simple example
-      const userLang = navigator.language || navigator.userLanguage;
-      console.log('User language detected:', userLang);
-      // In a real implementation, you would use this to load translations
-    });
-  </script>
+
+  // Newsletter
+  function subscribeNewsletter() {
+    const v = document.getElementById('nlEmail').value.trim();
+    if (!v || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { showToast('Please enter a valid email.', true); return; }
+    showToast('Subscribed! Thanks for joining us.');
+    document.getElementById('nlEmail').value = '';
+  }
+</script>
 </body>
-
 </html>
-
-
