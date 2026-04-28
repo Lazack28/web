@@ -20,722 +20,530 @@
     --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     --radius: 10px;
   }
-  
-  * { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    font-family: 'Poppins', Arial, sans-serif;
-  }
-  
-  html, body {
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-  }
-  
+
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; }
+
+  html, body { width: 100%; height: 100%; overflow-x: hidden; }
+
   body {
-    background: #0a0a0a; 
+    background: #0a0a0a;
     color: var(--text);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-image: 
+    background-image:
       radial-gradient(circle at 10% 20%, rgba(229, 57, 53, 0.1) 0%, transparent 20%),
       radial-gradient(circle at 90% 80%, rgba(183, 28, 28, 0.1) 0%, transparent 20%);
   }
-  
+
+  /* ── LOADING SCREEN ── */
   #loading-screen {
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: var(--secondary);
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    z-index: 9999;
-    transition: opacity 0.8s ease;
-    padding: 20px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    z-index: 9999; transition: opacity 0.8s ease; padding: 20px;
   }
-  
-  .logo-container {
-    position: relative;
-    margin-bottom: 15px;
-  }
-  
+
   .logo-plane {
-    width: 80px;
-    height: 80px;
-    fill: var(--primary);
+    width: 80px; height: 80px; fill: var(--primary);
     animation: float 3s infinite ease-in-out;
     filter: drop-shadow(0 0 8px rgba(229, 57, 53, 0.5));
   }
-  
+
   .loading-text {
-    font-size: 1.2rem;
-    font-weight: 600;
+    font-size: 1.2rem; font-weight: 600;
     background: var(--gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-top: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-align: center;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-top: 10px; letter-spacing: 1px; text-transform: uppercase; text-align: center;
   }
-  
-  .loading-dots {
-    display: flex;
-    margin-top: 15px;
-  }
-  
+
+  .loading-dots { display: flex; margin-top: 15px; }
+
   .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--primary);
-    margin: 0 4px;
-    animation: bounce 1.5s infinite ease-in-out;
+    width: 8px; height: 8px; border-radius: 50%; background: var(--primary);
+    margin: 0 4px; animation: bounce 1.5s infinite ease-in-out;
   }
-  
-  .dot:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-  
-  .dot:nth-child(3) {
-    animation-delay: 0.4s;
-  }
-  
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+
   @keyframes float {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     50% { transform: translateY(-10px) rotate(5deg); }
   }
-  
   @keyframes bounce {
     0%, 100% { transform: scale(1); opacity: 0.7; }
     50% { transform: scale(1.2); opacity: 1; }
   }
-  
+
+  /* ── DASHBOARD ── */
   #dashboard {
-    display: none; 
-    flex: 1;
-    flex-direction: column; 
-    align-items: center; 
-    padding: 15px; 
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
+    display: none; flex: 1; flex-direction: column; align-items: center;
+    padding: 15px; width: 100%; max-width: 100%; margin: 0 auto;
+    position: relative;
   }
-  
+
+  /* Dashboard blur/lock overlay */
+  #dashboard.locked::after {
+    content: "";
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(6px);
+    z-index: 10;
+    pointer-events: all;
+  }
+
+  /* ── SERVER STATUS BADGE ── */
+  #server-status {
+    position: fixed; top: 12px; right: 12px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 5px 11px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    z-index: 500;
+    display: flex; align-items: center; gap: 5px;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(4px);
+  }
+  #server-status .dot-status {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #555; flex-shrink: 0;
+    transition: background 0.4s ease;
+  }
+  #server-status.online .dot-status  { background: var(--success); box-shadow: 0 0 6px var(--success); }
+  #server-status.offline .dot-status { background: var(--primary); box-shadow: 0 0 6px var(--primary); }
+
+  /* ── HEADER ── */
   header {
     background: var(--gradient);
-    color: var(--text);
-    width: 100%;
-    text-align: center;
-    padding: 15px 10px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    border-radius: var(--radius);
-    margin-bottom: 15px;
-    box-shadow: var(--shadow);
-    position: relative;
-    overflow: hidden;
+    color: var(--text); width: 100%; text-align: center;
+    padding: 15px 10px; font-size: 1.1rem; font-weight: 700;
+    text-transform: uppercase; border-radius: var(--radius);
+    margin-bottom: 15px; box-shadow: var(--shadow);
+    position: relative; overflow: hidden;
   }
-  
   header::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
+    content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
     animation: shine 3s infinite;
   }
-  
-  @keyframes shine {
-    0% { left: -100%; }
-    100% { left: 100%; }
-  }
-  
+  @keyframes shine { 0% { left: -100%; } 100% { left: 100%; } }
+
   .subtitle {
-    margin: 8px 0 20px;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    text-align: center;
-    position: relative;
-    padding-bottom: 8px;
+    margin: 8px 0 20px; color: var(--text-secondary); font-size: 0.9rem;
+    letter-spacing: 0.5px; text-transform: uppercase; text-align: center;
+    position: relative; padding-bottom: 8px;
   }
-  
   .subtitle::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 2px;
-    background: var(--gradient);
-    border-radius: 2px;
+    content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 2px; background: var(--gradient); border-radius: 2px;
   }
-  
-  .stats-container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 20px;
-    gap: 10px;
-  }
-  
+
+  /* ── STATS ── */
+  .stats-container { display: flex; justify-content: space-between; width: 100%; margin-bottom: 20px; gap: 10px; }
+
   .stat-card {
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    padding: 12px 8px;
-    flex: 1;
-    text-align: center;
-    box-shadow: var(--shadow);
-    border-left: 3px solid var(--primary);
-    min-height: 70px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    background: var(--card-bg); border-radius: var(--radius);
+    padding: 12px 8px; flex: 1; text-align: center;
+    box-shadow: var(--shadow); border-left: 3px solid var(--primary);
+    min-height: 70px; display: flex; flex-direction: column; justify-content: center;
   }
-  
-  .stat-value {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 3px;
-    line-height: 1.2;
-  }
-  
-  .stat-label {
-    font-size: 0.7rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    line-height: 1.2;
-  }
-  
+  .stat-value { font-size: 1.3rem; font-weight: 700; color: var(--primary); margin-bottom: 3px; line-height: 1.2; }
+  .stat-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; line-height: 1.2; }
+
+  /* ── SITE BOXES ── */
   .sites-container {
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
-    gap: 12px; 
-    margin-top: 15px; 
-    width: 100%;
-    max-width: 100%;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 12px; margin-top: 15px; width: 100%; max-width: 100%;
   }
-  
+
   .site-box {
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    padding: 18px 8px; 
-    border-radius: var(--radius);
-    cursor: pointer; 
-    transition: all 0.3s ease; 
-    color: var(--text); 
-    text-transform: uppercase; 
-    font-weight: 600; 
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(255,255,255,0.05);
-    font-size: 0.8rem;
-    min-height: 70px;
+    display: flex; justify-content: center; align-items: center;
+    padding: 18px 8px; border-radius: var(--radius);
+    cursor: pointer; transition: all 0.3s ease; color: var(--text);
+    text-transform: uppercase; font-weight: 600; text-align: center;
+    position: relative; overflow: hidden; box-shadow: var(--shadow);
+    border: 1px solid rgba(255,255,255,0.05); font-size: 0.8rem; min-height: 70px;
   }
-  
   .site-box::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    opacity: 0; transition: opacity 0.3s ease;
   }
-  
-  .site-box:hover { 
-    transform: translateY(-3px); 
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-  }
-  
-  .site-box:hover::before {
-    opacity: 1;
-  }
-  
-  .site-box.betway { background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%); } 
-  .site-box.sportpesa { background: linear-gradient(135deg, #001f5b 0%, #003399 100%); } 
-  .site-box.betika { background: linear-gradient(135deg, #ffcc00 0%, #ffaa00 100%); color:#000; } 
-  .site-box.meridianbet { background: linear-gradient(135deg, #d71a28 0%, #a3141f 100%); } 
-  .site-box.betpawa { background: linear-gradient(135deg, #009739 0%, #00752d 100%); } 
-  .site-box.parimatch { background: linear-gradient(135deg, #ffea00 0%, #ffd700 100%); color:#000; } 
-  .site-box.galabet { background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); } 
-  .site-box.mcheza { background: linear-gradient(135deg, #3c0d73 0%, #2a0952 100%); } 
-  .site-box.xbet1 { background: linear-gradient(135deg, #0071c2 0%, #005a9e 100%); } 
-  .site-box.bet365 { background: linear-gradient(135deg, #125c3e 0%, #0e4a31 100%); } 
-  .site-box.melbet { background: linear-gradient(135deg, #e5b700 0%, #cc9f00 100%); color:#000; } 
-  .site-box.palmsbet { background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); } 
-  .site-box.bet22 { background: linear-gradient(135deg, #066b54 0%, #055244 100%); } 
-  .site-box.betlion { background: linear-gradient(135deg, #b41c18 0%, #8f1512 100%); } 
-  .site-box.betikaextra { background: linear-gradient(135deg, #ff9900 0%, #e68500 100%); color:#000; } 
-  .site-box.odibets { background: linear-gradient(135deg, #4caf50 0%, #3d8b40 100%); } 
-  .site-box.powerbets { background: linear-gradient(135deg, #ff002b 0%, #cc0022 100%); } 
-  .site-box.mobet { background: linear-gradient(135deg, #001d34 0%, #001225 100%); } 
-  .site-box.bet888 { background: linear-gradient(135deg, #ff6600 0%, #cc5500 100%); } 
-  .site-box.wasafibet { background: linear-gradient(135deg, #c40000 0%, #9d0000 100%); }
-  
+  .site-box:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+  .site-box:hover::before { opacity: 1; }
+
+  .site-box.betway      { background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%); }
+  .site-box.sportpesa   { background: linear-gradient(135deg, #001f5b 0%, #003399 100%); }
+  .site-box.betika      { background: linear-gradient(135deg, #ffcc00 0%, #ffaa00 100%); color:#000; }
+  .site-box.meridianbet { background: linear-gradient(135deg, #d71a28 0%, #a3141f 100%); }
+  .site-box.betpawa     { background: linear-gradient(135deg, #009739 0%, #00752d 100%); }
+  .site-box.parimatch   { background: linear-gradient(135deg, #ffea00 0%, #ffd700 100%); color:#000; }
+  .site-box.galabet     { background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); }
+  .site-box.mcheza      { background: linear-gradient(135deg, #3c0d73 0%, #2a0952 100%); }
+  .site-box.xbet1       { background: linear-gradient(135deg, #0071c2 0%, #005a9e 100%); }
+  .site-box.bet365      { background: linear-gradient(135deg, #125c3e 0%, #0e4a31 100%); }
+  .site-box.melbet      { background: linear-gradient(135deg, #e5b700 0%, #cc9f00 100%); color:#000; }
+  .site-box.palmsbet    { background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); }
+  .site-box.bet22       { background: linear-gradient(135deg, #066b54 0%, #055244 100%); }
+  .site-box.betlion     { background: linear-gradient(135deg, #b41c18 0%, #8f1512 100%); }
+  .site-box.betikaextra { background: linear-gradient(135deg, #ff9900 0%, #e68500 100%); color:#000; }
+  .site-box.odibets     { background: linear-gradient(135deg, #4caf50 0%, #3d8b40 100%); }
+  .site-box.powerbets   { background: linear-gradient(135deg, #ff002b 0%, #cc0022 100%); }
+  .site-box.mobet       { background: linear-gradient(135deg, #001d34 0%, #001225 100%); }
+  .site-box.bet888      { background: linear-gradient(135deg, #ff6600 0%, #cc5500 100%); }
+  .site-box.wasafibet   { background: linear-gradient(135deg, #c40000 0%, #9d0000 100%); }
+
+  /* ── FOOTER ── */
   footer {
-    background: var(--gradient);
-    color: var(--text);
-    text-align: center;
-    padding: 15px 10px;
-    margin-top: 25px;
-    font-size: 0.8rem;
-    border-radius: var(--radius);
-    width: 100%;
-    box-shadow: var(--shadow);
-    line-height: 1.4;
+    background: var(--gradient); color: var(--text); text-align: center;
+    padding: 15px 10px; margin-top: 25px; font-size: 0.8rem;
+    border-radius: var(--radius); width: 100%; box-shadow: var(--shadow); line-height: 1.4;
   }
-  
   footer a {
-    color: var(--text);
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    border-bottom: 1px solid transparent;
-    font-size: 0.75rem;
-    word-break: break-all;
+    color: var(--text); font-weight: 600; text-decoration: none;
+    transition: all 0.3s ease; border-bottom: 1px solid transparent;
+    font-size: 0.75rem; word-break: break-all;
   }
-  
-  footer a:hover {
-    border-bottom: 1px solid var(--text);
+  footer a:hover { border-bottom: 1px solid var(--text); }
+
+  /* ── WHATSAPP CHANNEL MODAL ── */
+  #whatsappModal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); display: none; align-items: center;
+    justify-content: center; z-index: 9998; padding: 15px; backdrop-filter: blur(3px);
   }
-  
+  #whatsappModal.show { display: flex; animation: fadeIn 0.3s ease; }
+
+  .whatsapp-modal-content {
+    background: var(--card-bg); border-radius: var(--radius); padding: 20px;
+    width: 100%; max-width: 320px; text-align: center;
+    border: 2px solid var(--success); box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    animation: modalSlideIn 0.3s ease;
+  }
+  .whatsapp-modal-content h3 { color: var(--success); margin-bottom: 12px; font-size: 1.2rem; text-transform: uppercase; }
+  .whatsapp-modal-content p { color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5; font-size: 0.85rem; }
+  .whatsapp-buttons { display: flex; justify-content: space-between; gap: 10px; }
+  .whatsapp-buttons button {
+    flex: 1; padding: 12px 0; border: none; border-radius: 25px;
+    font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+    text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.85rem;
+  }
+  .join-btn { background: var(--success); color: var(--text); }
+  .join-btn:hover { background: #3d8b40; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(76,175,80,0.4); }
+  .cancel-btn { background: rgba(255,255,255,0.1); color: var(--text); }
+  .cancel-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+  /* ── MODAL BACKDROP ── */
   #modalBack {
-    position: fixed; 
-    inset: 0; 
-    display: none; 
-    align-items: center; 
-    justify-content: center; 
-    background: rgba(0,0,0,0.85); 
-    z-index: 1000; 
-    padding: 15px;
-    backdrop-filter: blur(3px);
+    position: fixed; inset: 0; display: none; align-items: center;
+    justify-content: center; background: rgba(0,0,0,0.88);
+    z-index: 5000; padding: 15px; backdrop-filter: blur(5px);
   }
-  
-  #modalBack.show {
-    display: flex;
-    animation: fadeIn 0.3s ease;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
+  #modalBack.show { display: flex; animation: fadeIn 0.35s ease; }
+
+  @keyframes fadeIn  { from { opacity: 0; }                          to { opacity: 1; } }
+  @keyframes fadeOut { from { opacity: 1; }                          to { opacity: 0; } }
+  @keyframes modalSlideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  /* ── PAYMENT MODAL ── */
   .modal {
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    padding: 20px;
-    width: 100%;
-    max-width: 350px;
+    background: #141414;
+    border-radius: 14px;
+    padding: 28px 24px 24px;
+    width: 100%; max-width: 360px;
     text-align: center;
     position: relative;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(255,255,255,0.1);
-    animation: modalSlideIn 0.3s ease;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(229,57,53,0.2);
+    animation: modalSlideIn 0.35s cubic-bezier(.22,.68,0,1.2);
   }
-  
-  @keyframes modalSlideIn {
-    from { transform: translateY(-15px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-  
-  .modal h3 {
-    color: var(--primary);
-    margin-bottom: 15px;
-    font-size: 1.2rem;
-  }
-  
-  .modal input {
-    width: 100%; 
-    padding: 12px; 
-    border-radius: var(--radius); 
-    border: 2px solid rgba(255,255,255,0.1);
-    margin-bottom: 15px; 
-    font-size: 0.9rem;
-    background: rgba(0,0,0,0.3);
-    color: var(--text);
-    transition: all 0.3s ease;
-  }
-  
-  .modal input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.2);
-  }
-  
-  .modal button {
-    padding: 12px 20px; 
-    border: none; 
-    border-radius: 25px; 
+
+  /* Glowing top border */
+  .modal::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
     background: var(--gradient);
-    color: var(--text); 
-    font-weight: 600; 
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    text-transform: uppercase;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .modal-step { display: none; }
+  .modal-step.active { display: block; animation: fadeIn 0.3s ease; }
+
+  /* ── MODAL HEADER ── */
+  .modal-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(229,57,53,0.12);
+    border: 2px solid rgba(229,57,53,0.3);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px; font-size: 1.5rem;
+  }
+
+  .modal h3 {
+    color: #fff; margin-bottom: 6px; font-size: 1.15rem; font-weight: 700;
     letter-spacing: 0.5px;
-    font-size: 0.9rem;
   }
-  
-  .modal button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(229, 57, 53, 0.4);
-  }
-  
-  .closeBtn {
-    position: absolute; 
-    top: 10px; 
-    right: 10px; 
-    background: transparent; 
-    border: none; 
-    color: var(--text-secondary); 
-    font-size: 1.3rem; 
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .closeBtn:hover {
-    color: var(--text);
-    background: rgba(255,255,255,0.1);
-  }
-  
-  .errorMsg {
-    color: var(--primary);
-    font-weight: 500;
-    min-height: 18px;
-    margin-top: 8px;
-    font-size: 0.8rem;
-  }
-  
-  .whatsapp-btn {
-    position: fixed; 
-    bottom: 15px; 
-    right: 15px; 
-    width: 55px; 
-    height: 55px; 
-    border-radius: 50%; 
-    background: var(--success);
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    color: var(--text); 
-    font-size: 24px; 
-    cursor: pointer; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    z-index: 1000;
-    transition: all 0.3s ease;
-    animation: pulse-green 2s infinite;
-  }
-  
-  .whatsapp-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
-  }
-  
-  @keyframes pulse-green {
-    0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
-  }
-  
-  .whatsapp-badge {
-    position: absolute; 
-    top: -3px; 
-    right: -3px; 
-    background: var(--primary); 
-    width: 18px; 
-    height: 18px; 
-    border-radius: 50%; 
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    font-size: 10px; 
-    font-weight: bold;
-    animation: pulse 1.5s infinite;
-  }
-  
-  /* WhatsApp Channel Modal Styles */
-  #whatsappModal {
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: rgba(0,0,0,0.9); 
-    display: none; 
-    align-items: center; 
-    justify-content: center; 
-    z-index: 9998; 
-    padding: 15px;
-    backdrop-filter: blur(3px);
-  }
-  
-  #whatsappModal.show {
-    display: flex;
-    animation: fadeIn 0.3s ease;
-  }
-  
-  .whatsapp-modal-content {
-    background: var(--card-bg); 
-    border-radius: var(--radius); 
-    padding: 20px; 
-    width: 100%; 
-    max-width: 320px; 
-    text-align: center;
-    border: 2px solid var(--success); 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    animation: modalSlideIn 0.3s ease;
-  }
-  
-  .whatsapp-modal-content h3 {
-    color: var(--success); 
-    margin-bottom: 12px; 
-    font-size: 1.2rem; 
-    text-transform: uppercase;
-  }
-  
-  .whatsapp-modal-content p {
-    color: var(--text-secondary); 
-    margin-bottom: 20px; 
+
+  .modal-subtitle {
+    color: var(--text-secondary); font-size: 0.78rem; margin-bottom: 22px;
     line-height: 1.5;
-    font-size: 0.85rem;
   }
-  
-  .whatsapp-buttons {
-    display: flex; 
-    justify-content: space-between; 
-    gap: 10px;
-  }
-  
-  .whatsapp-buttons button {
-    flex: 1; 
-    padding: 12px 0; 
-    border: none; 
-    border-radius: 25px; 
-    font-weight: 600; 
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
+
+  /* ── INPUTS ── */
+  .input-group { position: relative; margin-bottom: 14px; text-align: left; }
+  .input-label { font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .modal input {
+    width: 100%; padding: 13px 16px; border-radius: 10px;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    font-size: 1rem; background: rgba(255,255,255,0.05);
+    color: var(--text); transition: all 0.25s ease; outline: none;
     letter-spacing: 0.5px;
-    font-size: 0.85rem;
   }
-  
-  .join-btn {
-    background: var(--success); 
-    color: var(--text);
+  .modal input:focus {
+    border-color: var(--primary);
+    background: rgba(229,57,53,0.06);
+    box-shadow: 0 0 0 3px rgba(229,57,53,0.12);
   }
-  
-  .join-btn:hover {
-    background: #3d8b40; 
+  .modal input::placeholder { color: rgba(255,255,255,0.25); }
+
+  /* 6-digit code input  */
+  #codeInput {
+    text-align: center;
+    font-size: 1.8rem; font-weight: 700; letter-spacing: 8px;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    width: 100%; padding: 14px;
+    border: none; border-radius: 25px;
+    background: var(--gradient);
+    color: #fff; font-weight: 700; font-size: 0.92rem;
+    cursor: pointer; transition: all 0.25s ease;
+    text-transform: uppercase; letter-spacing: 1px;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .btn-primary:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+    box-shadow: 0 8px 22px rgba(229,57,53,0.45);
   }
-  
-  .cancel-btn {
-    background: rgba(255,255,255,0.1); 
-    color: var(--text);
+  .btn-primary:disabled {
+    opacity: 0.6; cursor: not-allowed; transform: none;
   }
-  
-  .cancel-btn:hover {
-    background: rgba(255,255,255,0.2); 
-    transform: translateY(-2px);
+
+  .btn-ghost {
+    background: transparent; border: 1px solid rgba(255,255,255,0.15);
+    color: var(--text-secondary); border-radius: 25px;
+    padding: 10px 20px; font-size: 0.8rem; cursor: pointer;
+    transition: all 0.25s ease; margin-top: 10px; width: 100%;
   }
-  
-  /* Extra small devices */
+  .btn-ghost:hover { background: rgba(255,255,255,0.07); color: #fff; }
+
+  /* ── PRICE BADGE ── */
+  .price-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(229,57,53,0.1); border: 1px solid rgba(229,57,53,0.3);
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 0.8rem; color: var(--primary); font-weight: 600;
+    margin-bottom: 18px;
+  }
+
+  /* ── PAYMENT INFO BOX ── */
+  .payment-info-box {
+    background: rgba(76,175,80,0.07);
+    border: 1px solid rgba(76,175,80,0.25);
+    border-radius: 10px; padding: 14px 16px;
+    margin-bottom: 18px; text-align: left; font-size: 0.82rem;
+    color: var(--text-secondary); line-height: 1.6;
+  }
+  .payment-info-box .info-title {
+    color: var(--success); font-weight: 600; font-size: 0.85rem;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  }
+
+  /* ── CLOSE BUTTON ── */
+  .closeBtn {
+    position: absolute; top: 14px; right: 14px;
+    background: rgba(255,255,255,0.07); border: none;
+    color: var(--text-secondary); width: 28px; height: 28px;
+    border-radius: 50%; cursor: pointer; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; line-height: 1;
+  }
+  .closeBtn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+  /* ── ERROR & SUCCESS MSG ── */
+  .errorMsg {
+    color: var(--primary); font-size: 0.78rem; font-weight: 500;
+    min-height: 18px; margin-top: 10px; text-align: center;
+    animation: shake 0.3s ease;
+  }
+  .successMsg {
+    color: var(--success); font-size: 0.78rem; font-weight: 500;
+    min-height: 18px; margin-top: 10px; text-align: center;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  /* ── SPINNER ── */
+  .spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff; border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-right: 7px; vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── TOAST ── */
+  #toast-container {
+    position: fixed; top: 18px; left: 50%; transform: translateX(-50%);
+    z-index: 99999; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    pointer-events: none; width: 90%; max-width: 320px;
+  }
+  .toast {
+    padding: 11px 18px; border-radius: 10px; font-size: 0.82rem;
+    font-weight: 600; color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    animation: toastIn 0.35s cubic-bezier(.22,.68,0,1.2);
+    display: flex; align-items: center; gap: 8px; width: 100%;
+    backdrop-filter: blur(4px);
+  }
+  .toast.success { background: rgba(30,50,35,0.95); border: 1px solid rgba(76,175,80,0.4); }
+  .toast.error   { background: rgba(50,15,15,0.95); border: 1px solid rgba(229,57,53,0.4); }
+  .toast.info    { background: rgba(15,25,50,0.95); border: 1px solid rgba(100,150,255,0.4); }
+  .toast.warning { background: rgba(50,40,10,0.95); border: 1px solid rgba(255,193,7,0.4); }
+  .toast.out { animation: toastOut 0.3s ease forwards; }
+  @keyframes toastIn  { from { opacity: 0; transform: translateY(-12px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateY(-8px); } }
+
+  /* ── WHATSAPP BTN ── */
+  .whatsapp-btn {
+    position: fixed; bottom: 15px; right: 15px;
+    width: 55px; height: 55px; border-radius: 50%;
+    background: var(--success);
+    display: flex; justify-content: center; align-items: center;
+    color: var(--text); font-size: 24px; cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 1000;
+    transition: all 0.3s ease; animation: pulse-green 2s infinite;
+  }
+  .whatsapp-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(76,175,80,0.4); }
+  @keyframes pulse-green {
+    0%   { box-shadow: 0 0 0 0 rgba(76,175,80,0.7); }
+    70%  { box-shadow: 0 0 0 10px rgba(76,175,80,0); }
+    100% { box-shadow: 0 0 0 0 rgba(76,175,80,0); }
+  }
+  .whatsapp-badge {
+    position: absolute; top: -3px; right: -3px;
+    background: var(--primary); width: 18px; height: 18px;
+    border-radius: 50%; display: flex; justify-content: center;
+    align-items: center; font-size: 10px; font-weight: bold;
+    animation: bounce 1.5s infinite ease-in-out;
+  }
+
+  /* ── RESPONSIVE ── */
   @media (max-width: 360px) {
-    .sites-container {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-    
-    .site-box {
-      padding: 15px 5px;
-      font-size: 0.75rem;
-      min-height: 60px;
-    }
-    
-    .stats-container {
-      flex-direction: column;
-      gap: 8px;
-    }
-    
-    .stat-card {
-      padding: 10px 5px;
-      min-height: 60px;
-    }
-    
-    .stat-value {
-      font-size: 1.1rem;
-    }
-    
-    .stat-label {
-      font-size: 0.65rem;
-    }
-    
-    header {
-      font-size: 1rem;
-      padding: 12px 8px;
-    }
-    
-    .whatsapp-modal-content {
-      max-width: 280px;
-      padding: 15px;
-    }
-    
-    footer {
-      padding: 12px 8px;
-      font-size: 0.75rem;
-    }
+    .sites-container { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .site-box        { padding: 15px 5px; font-size: 0.75rem; min-height: 60px; }
+    .stats-container { flex-direction: column; gap: 8px; }
+    .stat-card       { padding: 10px 5px; min-height: 60px; }
+    .stat-value      { font-size: 1.1rem; }
+    .stat-label      { font-size: 0.65rem; }
+    header           { font-size: 1rem; padding: 12px 8px; }
+    footer           { padding: 12px 8px; font-size: 0.75rem; }
   }
-  
-  /* Small devices */
   @media (min-width: 361px) and (max-width: 480px) {
-    .sites-container {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    .sites-container { grid-template-columns: repeat(3, 1fr); }
   }
-  
-  /* Medium devices */
   @media (min-width: 481px) and (max-width: 768px) {
-    .sites-container {
-      grid-template-columns: repeat(4, 1fr);
-    }
-    
-    .site-box {
-      font-size: 0.85rem;
-      padding: 20px 10px;
-    }
+    .sites-container { grid-template-columns: repeat(4, 1fr); }
+    .site-box        { font-size: 0.85rem; padding: 20px 10px; }
   }
-  
-  /* Large devices */
   @media (min-width: 769px) {
-    .sites-container {
-      grid-template-columns: repeat(5, 1fr);
-      max-width: 800px;
-    }
-    
-    .site-box {
-      font-size: 0.9rem;
-      padding: 22px 12px;
-    }
-    
-    #dashboard {
-      padding: 20px;
-    }
-    
-    header {
-      font-size: 1.3rem;
-      padding: 18px 10px;
-    }
-    
-    .subtitle {
-      font-size: 1rem;
-    }
-    
-    .stats-container {
-      max-width: 800px;
-    }
+    .sites-container { grid-template-columns: repeat(5, 1fr); max-width: 800px; }
+    .site-box        { font-size: 0.9rem; padding: 22px 12px; }
+    #dashboard       { padding: 20px; }
+    header           { font-size: 1.3rem; padding: 18px 10px; }
+    .subtitle        { font-size: 1rem; }
+    .stats-container { max-width: 800px; }
   }
 </style>
 </head>
 <body>
 
+<!-- ── TOAST CONTAINER ── -->
+<div id="toast-container"></div>
+
+<!-- ── SERVER STATUS ── -->
+<div id="server-status">
+  <div class="dot-status"></div>
+  <span id="status-text">Checking...</span>
+</div>
+
+<!-- ── LOADING SCREEN ── -->
 <div id="loading-screen">
-  <div class="logo-container">
-    <svg class="logo-plane" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-      <path d="M476.864 3.7L35.164 240.8c-11.4 6.1-11.3 22.3.2 28.3l116.3 62.4L430.064 69.4c3.5-3.4 9.1-3.3 12.5.2 3.4 3.5 3.3 9.1-.2 12.5L164.364 343.3l13.4 129.1c1.1 10.4 13.9 14.2 20.2 6l45.9-58.1 103.4 55.5c7.8 4.2 17.3-2.2 15.9-11l-16.6-103.5 148.4-155.3c2.9-3 3.6-7.5 1.8-11.3-1.8-3.8-5.8-6.2-10-6L476.864 3.7z"></path>
-    </svg>
-  </div>
+  <svg class="logo-plane" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <path d="M476.864 3.7L35.164 240.8c-11.4 6.1-11.3 22.3.2 28.3l116.3 62.4L430.064 69.4c3.5-3.4 9.1-3.3 12.5.2 3.4 3.5 3.3 9.1-.2 12.5L164.364 343.3l13.4 129.1c1.1 10.4 13.9 14.2 20.2 6l45.9-58.1 103.4 55.5c7.8 4.2 17.3-2.2 15.9-11l-16.6-103.5 148.4-155.3c2.9-3 3.6-7.5 1.8-11.3-1.8-3.8-5.8-6.2-10-6L476.864 3.7z"/>
+  </svg>
   <h1 class="loading-text">AVIATOR PREDICTOR PRO</h1>
-  <p style="color: var(--text-secondary); margin-top: 8px; text-align: center; font-size: 0.8rem;">v12.0.5 - Premium Predictions</p>
+  <p style="color:var(--text-secondary);margin-top:8px;text-align:center;font-size:0.8rem;">v12.0.5 — Premium Predictions</p>
   <div class="loading-dots">
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
   </div>
 </div>
 
+<!-- ── WHATSAPP CHANNEL MODAL ── -->
 <div id="whatsappModal">
   <div class="whatsapp-modal-content">
     <h3>JOIN OUR CHANNEL</h3>
     <p>Join our exclusive WhatsApp channel to get real-time Aviator predictions, winning strategies, and exclusive tips!</p>
     <div class="whatsapp-buttons">
       <button class="cancel-btn" id="cancelBtn">CANCEL</button>
-      <button class="join-btn" id="joinBtn">JOIN NOW</button>
+      <button class="join-btn"   id="joinBtn">JOIN NOW</button>
     </div>
   </div>
 </div>
 
-<div id="dashboard">
-  <header>
-    <div>CHAGUA TOVUTI YAKO YA KUBETI</div>
-  </header>
-  
+<!-- ── DASHBOARD ── -->
+<div id="dashboard" class="locked">
+  <header>CHAGUA TOVUTI YAKO YA KUBETI</header>
   <h2 class="subtitle">Aviator Predictor V12.0.5</h2>
-  
+
   <div class="stats-container">
-    <div class="stat-card">
-      <div class="stat-value">97%</div>
-      <div class="stat-label">Accuracy Rate</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">12.5x</div>
-      <div class="stat-label">Avg. Multiplier</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">24/7</div>
-      <div class="stat-label">Active Predictions</div>
-    </div>
+    <div class="stat-card"><div class="stat-value">97%</div><div class="stat-label">Accuracy Rate</div></div>
+    <div class="stat-card"><div class="stat-value">12.5x</div><div class="stat-label">Avg. Multiplier</div></div>
+    <div class="stat-card"><div class="stat-value">24/7</div><div class="stat-label">Active Predictions</div></div>
   </div>
 
   <div class="sites-container">
-    <div class="site-box betway" data-link="https://v0-html-code-deployment-snowy.vercel.app/">Betway</div>
-    <div class="site-box sportpesa" data-link="https://v0-html-code-deployment-snowy.vercel.app/">SportPesa</div>
-    <div class="site-box betika" data-link="https://v0-html-code-deployment-snowy.vercel.app/">Betika</div>
+    <div class="site-box betway"      data-link="https://v0-html-code-deployment-snowy.vercel.app/">Betway</div>
+    <div class="site-box sportpesa"   data-link="https://v0-html-code-deployment-snowy.vercel.app/">SportPesa</div>
+    <div class="site-box betika"      data-link="https://v0-html-code-deployment-snowy.vercel.app/">Betika</div>
     <div class="site-box meridianbet" data-link="https://v0-html-code-deployment-snowy.vercel.app/">Meridianbet</div>
-    <div class="site-box betpawa" data-link="https://v0-html-code-deployment-snowy.vercel.app/">BetPawa</div>
-    <div class="site-box parimatch" data-link="https://v0-html-code-deployment-snowy.vercel.app/">Parimatch</div>
-    <div class="site-box galabet" data-link="https://v0-html-code-deployment-snowy.vercel.app/">Galabet</div>
-    <div class="site-box mcheza" data-link="https://v0-html-code-deployment-snowy.vercel.app/">Mcheza</div>
-    <div class="site-box xbet1" data-link="https://v0-html-code-deployment-snowy.vercel.app/">1xBet</div>
-    <div class="site-box bet365" data-link="https://v0-html-code-deployment-snowy.vercel.app/">Bet365</div>
-    <div class="site-box melbet" data-link="https://v0-html-code-deployment-snowy.vercel.app/">Melbet</div>
-    <div class="site-box palmsbet" data-link="https://v0-html-code-deployment-snowy.vercel.app/">PalmsBet</div>
-    <div class="site-box bet22" data-link="https://v0-html-code-deployment-snowy.vercel.app/">22Bet</div>
-    <div class="site-box betlion" data-link="https://v0-html-code-deployment-snowy.vercel.app/">BetLion</div>
+    <div class="site-box betpawa"     data-link="https://v0-html-code-deployment-snowy.vercel.app/">BetPawa</div>
+    <div class="site-box parimatch"   data-link="https://v0-html-code-deployment-snowy.vercel.app/">Parimatch</div>
+    <div class="site-box galabet"     data-link="https://v0-html-code-deployment-snowy.vercel.app/">Galabet</div>
+    <div class="site-box mcheza"      data-link="https://v0-html-code-deployment-snowy.vercel.app/">Mcheza</div>
+    <div class="site-box xbet1"       data-link="https://v0-html-code-deployment-snowy.vercel.app/">1xBet</div>
+    <div class="site-box bet365"      data-link="https://v0-html-code-deployment-snowy.vercel.app/">Bet365</div>
+    <div class="site-box melbet"      data-link="https://v0-html-code-deployment-snowy.vercel.app/">Melbet</div>
+    <div class="site-box palmsbet"    data-link="https://v0-html-code-deployment-snowy.vercel.app/">PalmsBet</div>
+    <div class="site-box bet22"       data-link="https://v0-html-code-deployment-snowy.vercel.app/">22Bet</div>
+    <div class="site-box betlion"     data-link="https://v0-html-code-deployment-snowy.vercel.app/">BetLion</div>
     <div class="site-box betikaextra" data-link="https://v0-html-code-deployment-snowy.vercel.app/">Betika Extra</div>
-    <div class="site-box odibets" data-link="https://v0-html-code-deployment-snowy.vercel.app/">OdiBets</div>
-    <div class="site-box powerbets" data-link="https://v0-html-code-deployment-snowy.vercel.app/">PowerBets</div>
-    <div class="site-box mobet" data-link="https://v0-html-code-deployment-snowy.vercel.app/">MoBet</div>
-    <div class="site-box bet888" data-link="https://v0-html-code-deployment-snowy.vercel.app/">888Bet</div>
-    <div class="site-box wasafibet" data-link="https://v0-html-code-deployment-snowy.vercel.app/">WasafiBet</div>
+    <div class="site-box odibets"     data-link="https://v0-html-code-deployment-snowy.vercel.app/">OdiBets</div>
+    <div class="site-box powerbets"   data-link="https://v0-html-code-deployment-snowy.vercel.app/">PowerBets</div>
+    <div class="site-box mobet"       data-link="https://v0-html-code-deployment-snowy.vercel.app/">MoBet</div>
+    <div class="site-box bet888"      data-link="https://v0-html-code-deployment-snowy.vercel.app/">888Bet</div>
+    <div class="site-box wasafibet"   data-link="https://v0-html-code-deployment-snowy.vercel.app/">WasafiBet</div>
   </div>
 
   <footer>
@@ -744,106 +552,377 @@
   </footer>
 </div>
 
-<div id="modalBack">
+<!-- ── MAIN MODAL (payment + verify steps) ── -->
+<div id="modalBack" class="show">
   <div class="modal">
-    <button class="closeBtn">×</button>
-    <h3>ENTER ACCESS CODE</h3>
-    <input type="text" id="appIdInput" placeholder="Enter your access code">
-    <button id="submitBtn">CONTINUE TO PREDICTIONS</button>
-    <div class="errorMsg" id="errorMsg"></div>
+    <button class="closeBtn" id="closeModalBtn">×</button>
+
+    <!-- STEP 1: Phone + Pay -->
+    <div class="modal-step active" id="step-payment">
+      <div class="modal-icon">✈️</div>
+      <h3>UNLOCK ACCESS</h3>
+      <p class="modal-subtitle">Pay once, get your 6-digit SMS code instantly and access all predictions.</p>
+
+      <div class="price-badge">
+        <span>💳</span> TSH 5,000 — One-time access
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="phoneInput">Phone Number</label>
+        <input type="tel" id="phoneInput" placeholder="07XXXXXXXX or +255XXXXXXXXX" maxlength="15" inputmode="tel">
+      </div>
+
+      <button class="btn-primary" id="payBtn">PAY TSH 5,000</button>
+      <div class="errorMsg" id="payError"></div>
+    </div>
+
+    <!-- STEP 2: Enter SMS code -->
+    <div class="modal-step" id="step-verify">
+      <div class="modal-icon">📱</div>
+      <h3>ENTER YOUR CODE</h3>
+      <p class="modal-subtitle">A 6-digit code has been sent to your phone via SMS. Enter it below.</p>
+
+      <div class="payment-info-box" id="paymentInfoBox">
+        <div class="info-title">✅ Payment Initiated</div>
+        <div id="paymentInfoText">Complete the M-Pesa prompt on your phone. Your access code will arrive by SMS within seconds.</div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="codeInput">6-Digit SMS Code</label>
+        <input type="text" id="codeInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+      </div>
+
+      <button class="btn-primary" id="verifyBtn">VERIFY CODE</button>
+      <button class="btn-ghost"   id="backToPayBtn">← Try different number</button>
+      <div class="errorMsg" id="verifyError"></div>
+    </div>
+
   </div>
 </div>
 
+<!-- ── WHATSAPP FLOAT BTN ── -->
 <div class="whatsapp-btn" onclick="window.open('https://wa.me/255783394967','_blank')">
   <span>💬</span>
   <div class="whatsapp-badge">1</div>
 </div>
 
 <script>
-const ACCESS_CODES = ["AVIATOR2024", "PREDICTOR123", "V12ACCESS", "FLYHIGH2024", "WINNERCODE", "BETPRO2024", "AVIATORPRO", "PREDICT2024", "FLYTOWIN", "AVIATORV12"];
-const loadingScreen = document.getElementById('loading-screen');
-const dashboard = document.getElementById('dashboard');
-const modalBack = document.getElementById('modalBack');
-const closeBtn = document.querySelector('.closeBtn');
-const submitBtn = document.getElementById('submitBtn');
-const appIdInput = document.getElementById('appIdInput');
-const errorMsg = document.getElementById('errorMsg');
+/* ═══════════════════════════════════════════════════════════
+   CONFIGURATION
+═══════════════════════════════════════════════════════════ */
+const API_BASE = "https://aviator-payment.onrender.com"
+const SESSION_KEY = "aviatorAccess"
+const SESSION_TTL = 24 * 60 * 60 * 1000 // 24 hours
 
-// WhatsApp modal elements
-const whatsappModal = document.getElementById('whatsappModal');
-const joinBtn = document.getElementById('joinBtn');
-const cancelBtn = document.getElementById('cancelBtn');
-
-let selectedLink = '';
-
-window.addEventListener('load', () => {
+/* ═══════════════════════════════════════════════════════════
+   TOAST SYSTEM
+═══════════════════════════════════════════════════════════ */
+function showToast(msg, type = "info", duration = 3500) {
+  const icons = { success: "✔", error: "✖", info: "ℹ", warning: "⚠" }
+  const container = document.getElementById("toast-container")
+  const toast = document.createElement("div")
+  toast.className = `toast ${type}`
+  toast.innerHTML = `<span>${icons[type] || "ℹ"}</span><span>${msg}</span>`
+  container.appendChild(toast)
   setTimeout(() => {
-    loadingScreen.style.opacity='0';
-    setTimeout(()=>{ 
-      loadingScreen.style.display='none'; 
-      // Show WhatsApp modal first
-      whatsappModal.classList.add('show'); 
-    }, 800);
-  }, 2500);
-});
+    toast.classList.add("out")
+    setTimeout(() => toast.remove(), 350)
+  }, duration)
+}
 
-// WhatsApp modal button handlers
-joinBtn.addEventListener('click', () => {
-  whatsappModal.classList.remove('show');
-  // Redirect to WhatsApp channel
-  window.open('https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A', '_blank');
-  // Show dashboard after joining
-  dashboard.style.display='flex';
-});
+/* ═══════════════════════════════════════════════════════════
+   SESSION HELPERS
+═══════════════════════════════════════════════════════════ */
+function saveSession() {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ ts: Date.now() }))
+}
 
-cancelBtn.addEventListener('click', () => {
-  whatsappModal.classList.remove('show');
-  // Show dashboard after canceling
-  dashboard.style.display='flex';
-});
-
-document.querySelectorAll('.site-box').forEach(box=>{
-  box.addEventListener('click', ()=>{
-    selectedLink = box.getAttribute('data-link');
-    checkAccess(selectedLink);
-  });
-});
-
-closeBtn.addEventListener('click', ()=> modalBack.classList.remove('show'));
-modalBack.addEventListener('click', e => { if(e.target===modalBack) modalBack.classList.remove('show'); });
-submitBtn.addEventListener('click', handleSubmit);
-appIdInput.addEventListener('keydown', e=>{ if(e.key==='Enter') handleSubmit(); });
-
-function handleSubmit(){
-  const val = appIdInput.value.trim().toUpperCase();
-  if(ACCESS_CODES.includes(val)){
-    const expiry = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 days
-    localStorage.setItem('aviatorAccess', JSON.stringify({id: val, expiry}));
-    modalBack.classList.remove('show');
-    window.location.href = selectedLink;
-  } else {
-    errorMsg.textContent = 'Invalid Access Code. Please try again.';
+function hasValidSession() {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY)
+    if (!raw) return false
+    const { ts } = JSON.parse(raw)
+    return Date.now() - ts < SESSION_TTL
+  } catch {
+    return false
   }
 }
 
-function checkAccess(link){
-  const saved = localStorage.getItem('aviatorAccess');
-  if(saved){
-    try{
-      const data = JSON.parse(saved);
-      if(data.expiry > Date.now() && ACCESS_CODES.includes(data.id)){
-        window.location.href = link;
-        return;
-      } else {
-        localStorage.removeItem('aviatorAccess');
+/* ═══════════════════════════════════════════════════════════
+   UI HELPERS
+═══════════════════════════════════════════════════════════ */
+function setLoading(btn, loading, label) {
+  btn.disabled = loading
+  btn.innerHTML = loading
+    ? `<span class="spinner"></span>${label}`
+    : label
+}
+
+function showStep(stepId) {
+  document.querySelectorAll(".modal-step").forEach(s => s.classList.remove("active"))
+  document.getElementById(stepId).classList.add("active")
+}
+
+function clearError(id) {
+  document.getElementById(id).textContent = ""
+}
+
+function showError(id, msg) {
+  const el = document.getElementById(id)
+  el.textContent = msg
+  // Re-trigger shake animation
+  el.style.animation = "none"
+  el.offsetHeight // reflow
+  el.style.animation = ""
+}
+
+function unlockDashboard() {
+  const dash = document.getElementById("dashboard")
+  dash.classList.remove("locked")
+  document.querySelectorAll(".site-box").forEach(box => {
+    box.addEventListener("click", () => {
+      const url = box.dataset.link
+      if (url) window.open(url, "_blank")
+    })
+  })
+}
+
+function openModal()  { document.getElementById("modalBack").classList.add("show") }
+function closeModal() { document.getElementById("modalBack").classList.remove("show") }
+
+/* ═══════════════════════════════════════════════════════════
+   SERVER HEALTH CHECK
+═══════════════════════════════════════════════════════════ */
+async function checkServerHealth() {
+  const badge = document.getElementById("server-status")
+  const text  = document.getElementById("status-text")
+  try {
+    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(6000) })
+    if (res.ok) {
+      badge.classList.add("online")
+      badge.classList.remove("offline")
+      text.textContent = "Server Online"
+    } else { throw new Error("not ok") }
+  } catch {
+    badge.classList.add("offline")
+    badge.classList.remove("online")
+    text.textContent = "Payment Server Offline"
+    showToast("Payment server is currently unreachable.", "warning", 5000)
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PHONE VALIDATION
+═══════════════════════════════════════════════════════════ */
+function sanitizePhone(raw) {
+  // Strip everything except digits and leading +
+  return raw.trim().replace(/[^\d+]/g, "")
+}
+
+function validatePhone(phone) {
+  const clean = sanitizePhone(phone)
+  // Accept: 07XXXXXXXX (10 digits) or +255XXXXXXXXX (12 digits)
+  return /^(0\d{9}|\+255\d{9})$/.test(clean) ? clean : null
+}
+
+/* ═══════════════════════════════════════════════════════════
+   API: START PAYMENT
+═══════════════════════════════════════════════════════════ */
+async function startPayment(phone) {
+  const res = await fetch(`${API_BASE}/start-payment`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ phone }),
+    signal: AbortSignal.timeout(20000),
+  })
+  return { ok: res.ok, status: res.status, data: await res.json() }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   API: VERIFY CODE
+═══════════════════════════════════════════════════════════ */
+async function verifyCode(code) {
+  const res = await fetch(`${API_BASE}/verify-code`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code }),
+    signal: AbortSignal.timeout(15000),
+  })
+  return { ok: res.ok, status: res.status, data: await res.json() }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAY BUTTON HANDLER
+═══════════════════════════════════════════════════════════ */
+document.getElementById("payBtn").addEventListener("click", async () => {
+  const rawPhone = document.getElementById("phoneInput").value
+  clearError("payError")
+
+  const phone = validatePhone(rawPhone)
+  if (!phone) {
+    showError("payError", "Enter a valid Tanzanian number (07XXXXXXXX or +255XXXXXXXXX)")
+    return
+  }
+
+  const btn = document.getElementById("payBtn")
+  setLoading(btn, true, "Processing...")
+
+  try {
+    const { ok, data } = await startPayment(phone)
+
+    if (!ok) {
+      const msg = data?.error || "Failed to start payment. Please try again."
+      showError("payError", msg)
+      showToast(msg, "error")
+      return
+    }
+
+    // Show payment info and switch to verify step
+    const infoText = data.message ||
+      "Complete the M-Pesa prompt on your phone. Your 6-digit access code will arrive by SMS."
+    document.getElementById("paymentInfoText").textContent = infoText
+
+    showToast("✔ Payment started — check your phone!", "success")
+    showStep("step-verify")
+
+  } catch (err) {
+    const msg = err.name === "TimeoutError"
+      ? "Request timed out. Check your connection."
+      : "Network error. Please try again."
+    showError("payError", msg)
+    showToast(msg, "error")
+  } finally {
+    setLoading(btn, false, "PAY TSH 5,000")
+  }
+})
+
+/* ═══════════════════════════════════════════════════════════
+   VERIFY BUTTON HANDLER
+═══════════════════════════════════════════════════════════ */
+document.getElementById("verifyBtn").addEventListener("click", async () => {
+  const rawCode = document.getElementById("codeInput").value.trim()
+  clearError("verifyError")
+
+  if (!/^\d{6}$/.test(rawCode)) {
+    showError("verifyError", "Please enter the 6-digit code from your SMS.")
+    return
+  }
+
+  const btn = document.getElementById("verifyBtn")
+  setLoading(btn, true, "Verifying...")
+
+  try {
+    const { ok, data } = await verifyCode(rawCode)
+
+    if (!ok || !data?.valid) {
+      const msg = data?.expired
+        ? "This code has expired. Please start a new payment."
+        : (data?.error || "Invalid or already-used code.")
+      showError("verifyError", msg)
+      showToast("✖ " + msg, "error")
+      return
+    }
+
+    // Success — grant access
+    saveSession()
+    showToast("✔ Access granted! Welcome.", "success", 4000)
+    closeModal()
+    unlockDashboard()
+
+  } catch (err) {
+    const msg = err.name === "TimeoutError"
+      ? "Request timed out. Try again."
+      : "Network error. Please try again."
+    showError("verifyError", msg)
+    showToast(msg, "error")
+  } finally {
+    setLoading(btn, false, "VERIFY CODE")
+  }
+})
+
+/* ═══════════════════════════════════════════════════════════
+   BACK BUTTON
+═══════════════════════════════════════════════════════════ */
+document.getElementById("backToPayBtn").addEventListener("click", () => {
+  clearError("verifyError")
+  clearError("payError")
+  document.getElementById("codeInput").value = ""
+  showStep("step-payment")
+})
+
+/* ═══════════════════════════════════════════════════════════
+   CLOSE BUTTON (only active if already has a valid session)
+═══════════════════════════════════════════════════════════ */
+document.getElementById("closeModalBtn").addEventListener("click", () => {
+  if (hasValidSession()) {
+    closeModal()
+    unlockDashboard()
+  }
+  // If no session, silently ignore — modal stays open
+})
+
+/* ═══════════════════════════════════════════════════════════
+   PHONE INPUT — allow only digits, +, and common separators
+═══════════════════════════════════════════════════════════ */
+document.getElementById("phoneInput").addEventListener("input", function () {
+  this.value = this.value.replace(/[^\d\+\s\-]/g, "")
+})
+
+/* ═══════════════════════════════════════════════════════════
+   CODE INPUT — digits only, auto-submit at 6
+═══════════════════════════════════════════════════════════ */
+document.getElementById("codeInput").addEventListener("input", function () {
+  this.value = this.value.replace(/\D/g, "").slice(0, 6)
+  if (this.value.length === 6) {
+    document.getElementById("verifyBtn").click()
+  }
+})
+
+/* ═══════════════════════════════════════════════════════════
+   WHATSAPP MODAL
+═══════════════════════════════════════════════════════════ */
+document.getElementById("joinBtn").addEventListener("click", () => {
+  window.open("https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A", "_blank")
+  document.getElementById("whatsappModal").classList.remove("show")
+})
+document.getElementById("cancelBtn").addEventListener("click", () => {
+  document.getElementById("whatsappModal").classList.remove("show")
+})
+
+/* ═══════════════════════════════════════════════════════════
+   BOOT SEQUENCE
+═══════════════════════════════════════════════════════════ */
+window.addEventListener("DOMContentLoaded", () => {
+  const loadingScreen = document.getElementById("loading-screen")
+  const dashboard     = document.getElementById("dashboard")
+
+  // 1. Check server health in background
+  checkServerHealth()
+
+  // 2. Show loading screen for 2.5s
+  setTimeout(() => {
+    loadingScreen.style.opacity = "0"
+    setTimeout(() => {
+      loadingScreen.style.display = "none"
+      dashboard.style.display = "flex"
+
+      // 3. If valid session exists → skip payment, unlock immediately
+      if (hasValidSession()) {
+        closeModal()
+        unlockDashboard()
+        showToast("Welcome back! Access active.", "success")
+        // Optionally show WhatsApp modal after short delay
+        setTimeout(() => document.getElementById("whatsappModal").classList.add("show"), 2000)
+        return
       }
-    }catch(e){ localStorage.removeItem('aviatorAccess'); }
-  }
-  modalBack.classList.add('show');
-  errorMsg.textContent=''; 
-  appIdInput.value=''; 
-  appIdInput.focus();
-  }
+
+      // 4. No session → open payment modal (already visible from HTML)
+      // WhatsApp modal shown after they pay, not before
+      openModal()
+
+    }, 800)
+  }, 2500)
+})
 </script>
 </body>
 </html>
