@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aviator Predictor Pro v12.0.5</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════ */
+:root {
+  --red:        #f03030;
+  --red-dk:     #9e1a1a;
+  --red-gl:     rgba(240,48,48,0.28);
+  --amber:      #f5a623;
+  --amber-gl:   rgba(245,166,35,0.22);
+  --green:      #22c55e;
+  --green-gl:   rgba(34,197,94,0.2);
+  --bg:         #060609;
+  --surf:       #0d0d14;
+  --surf2:      #13131e;
+  --card:       #101019;
+  --border:     rgba(255,255,255,0.07);
+  --border2:    rgba(255,255,255,0.12);
+  --txt:        #e8e8f0;
+  --muted:      #5a5a78;
+  --muted2:     #8888a8;
+  --grad:       linear-gradient(135deg, #9e1a1a 0%, #f03030 100%);
+  --grad-h:     linear-gradient(135deg, #b31c1c 0%, #f54040 100%);
+  --shadow-lg:  0 20px 60px rgba(0,0,0,0.7);
+  --r:          12px;
+}
+
+/* ══════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; min-height: 100%; overflow-x: hidden; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+  min-height: 100vh;
+}
+
+/* ambient glow */
+body::after {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% -5%,  rgba(240,48,48,0.09)  0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 95% 90%,  rgba(245,166,35,0.05) 0%, transparent 50%);
+}
+
+/* subtle grid texture */
+body::before {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ══════════════════════════════════════════
+   LOADING SCREEN
+══════════════════════════════════════════ */
+#loading-screen {
+  position: fixed; inset: 0; z-index: 9000;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 0;
+  transition: opacity 0.7s ease;
+}
+#loading-screen.fade-out { opacity: 0; pointer-events: none; }
+
+.ls-icon {
+  position: relative;
+  width: 88px; height: 88px;
+  margin-bottom: 22px;
+}
+.ls-icon svg {
+  width: 100%; height: 100%;
+  filter: drop-shadow(0 0 20px var(--red-gl));
+  animation: planeFly 3s ease-in-out infinite;
+}
+.ls-ring {
+  position: absolute; inset: -14px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  border-top-color: var(--red);
+  border-right-color: rgba(240,48,48,0.3);
+  animation: ringRot 1.6s linear infinite;
+}
+.ls-ring2 {
+  position: absolute; inset: -6px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  border-bottom-color: var(--amber);
+  animation: ringRot 2.4s linear infinite reverse;
+}
+@keyframes planeFly {
+  0%,100% { transform: translateY(0) rotate(-4deg); }
+  50%      { transform: translateY(-10px) rotate(4deg); }
+}
+@keyframes ringRot { to { transform: rotate(360deg); } }
+
+.ls-brand {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.7rem; font-weight: 800;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--txt);
+  margin-bottom: 3px;
+}
+.ls-brand span { color: var(--red); }
+.ls-ver {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 3px;
+  color: var(--muted); text-transform: uppercase;
+  margin-bottom: 28px;
+}
+.ls-track {
+  width: 180px; height: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px; overflow: hidden;
+  margin-bottom: 10px;
+}
+.ls-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--red-dk), var(--red), var(--amber));
+  border-radius: 4px;
+  box-shadow: 0 0 12px var(--red-gl);
+  animation: lsBar 2.6s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes lsBar { 0% { width:0%; } 100% { width:100%; } }
+.ls-msg {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem; color: var(--muted);
+  letter-spacing: 2px; min-height: 14px;
+  text-align: center;
+}
+
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+#toast-container {
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+  z-index: 9999; display: flex; flex-direction: column; gap: 8px;
+  align-items: center; width: 92%; max-width: 340px;
+  pointer-events: none;
+}
+.toast {
+  width: 100%; padding: 12px 16px; border-radius: 10px;
+  font-size: 0.8rem; font-weight: 600;
+  display: flex; align-items: center; gap: 10px;
+  backdrop-filter: blur(10px);
+  animation: tIn 0.35s cubic-bezier(.22,.68,0,1.2);
+  line-height: 1.3;
+}
+.toast.success { background: rgba(10,28,16,0.97); border: 1px solid rgba(34,197,94,0.3); color: var(--green); }
+.toast.error   { background: rgba(28,6,6,0.97);   border: 1px solid rgba(240,48,48,0.35); color: #f87171; }
+.toast.info    { background: rgba(6,10,28,0.97);  border: 1px solid rgba(100,140,255,0.3); color: #93b4ff; }
+.toast.warning { background: rgba(28,20,4,0.97);  border: 1px solid rgba(245,166,35,0.3); color: var(--amber); }
+.toast.out { animation: tOut 0.28s ease forwards; }
+@keyframes tIn  { from { opacity:0; transform:translateY(-10px) scale(.96); } to { opacity:1; transform:none; } }
+@keyframes tOut { to { opacity:0; transform:translateY(-8px); } }
+
+/* ══════════════════════════════════════════
+   SERVER STATUS
+══════════════════════════════════════════ */
+#server-status {
+  position: fixed; top: 14px; right: 14px; z-index: 800;
+  background: rgba(8,8,16,0.85); backdrop-filter: blur(8px);
+  border: 1px solid var(--border2);
+  border-radius: 20px; padding: 5px 12px 5px 9px;
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem; color: var(--muted2);
+  letter-spacing: 0.5px;
+  transition: all 0.4s ease;
+}
+.dot-status {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #333; flex-shrink: 0;
+  transition: background 0.4s, box-shadow 0.4s;
+}
+#server-status.online  .dot-status { background: var(--green); box-shadow: 0 0 8px var(--green-gl); }
+#server-status.offline .dot-status { background: var(--red);   box-shadow: 0 0 8px var(--red-gl); }
+
+/* ══════════════════════════════════════════
+   DASHBOARD WRAPPER
+══════════════════════════════════════════ */
+#dashboard {
+  display: none; flex: 1; flex-direction: column; align-items: center;
+  padding: 16px 14px 90px;
+  width: 100%; max-width: 620px; margin: 0 auto;
+  position: relative; z-index: 1;
+}
+
+/* lock blur */
+#dashboard.locked::after {
+  content: "";
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(8px);
+  z-index: 50; pointer-events: all;
+}
+
+/* ══════════════════════════════════════════
+   HEADER CARD
+══════════════════════════════════════════ */
+.app-header {
+  width: 100%; margin-bottom: 16px;
+  background: var(--card);
+  border: 1px solid rgba(240,48,48,0.18);
+  border-radius: var(--r);
+  padding: 20px 20px 18px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.app-header::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--red-dk) 20%, var(--red) 50%, var(--amber) 80%, transparent 100%);
+}
+/* shimmer */
+.app-header::after {
+  content: "";
+  position: absolute; top: 0; left: -100%; width: 55%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+  animation: headerShimmer 4s ease-in-out infinite;
+}
+@keyframes headerShimmer { 0%,100%{left:-100%} 55%{left:150%} }
+
+.header-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 3px; color: var(--red);
+  text-transform: uppercase; margin-bottom: 7px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.header-eyebrow::before, .header-eyebrow::after {
+  content: ""; display: inline-block;
+  width: 24px; height: 1px; background: var(--red); opacity: 0.5;
+}
+.header-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(1.6rem, 5vw, 2.2rem);
+  font-weight: 800; letter-spacing: 2px; line-height: 1;
+  text-transform: uppercase; color: var(--txt);
+  margin-bottom: 5px;
+}
+.header-title em { font-style: normal; color: var(--red); }
+.header-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem; color: var(--muted2);
+  letter-spacing: 2px;
+}
+
+/* ══════════════════════════════════════════
+   STATS ROW
+══════════════════════════════════════════ */
+.stats-container {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 10px; width: 100%; margin-bottom: 18px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 8px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.stat-card::after {
+  content: "";
+  position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: var(--grad); opacity: 0.6;
+}
+.stat-value {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.55rem; font-weight: 700;
+  color: var(--red); line-height: 1; margin-bottom: 4px;
+  text-shadow: 0 0 20px var(--red-gl);
+}
+.stat-label {
+  font-size: 0.63rem; color: var(--muted2);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* ══════════════════════════════════════════
+   SECTION DIVIDER
+══════════════════════════════════════════ */
+.section-divider {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+}
+.section-divider span {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem; color: var(--muted);
+  letter-spacing: 2px; text-transform: uppercase;
+  white-space: nowrap;
+}
+.section-divider::before, .section-divider::after {
+  content: ""; flex: 1; height: 1px; background: var(--border);
+}
+
+/* ══════════════════════════════════════════
+   SITES GRID
+══════════════════════════════════════════ */
+.sites-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px; width: 100%;
+}
+@media (min-width: 380px) { .sites-container { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 500px) { .sites-container { grid-template-columns: repeat(5, 1fr); } }
+
+.site-box {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--r);
+  cursor: pointer;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 6px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.3px; text-align: center;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.06);
+  position: relative; overflow: hidden;
+  transition: transform 0.2s cubic-bezier(.22,.68,0,1.2),
+              box-shadow 0.2s ease,
+              border-color 0.2s;
+  -webkit-user-select: none; user-select: none;
+  padding: 6px 4px;
+}
+.site-box .site-icon {
+  font-size: 1.35rem; line-height: 1; pointer-events: none;
+}
+.site-box .site-name { line-height: 1.1; pointer-events: none; }
+
+/* hover lift */
+.site-box:hover {
+  transform: translateY(-4px) scale(1.04);
+  border-color: rgba(255,255,255,0.2);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.55);
+}
+/* shine overlay */
+.site-box::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 55%);
+  opacity: 0; transition: opacity 0.2s; pointer-events: none;
+}
+.site-box:hover::before { opacity: 1; }
+/* active tap */
+.site-box:active { transform: scale(0.97); }
+
+/* Brand backgrounds */
+.betway      { background: linear-gradient(145deg,#1a1a1a,#2c2c2c); }
+.sportpesa   { background: linear-gradient(145deg,#001460,#003acc); }
+.betika      { background: linear-gradient(145deg,#b8860b,#e6b800); color:#050505; }
+.meridianbet { background: linear-gradient(145deg,#8b0000,#cc001a); }
+.betpawa     { background: linear-gradient(145deg,#005c1f,#00962f); }
+.parimatch   { background: linear-gradient(145deg,#a88000,#d4a800); color:#050505; }
+.galabet     { background: linear-gradient(145deg,#1a1c2e,#2a2e48); }
+.mcheza      { background: linear-gradient(145deg,#22005c,#3a008f); }
+.xbet1       { background: linear-gradient(145deg,#003e80,#0060c8); }
+.bet365      { background: linear-gradient(145deg,#0a3d22,#14613a); }
+.melbet      { background: linear-gradient(145deg,#8a6200,#b88000); color:#050505; }
+.palmsbet    { background: linear-gradient(145deg,#003c8a,#0058cc); }
+.bet22       { background: linear-gradient(145deg,#033a2e,#065c48); }
+.betlion     { background: linear-gradient(145deg,#6e0c0c,#a81010); }
+.betikaextra { background: linear-gradient(145deg,#8a4e00,#c87000); color:#050505; }
+.odibets     { background: linear-gradient(145deg,#154f17,#1e7a22); }
+.powerbets   { background: linear-gradient(145deg,#8b0014,#cc001e); }
+.mobet       { background: linear-gradient(145deg,#000e1f,#001e3c); }
+.bet888      { background: linear-gradient(145deg,#7a2e00,#b84400); }
+.wasafibet   { background: linear-gradient(145deg,#5c0000,#900000); }
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer {
+  width: 100%; margin-top: 22px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 16px;
+  text-align: center;
+}
+footer p {
+  font-size: 0.73rem; color: var(--muted2);
+  line-height: 1.65;
+}
+footer p + p { margin-top: 4px; }
+footer a {
+  color: #25d366; font-weight: 600;
+  text-decoration: none; word-break: break-all;
+  transition: color 0.2s;
+}
+footer a:hover { color: #34eb76; }
+footer strong { color: var(--txt); }
+
+/* ══════════════════════════════════════════
+   WHATSAPP FAB
+══════════════════════════════════════════ */
+.whatsapp-btn {
+  position: fixed; bottom: 18px; right: 18px;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #25d366;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 900;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+  animation: waPulse 2.5s ease-in-out infinite;
+  transition: transform 0.2s;
+  font-size: 1.5rem;
+}
+.whatsapp-btn:hover { transform: scale(1.08); }
+.whatsapp-badge {
+  position: absolute; top: -3px; right: -3px;
+  background: var(--red); color: #fff;
+  width: 18px; height: 18px; border-radius: 50%;
+  font-size: 0.65rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Mono', monospace;
+}
+@keyframes waPulse {
+  0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+  50%      { box-shadow: 0 4px 30px rgba(37,211,102,0.7), 0 0 0 8px rgba(37,211,102,0.08); }
+}
+
+/* ══════════════════════════════════════════
+   MODAL BACKDROP (shared)
+══════════════════════════════════════════ */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.88);
+  backdrop-filter: blur(8px);
+  display: none; align-items: center; justify-content: center;
+  padding: 16px; z-index: 4000;
+}
+.modal-backdrop.show { display: flex; animation: bFadeIn 0.3s ease; }
+@keyframes bFadeIn { from { opacity:0; } to { opacity:1; } }
+
+/* ══════════════════════════════════════════
+   WHATSAPP CHANNEL MODAL
+══════════════════════════════════════════ */
+#whatsappModal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.9); display: none; align-items: center;
+  justify-content: center; z-index: 4100; padding: 16px;
+  backdrop-filter: blur(6px);
+}
+#whatsappModal.show { display: flex; animation: bFadeIn 0.3s ease; }
+
+.wa-modal-card {
+  background: var(--surf2);
+  border: 1px solid rgba(37,211,102,0.22);
+  border-radius: 16px; padding: 26px 22px;
+  width: 100%; max-width: 320px; text-align: center;
+  box-shadow: var(--shadow-lg);
+  animation: mSlideUp 0.35s cubic-bezier(.22,.68,0,1.2);
+  position: relative;
+}
+.wa-modal-card h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem; font-weight: 800; letter-spacing: 1px;
+  color: var(--green); text-transform: uppercase; margin-bottom: 10px;
+}
+.wa-modal-card p {
+  font-size: 0.82rem; color: var(--muted2);
+  line-height: 1.6; margin-bottom: 22px;
+}
+.whatsapp-buttons {
+  display: flex; gap: 10px;
+}
+.whatsapp-buttons button {
+  flex: 1; padding: 12px;
+  border: none; border-radius: 25px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.9rem; font-weight: 700; letter-spacing: 1px;
+  cursor: pointer; transition: all 0.2s; text-transform: uppercase;
+}
+.join-btn   { background: #25d366; color: #fff; }
+.join-btn:hover { background: #1dbf59; transform: translateY(-2px); }
+.cancel-btn { background: rgba(255,255,255,0.07); color: var(--muted2); }
+.cancel-btn:hover { background: rgba(255,255,255,0.12); color: var(--txt); }
+
+/* ══════════════════════════════════════════
+   PAYMENT MODAL
+══════════════════════════════════════════ */
+@keyframes mSlideUp {
+  from { transform: translateY(-20px); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+.modal {
+  background: #0e0e18;
+  border: 1px solid rgba(240,48,48,0.18);
+  border-radius: 16px;
+  padding: 30px 22px 24px;
+  width: 100%; max-width: 360px;
+  text-align: center; position: relative;
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(240,48,48,0.1);
+  animation: mSlideUp 0.35s cubic-bezier(.22,.68,0,1.2);
+}
+.modal::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--red-dk), var(--red), var(--amber));
+  border-radius: 16px 16px 0 0;
+}
+
+.modal-step { display: none; }
+.modal-step.active { display: block; animation: bFadeIn 0.25s ease; }
+
+.modal-icon {
+  width: 54px; height: 54px; border-radius: 50%;
+  background: rgba(240,48,48,0.1);
+  border: 1.5px solid rgba(240,48,48,0.25);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px; font-size: 1.6rem;
+}
+.modal h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.25rem; font-weight: 800; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--txt);
+  margin-bottom: 6px;
+}
+.modal-subtitle {
+  font-size: 0.78rem; color: var(--muted2);
+  line-height: 1.55; margin-bottom: 20px;
+}
+
+/* price badge */
+.price-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(240,48,48,0.08);
+  border: 1px solid rgba(240,48,48,0.22);
+  border-radius: 20px; padding: 5px 16px;
+  font-size: 0.8rem; color: var(--red); font-weight: 600;
+  margin-bottom: 18px;
+}
+
+/* payment info box */
+.payment-info-box {
+  background: rgba(34,197,94,0.05);
+  border: 1px solid rgba(34,197,94,0.18);
+  border-radius: 10px; padding: 14px 16px;
+  margin-bottom: 18px; text-align: left;
+  font-size: 0.8rem; color: var(--muted2);
+  line-height: 1.65;
+}
+.payment-info-box .info-title {
+  color: var(--green); font-weight: 600;
+  font-size: 0.82rem; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* input */
+.input-group { text-align: left; margin-bottom: 14px; }
+.input-label {
+  display: block; font-size: 0.65rem; letter-spacing: 0.6px;
+  text-transform: uppercase; color: var(--muted2);
+  margin-bottom: 7px;
+}
+.modal input {
+  width: 100%; padding: 13px 15px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  color: var(--txt);
+  font-family: 'Inter', sans-serif; font-size: 0.95rem;
+  outline: none; transition: all 0.25s;
+  letter-spacing: 0.4px;
+}
+.modal input:focus {
+  border-color: var(--red);
+  background: rgba(240,48,48,0.05);
+  box-shadow: 0 0 0 3px rgba(240,48,48,0.1);
+}
+.modal input::placeholder { color: rgba(255,255,255,0.2); }
+#codeInput {
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 1.9rem; font-weight: 700; letter-spacing: 10px;
+}
+
+/* buttons */
+.btn-primary {
+  width: 100%; padding: 14px;
+  border: none; border-radius: 25px;
+  background: var(--grad);
+  color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; cursor: pointer;
+  transition: all 0.25s; position: relative; overflow: hidden;
+}
+.btn-primary::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 55%);
+  pointer-events: none;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--grad-h);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(240,48,48,0.4);
+}
+.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--muted2); border-radius: 25px;
+  padding: 10px 20px; font-size: 0.78rem;
+  cursor: pointer; transition: all 0.2s;
+  width: 100%; margin-top: 10px;
+  font-family: 'Inter', sans-serif;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.06); color: var(--txt); }
+
+/* close btn */
+.closeBtn {
+  position: absolute; top: 13px; right: 13px;
+  background: rgba(255,255,255,0.06); border: none;
+  color: var(--muted2); width: 28px; height: 28px;
+  border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: all 0.2s; line-height: 1;
+}
+.closeBtn:hover { background: rgba(255,255,255,0.13); color: var(--txt); }
+
+/* error / success */
+.errorMsg {
+  color: #f87171; font-size: 0.75rem; font-weight: 500;
+  min-height: 18px; margin-top: 10px; text-align: center;
+}
+.errorMsg.shake { animation: shake 0.3s ease; }
+@keyframes shake {
+  0%,100% { transform:translateX(0); }
+  25%      { transform:translateX(-5px); }
+  75%      { transform:translateX(5px); }
+}
+
+/* spinner */
+.spinner {
+  display: inline-block; width: 13px; height: 13px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-top-color: #fff; border-radius: 50%;
+  animation: spinR 0.7s linear infinite;
+  margin-right: 6px; vertical-align: middle;
+}
+@keyframes spinR { to { transform: rotate(360deg); } }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE TWEAKS
+══════════════════════════════════════════ */
+@media (max-width: 340px) {
+  .stats-container { grid-template-columns: repeat(3,1fr); gap: 7px; }
+  .stat-value      { font-size: 1.25rem; }
+  .sites-container { grid-template-columns: repeat(3,1fr); }
+  .app-header      { padding: 16px 14px; }
+}
+@media (min-width: 600px) {
+  #dashboard       { padding: 24px 20px 90px; }
+  .header-title    { font-size: 2.4rem; }
+  .site-box        { font-size: 0.82rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast-container"></div>
+
+<!-- SERVER STATUS -->
+<div id="server-status">
+  <div class="dot-status"></div>
+  <span id="status-text">Checking...</span>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LOADING SCREEN
+══════════════════════════════════════════ -->
+<div id="loading-screen">
+  <div class="ls-icon">
+    <div class="ls-ring"></div>
+    <div class="ls-ring2"></div>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#f03030">
+      <path d="M476.864 3.7L35.164 240.8c-11.4 6.1-11.3 22.3.2 28.3l116.3 62.4L430.064 69.4c3.5-3.4 9.1-3.3 12.5.2 3.4 3.5 3.3 9.1-.2 12.5L164.364 343.3l13.4 129.1c1.1 10.4 13.9 14.2 20.2 6l45.9-58.1 103.4 55.5c7.8 4.2 17.3-2.2 15.9-11l-16.6-103.5 148.4-155.3c2.9-3 3.6-7.5 1.8-11.3-1.8-3.8-5.8-6.2-10-6L476.864 3.7z"/>
+    </svg>
+  </div>
+  <div class="ls-brand">AVIATOR <span>PREDICTOR</span> PRO</div>
+  <div class="ls-ver">v12.0.5 &nbsp;·&nbsp; Tanzania Edition</div>
+  <div class="ls-track"><div class="ls-bar"></div></div>
+  <div class="ls-msg" id="ls-msg">Initializing system...</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     WHATSAPP CHANNEL MODAL
+══════════════════════════════════════════ -->
+<div id="whatsappModal">
+  <div class="wa-modal-card">
+    <h3>📢 Jiunge na Channel</h3>
+    <p>Jiunge na channel yetu ya WhatsApp kupata ishara za kweli za Aviator kila siku, mbinu za ushindi, na vidokezo vya kipekee!</p>
+    <div class="whatsapp-buttons">
+      <button class="cancel-btn" id="cancelBtn">Baadaye</button>
+      <button class="join-btn"   id="joinBtn">Jiunge Sasa</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     DASHBOARD
+══════════════════════════════════════════ -->
+<div id="dashboard" class="locked">
+
+  <!-- HEADER -->
+  <div class="app-header">
+    <div class="header-eyebrow">🔴 Live Prediction Engine</div>
+    <div class="header-title">CHAGUA TOVUTI <em>YAKO</em></div>
+    <div class="header-sub">AVIATOR PREDICTOR PRO &nbsp;·&nbsp; V12.0.5</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-value">97%</div>
+      <div class="stat-label">Accuracy Rate</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">12.5x</div>
+      <div class="stat-label">Avg. Multiplier</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">24/7</div>
+      <div class="stat-label">Active</div>
+    </div>
+  </div>
+
+  <!-- SITES -->
+  <div class="section-divider"><span>Chagua Tovuti ya Kubeti</span></div>
+
+  <div class="sites-container">
+    <div class="site-box betway"      data-site="Betway">      <span class="site-icon">✈️</span><span class="site-name">Betway</span></div>
+    <div class="site-box sportpesa"   data-site="SportPesa">   <span class="site-icon">⚽</span><span class="site-name">SportPesa</span></div>
+    <div class="site-box betika"      data-site="Betika">      <span class="site-icon">🎯</span><span class="site-name">Betika</span></div>
+    <div class="site-box meridianbet" data-site="Meridianbet"> <span class="site-icon">🔴</span><span class="site-name">Meridianbet</span></div>
+    <div class="site-box betpawa"     data-site="BetPawa">     <span class="site-icon">💚</span><span class="site-name">BetPawa</span></div>
+    <div class="site-box parimatch"   data-site="Parimatch">   <span class="site-icon">🏆</span><span class="site-name">Parimatch</span></div>
+    <div class="site-box galabet"     data-site="Galabet">     <span class="site-icon">🌟</span><span class="site-name">Galabet</span></div>
+    <div class="site-box mcheza"      data-site="Mcheza">      <span class="site-icon">🎲</span><span class="site-name">Mcheza</span></div>
+    <div class="site-box xbet1"       data-site="1xBet">       <span class="site-icon">🔵</span><span class="site-name">1xBet</span></div>
+    <div class="site-box bet365"      data-site="Bet365">      <span class="site-icon">🟢</span><span class="site-name">Bet365</span></div>
+    <div class="site-box melbet"      data-site="Melbet">      <span class="site-icon">🥇</span><span class="site-name">Melbet</span></div>
+    <div class="site-box palmsbet"    data-site="PalmsBet">    <span class="site-icon">🌴</span><span class="site-name">PalmsBet</span></div>
+    <div class="site-box bet22"       data-site="22Bet">       <span class="site-icon">🎪</span><span class="site-name">22Bet</span></div>
+    <div class="site-box betlion"     data-site="BetLion">     <span class="site-icon">🦁</span><span class="site-name">BetLion</span></div>
+    <div class="site-box betikaextra" data-site="Betika Extra"><span class="site-icon">➕</span><span class="site-name">Betika Extra</span></div>
+    <div class="site-box odibets"     data-site="OdiBets">     <span class="site-icon">🎰</span><span class="site-name">OdiBets</span></div>
+    <div class="site-box powerbets"   data-site="PowerBets">   <span class="site-icon">⚡</span><span class="site-name">PowerBets</span></div>
+    <div class="site-box mobet"       data-site="MoBet">       <span class="site-icon">🌙</span><span class="site-name">MoBet</span></div>
+    <div class="site-box bet888"      data-site="888Bet">      <span class="site-icon">🎁</span><span class="site-name">888Bet</span></div>
+    <div class="site-box wasafibet"   data-site="WasafiBet">   <span class="site-icon">🔥</span><span class="site-name">WasafiBet</span></div>
+  </div>
+
+  <footer>
+    <p>Bonyeza kiungo 👉🏿 <a href="https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A" target="_blank">https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A</a></p>
+    <p>kujiunga na channel yetu ya WhatsApp &nbsp;<strong>AVIATOR | PREDICTOR PRO</strong></p>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAYMENT MODAL
+══════════════════════════════════════════ -->
+<div id="modalBack" class="modal-backdrop show">
+  <div class="modal">
+    <button class="closeBtn" id="closeModalBtn" aria-label="Close">×</button>
+
+    <!-- STEP 1: Phone + Pay -->
+    <div class="modal-step active" id="step-payment">
+      <div class="modal-icon">✈️</div>
+      <h3>Fungua Ufikiaji</h3>
+      <p class="modal-subtitle">Lipa mara moja, pata msimbo wako wa SMS wa nambari 6 mara moja na ufikia utabiri wote.</p>
+
+      <div class="price-badge">
+        <span>💳</span> TSH 2,000 — Ufikiaji wa Mara Moja
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="phoneInput">Nambari ya Simu</label>
+        <input type="tel" id="phoneInput" placeholder="07XXXXXXXX or +255XXXXXXXXX" maxlength="15" inputmode="tel" autocomplete="tel">
+      </div>
+
+      <button class="btn-primary" id="payBtn">LIPA TSH 2,000</button>
+      <div class="errorMsg" id="payError"></div>
+    </div>
+
+    <!-- STEP 2: Enter SMS code -->
+    <div class="modal-step" id="step-verify">
+      <div class="modal-icon">📱</div>
+      <h3>Weka Msimbo Wako</h3>
+      <p class="modal-subtitle">Msimbo wa nambari 6 umetumwa kwenye simu yako kwa SMS. Weka hapa chini.</p>
+
+      <div class="payment-info-box" id="paymentInfoBox">
+        <div class="info-title">✅ Malipo Yameanzishwa</div>
+        <div id="paymentInfoText">Kamilisha ombi la M-Pesa kwenye simu yako. Msimbo wako wa ufikiaji utafika kwa SMS ndani ya sekunde.</div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="codeInput">Msimbo wa SMS wa Nambari 6</label>
+        <input type="text" id="codeInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+      </div>
+
+      <button class="btn-primary" id="verifyBtn">THIBITISHA MSIMBO</button>
+      <button class="btn-ghost"   id="backToPayBtn">← Jaribu nambari nyingine</button>
+      <div class="errorMsg" id="verifyError"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- WHATSAPP FAB -->
+<div class="whatsapp-btn" onclick="window.open('https://wa.me/255783394967','_blank')" role="button" aria-label="WhatsApp Support">
+  💬
+  <div class="whatsapp-badge">1</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
+<script>
+/* ─── CONFIG ─── */
+const API_BASE   = "https://aviator-payment.onrender.com"
+const SESSION_KEY = "aviatorAccess"
+const SESSION_TTL = 24 * 60 * 60 * 1000  // 24 hours
+
+/* ─── LOADING MESSAGES ─── */
+const LOAD_MSGS = [
+  "Initializing system...",
+  "Connecting to servers...",
+  "Loading prediction model...",
+  "Syncing live data...",
+  "Almost ready..."
+]
+let msgIdx = 0
+const lsMsg = document.getElementById("ls-msg")
+const msgTick = setInterval(() => {
+  if (msgIdx < LOAD_MSGS.length) { lsMsg.textContent = LOAD_MSGS[msgIdx++] }
+  else clearInterval(msgTick)
+}, 500)
+
+/* ─── TOAST ─── */
+function showToast(msg, type = "info", duration = 3500) {
+  const icons = { success:"✔", error:"✖", info:"ℹ", warning:"⚠" }
+  const container = document.getElementById("toast-container")
+  const el = document.createElement("div")
+  el.className = `toast ${type}`
+  el.innerHTML = `<span>${icons[type]||"ℹ"}</span><span>${msg}</span>`
+  container.appendChild(el)
+  setTimeout(() => {
+    el.classList.add("out")
+    setTimeout(() => el.remove(), 350)
+  }, duration)
+}
+
+/* ─── SESSION ─── */
+function saveSession() {
+  try { localStorage.setItem(SESSION_KEY, JSON.stringify({ ts: Date.now() })) } catch(e) {}
+}
+function hasValidSession() {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY)
+    if (!raw) return false
+    const { ts } = JSON.parse(raw)
+    return Date.now() - ts < SESSION_TTL
+  } catch { return false }
+}
+
+/* ─── UI HELPERS ─── */
+function setLoading(btn, loading, label) {
+  btn.disabled = loading
+  btn.innerHTML = loading ? `<span class="spinner"></span>${label}` : label
+}
+
+function showStep(stepId) {
+  document.querySelectorAll(".modal-step").forEach(s => s.classList.remove("active"))
+  document.getElementById(stepId).classList.add("active")
+}
+
+function clearError(id) {
+  const el = document.getElementById(id)
+  el.textContent = ""
+  el.classList.remove("shake")
+}
+
+function showError(id, msg) {
+  const el = document.getElementById(id)
+  el.textContent = msg
+  el.classList.remove("shake")
+  void el.offsetHeight   // reflow to retrigger
+  el.classList.add("shake")
+}
+
+function unlockDashboard() {
+  const dash = document.getElementById("dashboard")
+  dash.classList.remove("locked")
+  /* Site boxes open the predictor inline — no external redirects */
+  document.querySelectorAll(".site-box").forEach(box => {
+    box.addEventListener("click", () => {
+      const site = box.dataset.site || "this site"
+      showToast(`✔ Predictions loaded for ${site}`, "success", 4000)
+    })
+  })
+}
+
+function openModal()  { document.getElementById("modalBack").classList.add("show") }
+function closeModal() { document.getElementById("modalBack").classList.remove("show") }
+
+/* ─── SERVER HEALTH ─── */
+async function checkServerHealth() {
+  const badge = document.getElementById("server-status")
+  const text  = document.getElementById("status-text")
+  try {
+    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(6000) })
+    if (res.ok) {
+      badge.classList.add("online"); badge.classList.remove("offline")
+      text.textContent = "Server Online"
+    } else throw new Error("not ok")
+  } catch {
+    badge.classList.add("offline"); badge.classList.remove("online")
+    text.textContent = "Server Offline"
+    showToast("Seva ya malipo haifiki sasa hivi.", "warning", 5000)
+  }
+}
+
+/* ─── PHONE VALIDATION ─── */
+function sanitizePhone(raw) {
+  return raw.trim().replace(/[^\d+]/g, "")
+}
+function validatePhone(phone) {
+  const clean = sanitizePhone(phone)
+  return /^(0\d{9}|\+255\d{9})$/.test(clean) ? clean : null
+}
+
+/* ─── API: START PAYMENT ─── */
+async function startPayment(phone) {
+  const res = await fetch(`${API_BASE}/start-payment`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ phone }),
+    signal: AbortSignal.timeout(20000),
+  })
+  return { ok: res.ok, status: res.status, data: await res.json() }
+}
+
+/* ─── API: VERIFY CODE ─── */
+async function verifyCode(code) {
+  const res = await fetch(`${API_BASE}/verify-code`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code }),
+    signal: AbortSignal.timeout(15000),
+  })
+  return { ok: res.ok, status: res.status, data: await res.json() }
+}
+
+/* ─── PAY BUTTON ─── */
+document.getElementById("payBtn").addEventListener("click", async () => {
+  const rawPhone = document.getElementById("phoneInput").value
+  clearError("payError")
+
+  const phone = validatePhone(rawPhone)
+  if (!phone) {
+    showError("payError", "Weka nambari sahihi ya Tanzania (07XXXXXXXX au +255XXXXXXXXX)")
+    return
+  }
+
+  const btn = document.getElementById("payBtn")
+  setLoading(btn, true, "Inashughulikia...")
+
+  try {
+    const { ok, data } = await startPayment(phone)
+    if (!ok) {
+      const msg = data?.error || "Imeshindwa kuanza malipo. Tafadhali jaribu tena."
+      showError("payError", msg)
+      showToast(msg, "error")
+      return
+    }
+    const infoText = data.message ||
+      "Kamilisha ombi la M-Pesa kwenye simu yako. Msimbo wako wa ufikiaji wa nambari 6 utafika kwa SMS."
+    document.getElementById("paymentInfoText").textContent = infoText
+    showToast("✔ Malipo yameanzishwa — angalia simu yako!", "success")
+    showStep("step-verify")
+  } catch (err) {
+    const msg = err.name === "TimeoutError"
+      ? "Ombi limeisha muda. Angalia muunganiko wako."
+      : "Hitilafu ya mtandao. Tafadhali jaribu tena."
+    showError("payError", msg)
+    showToast(msg, "error")
+  } finally {
+    setLoading(btn, false, "LIPA TSH 2,000")
+  }
+})
+
+/* ─── VERIFY BUTTON ─── */
+document.getElementById("verifyBtn").addEventListener("click", async () => {
+  const rawCode = document.getElementById("codeInput").value.trim()
+  clearError("verifyError")
+
+  if (!/^\d{6}$/.test(rawCode)) {
+    showError("verifyError", "Tafadhali weka msimbo wa nambari 6 kutoka kwa SMS yako.")
+    return
+  }
+
+  const btn = document.getElementById("verifyBtn")
+  setLoading(btn, true, "Inathibitisha...")
+
+  try {
+    const { ok, data } = await verifyCode(rawCode)
+    if (!ok || !data?.valid) {
+      const msg = data?.expired
+        ? "Msimbo huu umeisha muda. Tafadhali anza malipo mapya."
+        : (data?.error || "Msimbo batili au uliotumika tayari.")
+      showError("verifyError", msg)
+      showToast("✖ " + msg, "error")
+      return
+    }
+    saveSession()
+    showToast("✔ Ufikiaji umeidhinishwa! Karibu.", "success", 4000)
+    closeModal()
+    unlockDashboard()
+    setTimeout(() => document.getElementById("whatsappModal").classList.add("show"), 1500)
+  } catch (err) {
+    const msg = err.name === "TimeoutError"
+      ? "Ombi limeisha muda. Jaribu tena."
+      : "Hitilafu ya mtandao. Tafadhali jaribu tena."
+    showError("verifyError", msg)
+    showToast(msg, "error")
+  } finally {
+    setLoading(btn, false, "THIBITISHA MSIMBO")
+  }
+})
+
+/* ─── BACK BUTTON ─── */
+document.getElementById("backToPayBtn").addEventListener("click", () => {
+  clearError("verifyError")
+  clearError("payError")
+  document.getElementById("codeInput").value = ""
+  showStep("step-payment")
+})
+
+/* ─── CLOSE BUTTON ─── */
+document.getElementById("closeModalBtn").addEventListener("click", () => {
+  if (hasValidSession()) { closeModal(); unlockDashboard() }
+  // No valid session → silently ignore
+})
+
+/* ─── PHONE INPUT ─── */
+document.getElementById("phoneInput").addEventListener("input", function () {
+  this.value = this.value.replace(/[^\d+\s-]/g, "")
+})
+
+/* ─── CODE INPUT — auto-submit at 6 ─── */
+document.getElementById("codeInput").addEventListener("input", function () {
+  this.value = this.value.replace(/\D/g, "").slice(0, 6)
+  if (this.value.length === 6) document.getElementById("verifyBtn").click()
+})
+
+/* ─── WHATSAPP MODAL ─── */
+document.getElementById("joinBtn").addEventListener("click", () => {
+  window.open("https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A", "_blank")
+  document.getElementById("whatsappModal").classList.remove("show")
+})
+document.getElementById("cancelBtn").addEventListener("click", () => {
+  document.getElementById("whatsappModal").classList.remove("show")
+})
+
+/* ─── BOOT SEQUENCE ─── */
+window.addEventListener("DOMContentLoaded", () => {
+  const loadingScreen = document.getElementById("loading-screen")
+  const dashboard     = document.getElementById("dashboard")
+
+  checkServerHealth()
+
+  setTimeout(() => {
+    loadingScreen.classList.add("fade-out")
+    setTimeout(() => {
+      loadingScreen.style.display = "none"
+      dashboard.style.display = "flex"
+
+      if (hasValidSession()) {
+        closeModal()
+        unlockDashboard()
+        showToast("Karibu tena! Ufikiaji bado unaendelea.", "success")
+        setTimeout(() => document.getElementById("whatsappModal").classList.add("show"), 2000)
+        return
+      }
+
+      openModal()
+    }, 750)
+  }, 2800)
+})
+</script>
+</body>
+</html>
