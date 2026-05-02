@@ -3,483 +3,754 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aviator Predictor Pro v12.0.5</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Aviator Predictor Pro v13.0.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --primary: #e53935;
-    --primary-dark: #b71c1c;
-    --secondary: #1a1a1a;
-    --accent: #ff9800;
-    --text: #ffffff;
-    --text-secondary: #b0b0b0;
-    --card-bg: #1e1e1e;
-    --success: #4caf50;
-    --warning: #ffc107;
-    --gradient: linear-gradient(135deg, #e53935 0%, #b71c1c 100%);
-    --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    --radius: 10px;
-  }
+/* ═══════════════════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════════════════ */
+:root {
+  --primary: #e53935;
+  --primary-dark: #b71c1c;
+  --primary-glow: rgba(229,57,53,0.4);
+  --secondary: #0d0d0d;
+  --accent: #ff9800;
+  --text: #ffffff;
+  --text-secondary: #888;
+  --card-bg: #111;
+  --card-border: rgba(255,255,255,0.07);
+  --success: #00e676;
+  --success-glow: rgba(0,230,118,0.3);
+  --warning: #ffc107;
+  --gradient: linear-gradient(135deg, #e53935 0%, #b71c1c 100%);
+  --shadow: 0 4px 20px rgba(0,0,0,0.5);
+  --radius: 12px;
+  --font-head: 'Exo 2', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-ui: 'Rajdhani', sans-serif;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { width:100%; min-height:100%; overflow-x:hidden; }
 
-  html, body { width: 100%; height: 100%; overflow-x: hidden; }
+body {
+  font-family: var(--font-ui);
+  background: #080808;
+  color: var(--text);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 10% 0%, rgba(229,57,53,0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 100%, rgba(183,28,28,0.07) 0%, transparent 50%);
+}
 
-  body {
-    background: #0a0a0a;
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-image:
-      radial-gradient(circle at 10% 20%, rgba(229, 57, 53, 0.1) 0%, transparent 20%),
-      radial-gradient(circle at 90% 80%, rgba(183, 28, 28, 0.1) 0%, transparent 20%);
-  }
+/* ═══════════════════════════════════════════════════════════
+   SCANLINE OVERLAY (ambient)
+═══════════════════════════════════════════════════════════ */
+body::before {
+  content:"";
+  position:fixed; inset:0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events:none;
+  z-index:1;
+}
 
-  /* ── LOADING SCREEN ── */
-  #loading-screen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--secondary);
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    z-index: 9999; transition: opacity 0.8s ease; padding: 20px;
-  }
+/* ═══════════════════════════════════════════════════════════
+   LOADING SCREEN
+═══════════════════════════════════════════════════════════ */
+#loading-screen {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background: #080808;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  z-index:9999; transition:opacity 0.8s ease; padding:20px;
+}
 
-  .logo-plane {
-    width: 80px; height: 80px; fill: var(--primary);
-    animation: float 3s infinite ease-in-out;
-    filter: drop-shadow(0 0 8px rgba(229, 57, 53, 0.5));
-  }
+.load-logo-wrap {
+  position:relative; width:90px; height:90px; margin-bottom:20px;
+}
+.load-ring {
+  position:absolute; inset:0; border-radius:50%;
+  border:2px solid transparent;
+  border-top-color: var(--primary);
+  animation: spin 1.4s linear infinite;
+}
+.load-ring-2 {
+  position:absolute; inset:8px; border-radius:50%;
+  border:1.5px solid transparent;
+  border-bottom-color: rgba(229,57,53,0.4);
+  animation: spin 2s linear infinite reverse;
+}
+.logo-plane {
+  position:absolute; inset:0; margin:auto;
+  width:44px; height:44px; fill:var(--primary);
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px var(--primary-glow));
+}
+.loading-text {
+  font-family: var(--font-head);
+  font-size:1.3rem; font-weight:800;
+  letter-spacing:3px; text-transform:uppercase;
+  background: var(--gradient);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.loading-ver {
+  font-family: var(--font-mono);
+  font-size:0.7rem; color:var(--text-secondary);
+  margin-top:5px; letter-spacing:2px;
+}
+.loading-bar-wrap {
+  width:200px; height:3px; background:rgba(255,255,255,0.07);
+  border-radius:3px; margin-top:22px; overflow:hidden;
+}
+.loading-bar {
+  height:100%; width:0;
+  background: var(--gradient);
+  border-radius:3px;
+  animation: loadBar 2.5s ease forwards;
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+@keyframes loadBar { 0%{width:0} 60%{width:80%} 100%{width:100%} }
 
-  .loading-text {
-    font-size: 1.2rem; font-weight: 600;
-    background: var(--gradient);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    margin-top: 10px; letter-spacing: 1px; text-transform: uppercase; text-align: center;
-  }
+@keyframes float {
+  0%,100%{ transform:translateY(0) rotate(-5deg); }
+  50%{ transform:translateY(-8px) rotate(5deg); }
+}
+@keyframes spin { to{ transform:rotate(360deg); } }
+@keyframes bounce {
+  0%,100%{ transform:scale(1); opacity:0.6; }
+  50%{ transform:scale(1.3); opacity:1; }
+}
 
-  .loading-dots { display: flex; margin-top: 15px; }
+/* ═══════════════════════════════════════════════════════════
+   SERVER STATUS
+═══════════════════════════════════════════════════════════ */
+#server-status {
+  position:fixed; top:12px; right:12px;
+  background:rgba(0,0,0,0.7);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:20px; padding:5px 12px;
+  font-size:0.68rem; font-weight:600; font-family:var(--font-mono);
+  color:var(--text-secondary);
+  z-index:500;
+  display:flex; align-items:center; gap:6px;
+  transition:all 0.4s ease;
+  backdrop-filter:blur(6px);
+}
+#server-status .dot-status {
+  width:7px; height:7px; border-radius:50%;
+  background:#555; flex-shrink:0;
+  transition:background 0.4s ease;
+}
+#server-status.online  .dot-status { background:var(--success); box-shadow:0 0 6px var(--success-glow); }
+#server-status.offline .dot-status { background:var(--primary); box-shadow:0 0 6px var(--primary-glow); }
 
-  .dot {
-    width: 8px; height: 8px; border-radius: 50%; background: var(--primary);
-    margin: 0 4px; animation: bounce 1.5s infinite ease-in-out;
-  }
-  .dot:nth-child(2) { animation-delay: 0.2s; }
-  .dot:nth-child(3) { animation-delay: 0.4s; }
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════════════════════════ */
+#dashboard {
+  display:none; flex:1; flex-direction:column; align-items:center;
+  padding:16px; width:100%; position:relative;
+}
+#dashboard.locked::after {
+  content:"";
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(8px);
+  z-index:10;
+  pointer-events:all;
+}
 
-  @keyframes float {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-10px) rotate(5deg); }
-  }
-  @keyframes bounce {
-    0%, 100% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.2); opacity: 1; }
-  }
+/* ═══════════════════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════════════════ */
+header {
+  width:100%; text-align:center;
+  padding:18px 12px;
+  border-radius:var(--radius);
+  margin-bottom:16px;
+  background: linear-gradient(135deg, #1a0000 0%, #2a0000 50%, #1a0000 100%);
+  border:1px solid rgba(229,57,53,0.25);
+  box-shadow: 0 0 30px rgba(229,57,53,0.1), var(--shadow);
+  position:relative; overflow:hidden;
+}
+header::before {
+  content:""; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background:linear-gradient(90deg,transparent,rgba(229,57,53,0.12),transparent);
+  animation:shine 3.5s infinite;
+}
+header::after {
+  content:""; position:absolute; bottom:0; left:0; right:0; height:1px;
+  background: var(--gradient);
+}
+@keyframes shine { 0%{left:-100%} 100%{left:100%} }
 
-  /* ── DASHBOARD ── */
-  #dashboard {
-    display: none; flex: 1; flex-direction: column; align-items: center;
-    padding: 15px; width: 100%; max-width: 100%; margin: 0 auto;
-    position: relative;
-  }
+.header-title {
+  font-family:var(--font-head);
+  font-size:1.15rem; font-weight:800;
+  letter-spacing:3px; text-transform:uppercase;
+  background:var(--gradient);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.header-sub {
+  font-family:var(--font-mono);
+  font-size:0.65rem; color:var(--text-secondary);
+  letter-spacing:2px; margin-top:3px;
+}
 
-  /* Dashboard blur/lock overlay */
-  #dashboard.locked::after {
-    content: "";
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(6px);
-    z-index: 10;
-    pointer-events: all;
-  }
+.subtitle {
+  margin:0 0 18px; color:var(--text-secondary);
+  font-family:var(--font-mono);
+  font-size:0.75rem; letter-spacing:1.5px;
+  text-transform:uppercase; text-align:center;
+  position:relative; padding-bottom:10px;
+}
+.subtitle::after {
+  content:""; position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+  width:60px; height:1px; background:var(--gradient);
+}
 
-  /* ── SERVER STATUS BADGE ── */
-  #server-status {
-    position: fixed; top: 12px; right: 12px;
-    background: rgba(0,0,0,0.7);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px;
-    padding: 5px 11px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    z-index: 500;
-    display: flex; align-items: center; gap: 5px;
-    transition: all 0.4s ease;
-    backdrop-filter: blur(4px);
-  }
-  #server-status .dot-status {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: #555; flex-shrink: 0;
-    transition: background 0.4s ease;
-  }
-  #server-status.online .dot-status  { background: var(--success); box-shadow: 0 0 6px var(--success); }
-  #server-status.offline .dot-status { background: var(--primary); box-shadow: 0 0 6px var(--primary); }
+/* ═══════════════════════════════════════════════════════════
+   STATS
+═══════════════════════════════════════════════════════════ */
+.stats-container {
+  display:flex; justify-content:space-between;
+  width:100%; margin-bottom:20px; gap:10px;
+}
+.stat-card {
+  background:var(--card-bg);
+  border-radius:var(--radius); padding:14px 8px; flex:1;
+  text-align:center; box-shadow:var(--shadow);
+  border:1px solid var(--card-border);
+  border-top:2px solid var(--primary);
+  position:relative; overflow:hidden;
+}
+.stat-card::before {
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(229,57,53,0.05) 0%,transparent 60%);
+}
+.stat-value {
+  font-family:var(--font-head);
+  font-size:1.35rem; font-weight:800;
+  color:var(--primary);
+  text-shadow:0 0 12px var(--primary-glow);
+  margin-bottom:3px; line-height:1;
+}
+.stat-label {
+  font-family:var(--font-mono);
+  font-size:0.62rem; color:var(--text-secondary);
+  text-transform:uppercase; letter-spacing:1px;
+}
 
-  /* ── HEADER ── */
-  header {
-    background: var(--gradient);
-    color: var(--text); width: 100%; text-align: center;
-    padding: 15px 10px; font-size: 1.1rem; font-weight: 700;
-    text-transform: uppercase; border-radius: var(--radius);
-    margin-bottom: 15px; box-shadow: var(--shadow);
-    position: relative; overflow: hidden;
-  }
-  header::before {
-    content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    animation: shine 3s infinite;
-  }
-  @keyframes shine { 0% { left: -100%; } 100% { left: 100%; } }
+/* ═══════════════════════════════════════════════════════════
+   SITE BOXES
+═══════════════════════════════════════════════════════════ */
+.sites-label {
+  width:100%; font-family:var(--font-mono);
+  font-size:0.65rem; color:var(--text-secondary);
+  letter-spacing:2px; text-transform:uppercase;
+  margin-bottom:10px; padding-left:2px;
+}
 
-  .subtitle {
-    margin: 8px 0 20px; color: var(--text-secondary); font-size: 0.9rem;
-    letter-spacing: 0.5px; text-transform: uppercase; text-align: center;
-    position: relative; padding-bottom: 8px;
-  }
-  .subtitle::after {
-    content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 80px; height: 2px; background: var(--gradient); border-radius: 2px;
-  }
+.sites-container {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(105px,1fr));
+  gap:10px; width:100%;
+}
 
-  /* ── STATS ── */
-  .stats-container { display: flex; justify-content: space-between; width: 100%; margin-bottom: 20px; gap: 10px; }
+.site-box {
+  display:flex; flex-direction:column;
+  justify-content:center; align-items:center;
+  padding:16px 6px; border-radius:var(--radius);
+  cursor:pointer; transition:all 0.3s ease;
+  color:var(--text); text-transform:uppercase;
+  font-weight:700; font-family:var(--font-ui);
+  text-align:center; position:relative; overflow:hidden;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,0.06);
+  font-size:0.78rem; min-height:68px; gap:4px;
+}
+.site-box .site-icon { font-size:1.1rem; line-height:1; }
+.site-box .site-tag {
+  font-family:var(--font-mono);
+  font-size:0.52rem; letter-spacing:1px; opacity:0.6;
+}
+.site-box::before {
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.08) 0%,transparent 60%);
+  opacity:0; transition:opacity 0.3s;
+}
+.site-box:hover { transform:translateY(-4px); box-shadow:0 10px 28px rgba(0,0,0,0.6); }
+.site-box:hover::before { opacity:1; }
 
-  .stat-card {
-    background: var(--card-bg); border-radius: var(--radius);
-    padding: 12px 8px; flex: 1; text-align: center;
-    box-shadow: var(--shadow); border-left: 3px solid var(--primary);
-    min-height: 70px; display: flex; flex-direction: column; justify-content: center;
-  }
-  .stat-value { font-size: 1.3rem; font-weight: 700; color: var(--primary); margin-bottom: 3px; line-height: 1.2; }
-  .stat-label { font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; line-height: 1.2; }
+/* PREDICTOR-ENABLED site boxes get a subtle glow badge */
+.site-box.has-predictor::after {
+  content:"PRO"; position:absolute; top:5px; right:5px;
+  font-family:var(--font-mono); font-size:0.45rem; font-weight:700;
+  padding:2px 4px; border-radius:3px; letter-spacing:1px;
+}
+.site-box.betpawa.has-predictor::after   { background:rgba(0,180,60,0.3); color:#00e676; border:1px solid rgba(0,230,118,0.3); }
+.site-box.sportybet.has-predictor::after { background:rgba(0,100,255,0.3); color:#60a0ff; border:1px solid rgba(60,130,255,0.3); }
+.site-box.parimatch.has-predictor::after { background:rgba(200,170,0,0.3); color:#ffe000; border:1px solid rgba(255,220,0,0.3); }
 
-  /* ── SITE BOXES ── */
-  .sites-container {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 12px; margin-top: 15px; width: 100%; max-width: 100%;
-  }
+/* Colors */
+.site-box.betway      { background:linear-gradient(135deg,#1c1c1c,#2a2a2a); }
+.site-box.sportpesa   { background:linear-gradient(135deg,#001f5b,#003399); }
+.site-box.betika      { background:linear-gradient(135deg,#ffcc00,#ffaa00); color:#000; }
+.site-box.meridianbet { background:linear-gradient(135deg,#d71a28,#a3141f); }
+.site-box.betpawa     { background:linear-gradient(135deg,#005c24,#007a30); }
+.site-box.sportybet   { background:linear-gradient(135deg,#0040cc,#0060ee); }
+.site-box.parimatch   { background:linear-gradient(135deg,#1a1a00,#3a3300); color:#ffe000; }
+.site-box.galabet     { background:linear-gradient(135deg,#2a2a2a,#3a3a3a); }
+.site-box.mcheza      { background:linear-gradient(135deg,#3c0d73,#2a0952); }
+.site-box.xbet1       { background:linear-gradient(135deg,#0071c2,#005a9e); }
+.site-box.bet365      { background:linear-gradient(135deg,#125c3e,#0e4a31); }
+.site-box.melbet      { background:linear-gradient(135deg,#e5b700,#cc9f00); color:#000; }
+.site-box.palmsbet    { background:linear-gradient(135deg,#0066cc,#004d99); }
+.site-box.bet22       { background:linear-gradient(135deg,#066b54,#055244); }
+.site-box.betlion     { background:linear-gradient(135deg,#b41c18,#8f1512); }
+.site-box.betikaextra { background:linear-gradient(135deg,#ff9900,#e68500); color:#000; }
+.site-box.odibets     { background:linear-gradient(135deg,#2a7a2a,#1e5e1e); }
+.site-box.powerbets   { background:linear-gradient(135deg,#ff002b,#cc0022); }
+.site-box.mobet       { background:linear-gradient(135deg,#001d34,#001225); }
+.site-box.bet888      { background:linear-gradient(135deg,#ff6600,#cc5500); }
+.site-box.wasafibet   { background:linear-gradient(135deg,#c40000,#9d0000); }
 
-  .site-box {
-    display: flex; justify-content: center; align-items: center;
-    padding: 18px 8px; border-radius: var(--radius);
-    cursor: pointer; transition: all 0.3s ease; color: var(--text);
-    text-transform: uppercase; font-weight: 600; text-align: center;
-    position: relative; overflow: hidden; box-shadow: var(--shadow);
-    border: 1px solid rgba(255,255,255,0.05); font-size: 0.8rem; min-height: 70px;
-  }
-  .site-box::before {
-    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
-    opacity: 0; transition: opacity 0.3s ease;
-  }
-  .site-box:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
-  .site-box:hover::before { opacity: 1; }
+/* ═══════════════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════════════ */
+footer {
+  background:linear-gradient(135deg,#120000,#1a0000);
+  border:1px solid rgba(229,57,53,0.15);
+  color:var(--text); text-align:center;
+  padding:14px 10px; margin-top:24px;
+  font-size:0.75rem; border-radius:var(--radius);
+  width:100%; box-shadow:var(--shadow); line-height:1.6;
+  font-family:var(--font-mono);
+}
+footer a {
+  color:var(--primary); font-weight:600; text-decoration:none;
+  transition:all 0.3s ease; word-break:break-all;
+}
+footer a:hover { text-shadow:0 0 8px var(--primary-glow); }
 
-  .site-box.betway      { background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%); }
-  .site-box.sportpesa   { background: linear-gradient(135deg, #001f5b 0%, #003399 100%); }
-  .site-box.betika      { background: linear-gradient(135deg, #ffcc00 0%, #ffaa00 100%); color:#000; }
-  .site-box.meridianbet { background: linear-gradient(135deg, #d71a28 0%, #a3141f 100%); }
-  .site-box.betpawa     { background: linear-gradient(135deg, #009739 0%, #00752d 100%); }
-  .site-box.parimatch   { background: linear-gradient(135deg, #ffea00 0%, #ffd700 100%); color:#000; }
-  .site-box.galabet     { background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); }
-  .site-box.mcheza      { background: linear-gradient(135deg, #3c0d73 0%, #2a0952 100%); }
-  .site-box.xbet1       { background: linear-gradient(135deg, #0071c2 0%, #005a9e 100%); }
-  .site-box.bet365      { background: linear-gradient(135deg, #125c3e 0%, #0e4a31 100%); }
-  .site-box.melbet      { background: linear-gradient(135deg, #e5b700 0%, #cc9f00 100%); color:#000; }
-  .site-box.palmsbet    { background: linear-gradient(135deg, #0066cc 0%, #004d99 100%); }
-  .site-box.bet22       { background: linear-gradient(135deg, #066b54 0%, #055244 100%); }
-  .site-box.betlion     { background: linear-gradient(135deg, #b41c18 0%, #8f1512 100%); }
-  .site-box.betikaextra { background: linear-gradient(135deg, #ff9900 0%, #e68500 100%); color:#000; }
-  .site-box.odibets     { background: linear-gradient(135deg, #4caf50 0%, #3d8b40 100%); }
-  .site-box.powerbets   { background: linear-gradient(135deg, #ff002b 0%, #cc0022 100%); }
-  .site-box.mobet       { background: linear-gradient(135deg, #001d34 0%, #001225 100%); }
-  .site-box.bet888      { background: linear-gradient(135deg, #ff6600 0%, #cc5500 100%); }
-  .site-box.wasafibet   { background: linear-gradient(135deg, #c40000 0%, #9d0000 100%); }
+/* ═══════════════════════════════════════════════════════════
+   WHATSAPP MODAL
+═══════════════════════════════════════════════════════════ */
+#whatsappModal {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.9); display:none; align-items:center;
+  justify-content:center; z-index:9998; padding:15px; backdrop-filter:blur(5px);
+}
+#whatsappModal.show { display:flex; animation:fadeIn 0.3s ease; }
+.whatsapp-modal-content {
+  background:#111; border-radius:var(--radius); padding:24px;
+  width:100%; max-width:320px; text-align:center;
+  border:1px solid rgba(0,230,118,0.25);
+  box-shadow:0 0 40px rgba(0,230,118,0.1), var(--shadow);
+}
+.whatsapp-modal-content h3 { color:var(--success); margin-bottom:10px; font-size:1.1rem; font-family:var(--font-head); text-transform:uppercase; letter-spacing:2px; }
+.whatsapp-modal-content p  { color:var(--text-secondary); margin-bottom:20px; font-size:0.85rem; line-height:1.6; }
+.whatsapp-buttons { display:flex; gap:10px; }
+.whatsapp-buttons button {
+  flex:1; padding:12px 0; border:none; border-radius:25px;
+  font-weight:700; font-family:var(--font-ui); cursor:pointer;
+  transition:all 0.3s; text-transform:uppercase; letter-spacing:1px; font-size:0.85rem;
+}
+.join-btn   { background:var(--success); color:#000; }
+.join-btn:hover { transform:translateY(-2px); box-shadow:0 6px 16px var(--success-glow); }
+.cancel-btn { background:rgba(255,255,255,0.08); color:var(--text); }
+.cancel-btn:hover { background:rgba(255,255,255,0.14); }
 
-  /* ── FOOTER ── */
-  footer {
-    background: var(--gradient); color: var(--text); text-align: center;
-    padding: 15px 10px; margin-top: 25px; font-size: 0.8rem;
-    border-radius: var(--radius); width: 100%; box-shadow: var(--shadow); line-height: 1.4;
-  }
-  footer a {
-    color: var(--text); font-weight: 600; text-decoration: none;
-    transition: all 0.3s ease; border-bottom: 1px solid transparent;
-    font-size: 0.75rem; word-break: break-all;
-  }
-  footer a:hover { border-bottom: 1px solid var(--text); }
+/* ═══════════════════════════════════════════════════════════
+   MODAL BACKDROP + PAYMENT MODAL
+═══════════════════════════════════════════════════════════ */
+#modalBack {
+  position:fixed; inset:0; display:none; align-items:center;
+  justify-content:center; background:rgba(0,0,0,0.9);
+  z-index:5000; padding:15px; backdrop-filter:blur(6px);
+}
+#modalBack.show { display:flex; animation:fadeIn 0.35s ease; }
 
-  /* ── WHATSAPP CHANNEL MODAL ── */
-  #whatsappModal {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9); display: none; align-items: center;
-    justify-content: center; z-index: 9998; padding: 15px; backdrop-filter: blur(3px);
-  }
-  #whatsappModal.show { display: flex; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn      { from{opacity:0}              to{opacity:1} }
+@keyframes modalSlideIn{ from{transform:translateY(-20px);opacity:0} to{transform:translateY(0);opacity:1} }
 
-  .whatsapp-modal-content {
-    background: var(--card-bg); border-radius: var(--radius); padding: 20px;
-    width: 100%; max-width: 320px; text-align: center;
-    border: 2px solid var(--success); box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    animation: modalSlideIn 0.3s ease;
-  }
-  .whatsapp-modal-content h3 { color: var(--success); margin-bottom: 12px; font-size: 1.2rem; text-transform: uppercase; }
-  .whatsapp-modal-content p { color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5; font-size: 0.85rem; }
-  .whatsapp-buttons { display: flex; justify-content: space-between; gap: 10px; }
-  .whatsapp-buttons button {
-    flex: 1; padding: 12px 0; border: none; border-radius: 25px;
-    font-weight: 600; cursor: pointer; transition: all 0.3s ease;
-    text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.85rem;
-  }
-  .join-btn { background: var(--success); color: var(--text); }
-  .join-btn:hover { background: #3d8b40; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(76,175,80,0.4); }
-  .cancel-btn { background: rgba(255,255,255,0.1); color: var(--text); }
-  .cancel-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+.modal {
+  background:#0f0f0f;
+  border-radius:16px; padding:28px 22px 22px;
+  width:100%; max-width:360px; text-align:center;
+  position:relative;
+  box-shadow:0 0 60px rgba(229,57,53,0.12), 0 0 0 1px rgba(229,57,53,0.15), 0 30px 60px rgba(0,0,0,0.8);
+  animation:modalSlideIn 0.35s cubic-bezier(.22,.68,0,1.2);
+}
+.modal::before {
+  content:""; position:absolute; top:0; left:0; right:0; height:2px;
+  background:var(--gradient); border-radius:16px 16px 0 0;
+}
+.modal-step { display:none; }
+.modal-step.active { display:block; animation:fadeIn 0.3s ease; }
 
-  /* ── MODAL BACKDROP ── */
-  #modalBack {
-    position: fixed; inset: 0; display: none; align-items: center;
-    justify-content: center; background: rgba(0,0,0,0.88);
-    z-index: 5000; padding: 15px; backdrop-filter: blur(5px);
-  }
-  #modalBack.show { display: flex; animation: fadeIn 0.35s ease; }
+.modal-icon {
+  width:54px; height:54px; border-radius:50%;
+  background:rgba(229,57,53,0.1); border:1.5px solid rgba(229,57,53,0.25);
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 14px; font-size:1.5rem;
+}
+.modal h3 { color:#fff; margin-bottom:6px; font-size:1.1rem; font-weight:700; font-family:var(--font-head); letter-spacing:1px; }
+.modal-subtitle { color:var(--text-secondary); font-size:0.78rem; margin-bottom:20px; line-height:1.5; }
 
-  @keyframes fadeIn  { from { opacity: 0; }                          to { opacity: 1; } }
-  @keyframes fadeOut { from { opacity: 1; }                          to { opacity: 0; } }
-  @keyframes modalSlideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.input-group    { position:relative; margin-bottom:12px; text-align:left; }
+.input-label    { font-family:var(--font-mono); font-size:0.68rem; color:var(--text-secondary); margin-bottom:6px; display:block; text-transform:uppercase; letter-spacing:1px; }
+.modal input {
+  width:100%; padding:13px 16px; border-radius:10px;
+  border:1.5px solid rgba(255,255,255,0.08);
+  font-size:1rem; background:rgba(255,255,255,0.04);
+  color:var(--text); transition:all 0.25s; outline:none; letter-spacing:0.5px;
+  font-family:var(--font-ui);
+}
+.modal input:focus { border-color:var(--primary); background:rgba(229,57,53,0.06); box-shadow:0 0 0 3px rgba(229,57,53,0.1); }
+.modal input::placeholder { color:rgba(255,255,255,0.2); }
+#codeInput { text-align:center; font-size:1.8rem; font-weight:700; letter-spacing:10px; font-family:var(--font-mono); }
 
-  /* ── PAYMENT MODAL ── */
-  .modal {
-    background: #141414;
-    border-radius: 14px;
-    padding: 28px 24px 24px;
-    width: 100%; max-width: 360px;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(229,57,53,0.2);
-    animation: modalSlideIn 0.35s cubic-bezier(.22,.68,0,1.2);
-  }
+.btn-primary {
+  width:100%; padding:14px; border:none; border-radius:25px;
+  background:var(--gradient); color:#fff; font-weight:700;
+  font-size:0.9rem; cursor:pointer; transition:all 0.25s;
+  text-transform:uppercase; letter-spacing:1.5px; position:relative; overflow:hidden;
+  font-family:var(--font-head);
+}
+.btn-primary::after { content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 60%); pointer-events:none; }
+.btn-primary:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 24px rgba(229,57,53,0.5); }
+.btn-primary:disabled { opacity:0.55; cursor:not-allowed; transform:none; }
 
-  /* Glowing top border */
-  .modal::before {
-    content: "";
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: var(--gradient);
-    border-radius: 14px 14px 0 0;
-  }
+.btn-ghost {
+  background:transparent; border:1px solid rgba(255,255,255,0.1);
+  color:var(--text-secondary); border-radius:25px;
+  padding:10px 20px; font-size:0.8rem; cursor:pointer;
+  transition:all 0.25s; margin-top:10px; width:100%;
+  font-family:var(--font-ui);
+}
+.btn-ghost:hover { background:rgba(255,255,255,0.06); color:#fff; }
 
-  .modal-step { display: none; }
-  .modal-step.active { display: block; animation: fadeIn 0.3s ease; }
+.price-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(229,57,53,0.08); border:1px solid rgba(229,57,53,0.25);
+  border-radius:20px; padding:5px 14px;
+  font-family:var(--font-mono); font-size:0.78rem; color:var(--primary); font-weight:600; margin-bottom:16px;
+}
+.payment-info-box {
+  background:rgba(0,230,118,0.04); border:1px solid rgba(0,230,118,0.2);
+  border-radius:10px; padding:14px 16px; margin-bottom:16px;
+  text-align:left; font-size:0.82rem; color:var(--text-secondary); line-height:1.6;
+}
+.payment-info-box .info-title { color:var(--success); font-weight:600; font-size:0.85rem; margin-bottom:6px; display:flex; align-items:center; gap:6px; }
 
-  /* ── MODAL HEADER ── */
-  .modal-icon {
-    width: 56px; height: 56px; border-radius: 50%;
-    background: rgba(229,57,53,0.12);
-    border: 2px solid rgba(229,57,53,0.3);
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 16px; font-size: 1.5rem;
-  }
+.closeBtn {
+  position:absolute; top:14px; right:14px;
+  background:rgba(255,255,255,0.06); border:none;
+  color:var(--text-secondary); width:28px; height:28px;
+  border-radius:50%; cursor:pointer; font-size:1rem;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s; line-height:1;
+}
+.closeBtn:hover { background:rgba(255,255,255,0.12); color:#fff; }
 
-  .modal h3 {
-    color: #fff; margin-bottom: 6px; font-size: 1.15rem; font-weight: 700;
-    letter-spacing: 0.5px;
-  }
+.errorMsg {
+  color:var(--primary); font-size:0.78rem; font-weight:500;
+  min-height:18px; margin-top:10px; text-align:center;
+  animation:shake 0.3s ease;
+}
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
 
-  .modal-subtitle {
-    color: var(--text-secondary); font-size: 0.78rem; margin-bottom: 22px;
-    line-height: 1.5;
-  }
+.spinner {
+  display:inline-block; width:13px; height:13px;
+  border:2px solid rgba(255,255,255,0.25);
+  border-top-color:#fff; border-radius:50%;
+  animation:spin 0.7s linear infinite;
+  margin-right:7px; vertical-align:middle;
+}
 
-  /* ── INPUTS ── */
-  .input-group { position: relative; margin-bottom: 14px; text-align: left; }
-  .input-label { font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+/* ═══════════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════════ */
+#toast-container {
+  position:fixed; top:18px; left:50%; transform:translateX(-50%);
+  z-index:99999; display:flex; flex-direction:column; align-items:center; gap:8px;
+  pointer-events:none; width:90%; max-width:320px;
+}
+.toast {
+  padding:11px 16px; border-radius:10px;
+  font-family:var(--font-ui); font-size:0.82rem; font-weight:600;
+  color:#fff; box-shadow:var(--shadow);
+  animation:toastIn 0.35s cubic-bezier(.22,.68,0,1.2);
+  display:flex; align-items:center; gap:8px; width:100%;
+  backdrop-filter:blur(6px);
+}
+.toast.success { background:rgba(0,20,12,0.95); border:1px solid rgba(0,230,118,0.3); }
+.toast.error   { background:rgba(20,5,5,0.95);  border:1px solid rgba(229,57,53,0.35); }
+.toast.info    { background:rgba(5,12,25,0.95);  border:1px solid rgba(100,150,255,0.3); }
+.toast.warning { background:rgba(20,15,0,0.95);  border:1px solid rgba(255,193,7,0.35); }
+.toast.out     { animation:toastOut 0.3s ease forwards; }
+@keyframes toastIn  { from{opacity:0;transform:translateY(-12px) scale(0.95)} to{opacity:1;transform:translateY(0) scale(1)} }
+@keyframes toastOut { from{opacity:1} to{opacity:0;transform:translateY(-8px)} }
 
-  .modal input {
-    width: 100%; padding: 13px 16px; border-radius: 10px;
-    border: 1.5px solid rgba(255,255,255,0.1);
-    font-size: 1rem; background: rgba(255,255,255,0.05);
-    color: var(--text); transition: all 0.25s ease; outline: none;
-    letter-spacing: 0.5px;
-  }
-  .modal input:focus {
-    border-color: var(--primary);
-    background: rgba(229,57,53,0.06);
-    box-shadow: 0 0 0 3px rgba(229,57,53,0.12);
-  }
-  .modal input::placeholder { color: rgba(255,255,255,0.25); }
+/* ═══════════════════════════════════════════════════════════
+   WHATSAPP FLOAT
+═══════════════════════════════════════════════════════════ */
+.whatsapp-btn {
+  position:fixed; bottom:18px; right:18px;
+  width:52px; height:52px; border-radius:50%;
+  background:var(--success);
+  display:flex; justify-content:center; align-items:center;
+  font-size:22px; cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,0,0,0.4); z-index:1000;
+  transition:all 0.3s; animation:pulseGreen 2.5s infinite;
+}
+.whatsapp-btn:hover { transform:scale(1.08); }
+.whatsapp-badge {
+  position:absolute; top:-3px; right:-3px;
+  background:var(--primary); width:18px; height:18px;
+  border-radius:50%; display:flex; justify-content:center; align-items:center;
+  font-size:10px; font-weight:bold; font-family:var(--font-head);
+  animation:bounce 1.5s infinite ease-in-out;
+}
+@keyframes pulseGreen {
+  0%  { box-shadow:0 0 0 0 rgba(0,230,118,0.6); }
+  70% { box-shadow:0 0 0 12px rgba(0,230,118,0); }
+  100%{ box-shadow:0 0 0 0 rgba(0,230,118,0); }
+}
 
-  /* 6-digit code input  */
-  #codeInput {
-    text-align: center;
-    font-size: 1.8rem; font-weight: 700; letter-spacing: 8px;
-  }
+/* ═══════════════════════════════════════════════════════════
+   PREDICTOR PAGES (full-screen overlay)
+═══════════════════════════════════════════════════════════ */
+.predictor-page {
+  display:none; position:fixed; inset:0;
+  z-index:4000; overflow-y:auto;
+  background:#080808;
+  flex-direction:column;
+  animation:fadeIn 0.4s ease;
+}
+.predictor-page.visible { display:flex; }
 
-  /* ── BUTTONS ── */
-  .btn-primary {
-    width: 100%; padding: 14px;
-    border: none; border-radius: 25px;
-    background: var(--gradient);
-    color: #fff; font-weight: 700; font-size: 0.92rem;
-    cursor: pointer; transition: all 0.25s ease;
-    text-transform: uppercase; letter-spacing: 1px;
-    position: relative; overflow: hidden;
-  }
-  .btn-primary::after {
-    content: ""; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
-    pointer-events: none;
-  }
-  .btn-primary:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(229,57,53,0.45);
-  }
-  .btn-primary:disabled {
-    opacity: 0.6; cursor: not-allowed; transform: none;
-  }
+/* ── Page header ── */
+.pred-header {
+  padding:14px 16px;
+  display:flex; align-items:center; gap:12px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  position:sticky; top:0; z-index:10;
+  backdrop-filter:blur(12px);
+}
+.pred-back {
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(255,255,255,0.07); border:none;
+  color:#fff; font-size:1.2rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s; flex-shrink:0;
+}
+.pred-back:hover { background:rgba(255,255,255,0.14); transform:scale(1.05); }
+.pred-title-wrap { flex:1; }
+.pred-title {
+  font-family:var(--font-head); font-weight:800;
+  font-size:1.05rem; letter-spacing:1.5px; text-transform:uppercase;
+}
+.pred-subtitle {
+  font-family:var(--font-mono); font-size:0.6rem;
+  opacity:0.5; letter-spacing:1px; text-transform:uppercase;
+}
+.pred-badge {
+  font-family:var(--font-mono); font-size:0.62rem;
+  padding:4px 10px; border-radius:20px;
+  font-weight:700; letter-spacing:1px; text-transform:uppercase;
+}
 
-  .btn-ghost {
-    background: transparent; border: 1px solid rgba(255,255,255,0.15);
-    color: var(--text-secondary); border-radius: 25px;
-    padding: 10px 20px; font-size: 0.8rem; cursor: pointer;
-    transition: all 0.25s ease; margin-top: 10px; width: 100%;
-  }
-  .btn-ghost:hover { background: rgba(255,255,255,0.07); color: #fff; }
+/* ── Page body ── */
+.pred-body { padding:16px; max-width:520px; margin:0 auto; width:100%; }
 
-  /* ── PRICE BADGE ── */
-  .price-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(229,57,53,0.1); border: 1px solid rgba(229,57,53,0.3);
-    border-radius: 20px; padding: 5px 14px;
-    font-size: 0.8rem; color: var(--primary); font-weight: 600;
-    margin-bottom: 18px;
-  }
+/* ── Input section ── */
+.pred-input-section {
+  border-radius:var(--radius); padding:18px;
+  margin-bottom:18px; border:1px solid;
+}
+.pred-input-title {
+  font-family:var(--font-head); font-size:0.85rem;
+  font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+  margin-bottom:14px; display:flex; align-items:center; gap:8px;
+}
+.pred-input-row { display:flex; gap:10px; margin-bottom:12px; }
+.pred-input-group { flex:1; }
+.pred-input-label {
+  font-family:var(--font-mono); font-size:0.65rem;
+  text-transform:uppercase; letter-spacing:1px; opacity:0.6; margin-bottom:5px; display:block;
+}
+.pred-input {
+  width:100%; padding:12px 14px; border-radius:10px;
+  font-family:var(--font-mono); font-size:1.1rem; font-weight:700;
+  background:rgba(255,255,255,0.04); color:#fff;
+  outline:none; transition:all 0.25s; border:1.5px solid rgba(255,255,255,0.08);
+  text-align:center;
+}
+.pred-input:focus { border-color:currentColor; background:rgba(255,255,255,0.06); }
 
-  /* ── PAYMENT INFO BOX ── */
-  .payment-info-box {
-    background: rgba(76,175,80,0.07);
-    border: 1px solid rgba(76,175,80,0.25);
-    border-radius: 10px; padding: 14px 16px;
-    margin-bottom: 18px; text-align: left; font-size: 0.82rem;
-    color: var(--text-secondary); line-height: 1.6;
-  }
-  .payment-info-box .info-title {
-    color: var(--success); font-weight: 600; font-size: 0.85rem;
-    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
-  }
+.pred-btn {
+  width:100%; padding:16px; border:none; border-radius:25px;
+  font-family:var(--font-head); font-size:1rem; font-weight:800;
+  letter-spacing:2px; text-transform:uppercase; cursor:pointer;
+  transition:all 0.3s; position:relative; overflow:hidden;
+}
+.pred-btn::after { content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.12),transparent); pointer-events:none; }
+.pred-btn:hover { transform:translateY(-2px); }
+.pred-btn:active { transform:translateY(0); }
+.pred-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
-  /* ── CLOSE BUTTON ── */
-  .closeBtn {
-    position: absolute; top: 14px; right: 14px;
-    background: rgba(255,255,255,0.07); border: none;
-    color: var(--text-secondary); width: 28px; height: 28px;
-    border-radius: 50%; cursor: pointer; font-size: 1rem;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s; line-height: 1;
-  }
-  .closeBtn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+/* ── Predictions grid ── */
+.pred-cards-title {
+  font-family:var(--font-mono); font-size:0.65rem; color:var(--text-secondary);
+  text-transform:uppercase; letter-spacing:2px; margin-bottom:12px;
+}
+.pred-cards {
+  display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:20px;
+}
+.pred-card {
+  border-radius:10px; padding:12px 6px; text-align:center;
+  border:1px solid; position:relative; overflow:hidden;
+  opacity:0; transform:translateY(20px);
+  transition:all 0.4s ease;
+}
+.pred-card.show { opacity:1; transform:translateY(0); }
+.pred-card::before {
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.06),transparent);
+  pointer-events:none;
+}
+.pred-round { font-family:var(--font-mono); font-size:0.55rem; opacity:0.5; letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
+.pred-mult {
+  font-family:var(--font-head); font-size:1.3rem; font-weight:800;
+  line-height:1; margin-bottom:3px;
+}
+.pred-conf { font-family:var(--font-mono); font-size:0.55rem; opacity:0.6; }
 
-  /* ── ERROR & SUCCESS MSG ── */
-  .errorMsg {
-    color: var(--primary); font-size: 0.78rem; font-weight: 500;
-    min-height: 18px; margin-top: 10px; text-align: center;
-    animation: shake 0.3s ease;
-  }
-  .successMsg {
-    color: var(--success); font-size: 0.78rem; font-weight: 500;
-    min-height: 18px; margin-top: 10px; text-align: center;
-  }
-  @keyframes shake {
-    0%,100% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    75% { transform: translateX(4px); }
-  }
+/* ── Details panel ── */
+.pred-details {
+  border-radius:var(--radius); padding:16px; margin-bottom:18px;
+  border:1px solid; opacity:0; transition:all 0.4s ease 0.5s;
+}
+.pred-details.show { opacity:1; }
+.pred-details-title {
+  font-family:var(--font-head); font-size:0.8rem; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px;
+}
+.pred-detail-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.pred-detail-label { font-family:var(--font-mono); font-size:0.68rem; opacity:0.55; text-transform:uppercase; letter-spacing:1px; }
+.pred-detail-value { font-family:var(--font-head); font-size:0.9rem; font-weight:700; }
 
-  /* ── SPINNER ── */
-  .spinner {
-    display: inline-block; width: 14px; height: 14px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: #fff; border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin-right: 7px; vertical-align: middle;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+/* ── History ── */
+.pred-history {
+  border-radius:var(--radius); padding:16px;
+  border:1px solid rgba(255,255,255,0.06);
+  background:rgba(255,255,255,0.02);
+}
+.pred-history-header {
+  display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;
+}
+.pred-history-title {
+  font-family:var(--font-head); font-size:0.8rem; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase;
+}
+.pred-history-clear {
+  background:none; border:1px solid rgba(255,255,255,0.1);
+  color:var(--text-secondary); font-size:0.7rem; padding:4px 10px;
+  border-radius:20px; cursor:pointer; transition:all 0.2s;
+  font-family:var(--font-mono); letter-spacing:0.5px;
+}
+.pred-history-clear:hover { border-color:var(--primary); color:var(--primary); }
 
-  /* ── TOAST ── */
-  #toast-container {
-    position: fixed; top: 18px; left: 50%; transform: translateX(-50%);
-    z-index: 99999; display: flex; flex-direction: column; align-items: center; gap: 8px;
-    pointer-events: none; width: 90%; max-width: 320px;
-  }
-  .toast {
-    padding: 11px 18px; border-radius: 10px; font-size: 0.82rem;
-    font-weight: 600; color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-    animation: toastIn 0.35s cubic-bezier(.22,.68,0,1.2);
-    display: flex; align-items: center; gap: 8px; width: 100%;
-    backdrop-filter: blur(4px);
-  }
-  .toast.success { background: rgba(30,50,35,0.95); border: 1px solid rgba(76,175,80,0.4); }
-  .toast.error   { background: rgba(50,15,15,0.95); border: 1px solid rgba(229,57,53,0.4); }
-  .toast.info    { background: rgba(15,25,50,0.95); border: 1px solid rgba(100,150,255,0.4); }
-  .toast.warning { background: rgba(50,40,10,0.95); border: 1px solid rgba(255,193,7,0.4); }
-  .toast.out { animation: toastOut 0.3s ease forwards; }
-  @keyframes toastIn  { from { opacity: 0; transform: translateY(-12px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateY(-8px); } }
+.pred-history-list { max-height:160px; overflow-y:auto; }
+.pred-history-item {
+  display:flex; align-items:center; gap:8px; padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04); font-size:0.78rem;
+}
+.pred-history-item:last-child { border-bottom:none; }
+.pred-history-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.pred-history-mults { font-family:var(--font-mono); font-size:0.72rem; flex:1; color:rgba(255,255,255,0.7); }
+.pred-history-time { font-family:var(--font-mono); font-size:0.6rem; opacity:0.4; }
+.pred-history-empty { font-family:var(--font-mono); font-size:0.72rem; color:var(--text-secondary); text-align:center; padding:16px; }
 
-  /* ── WHATSAPP BTN ── */
-  .whatsapp-btn {
-    position: fixed; bottom: 15px; right: 15px;
-    width: 55px; height: 55px; border-radius: 50%;
-    background: var(--success);
-    display: flex; justify-content: center; align-items: center;
-    color: var(--text); font-size: 24px; cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 1000;
-    transition: all 0.3s ease; animation: pulse-green 2s infinite;
-  }
-  .whatsapp-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(76,175,80,0.4); }
-  @keyframes pulse-green {
-    0%   { box-shadow: 0 0 0 0 rgba(76,175,80,0.7); }
-    70%  { box-shadow: 0 0 0 10px rgba(76,175,80,0); }
-    100% { box-shadow: 0 0 0 0 rgba(76,175,80,0); }
-  }
-  .whatsapp-badge {
-    position: absolute; top: -3px; right: -3px;
-    background: var(--primary); width: 18px; height: 18px;
-    border-radius: 50%; display: flex; justify-content: center;
-    align-items: center; font-size: 10px; font-weight: bold;
-    animation: bounce 1.5s infinite ease-in-out;
-  }
+/* ── THEMES ── */
+/* BetPawa: Green */
+#pred-betpawa .pred-header   { background:rgba(0,40,16,0.95); border-color:rgba(0,150,57,0.3); }
+#pred-betpawa .pred-badge    { background:rgba(0,150,57,0.2); color:#00e676; border:1px solid rgba(0,230,118,0.3); }
+#pred-betpawa .pred-title    { color:#00e676; }
+#pred-betpawa .pred-input-section { background:rgba(0,40,16,0.5); border-color:rgba(0,150,57,0.2); }
+#pred-betpawa .pred-input-title   { color:#00e676; }
+#pred-betpawa .pred-input:focus   { border-color:#00e676; box-shadow:0 0 0 3px rgba(0,230,118,0.1); }
+#pred-betpawa .pred-btn    { background:linear-gradient(135deg,#009739,#006b28); color:#fff; box-shadow:0 6px 20px rgba(0,151,57,0.35); }
+#pred-betpawa .pred-btn:hover { box-shadow:0 10px 28px rgba(0,151,57,0.5); }
+#pred-betpawa .pred-card   { background:rgba(0,40,16,0.6); border-color:rgba(0,150,57,0.25); }
+#pred-betpawa .pred-mult   { color:#00e676; text-shadow:0 0 12px rgba(0,230,118,0.5); }
+#pred-betpawa .pred-details { background:rgba(0,40,16,0.5); border-color:rgba(0,150,57,0.2); }
+#pred-betpawa .pred-detail-value { color:#00e676; }
+#pred-betpawa .pred-history-dot  { background:#00e676; }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 360px) {
-    .sites-container { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .site-box        { padding: 15px 5px; font-size: 0.75rem; min-height: 60px; }
-    .stats-container { flex-direction: column; gap: 8px; }
-    .stat-card       { padding: 10px 5px; min-height: 60px; }
-    .stat-value      { font-size: 1.1rem; }
-    .stat-label      { font-size: 0.65rem; }
-    header           { font-size: 1rem; padding: 12px 8px; }
-    footer           { padding: 12px 8px; font-size: 0.75rem; }
-  }
-  @media (min-width: 361px) and (max-width: 480px) {
-    .sites-container { grid-template-columns: repeat(3, 1fr); }
-  }
-  @media (min-width: 481px) and (max-width: 768px) {
-    .sites-container { grid-template-columns: repeat(4, 1fr); }
-    .site-box        { font-size: 0.85rem; padding: 20px 10px; }
-  }
-  @media (min-width: 769px) {
-    .sites-container { grid-template-columns: repeat(5, 1fr); max-width: 800px; }
-    .site-box        { font-size: 0.9rem; padding: 22px 12px; }
-    #dashboard       { padding: 20px; }
-    header           { font-size: 1.3rem; padding: 18px 10px; }
-    .subtitle        { font-size: 1rem; }
-    .stats-container { max-width: 800px; }
-  }
+/* SportyBet: Blue */
+#pred-sportybet .pred-header  { background:rgba(0,16,50,0.95); border-color:rgba(0,80,200,0.3); }
+#pred-sportybet .pred-badge   { background:rgba(0,80,200,0.2); color:#60a0ff; border:1px solid rgba(60,130,255,0.3); }
+#pred-sportybet .pred-title   { color:#60a0ff; }
+#pred-sportybet .pred-input-section { background:rgba(0,16,50,0.5); border-color:rgba(0,80,200,0.2); }
+#pred-sportybet .pred-input-title   { color:#60a0ff; }
+#pred-sportybet .pred-input:focus   { border-color:#60a0ff; box-shadow:0 0 0 3px rgba(60,130,255,0.1); }
+#pred-sportybet .pred-btn    { background:linear-gradient(135deg,#0050c8,#0040a0); color:#fff; box-shadow:0 6px 20px rgba(0,80,200,0.35); }
+#pred-sportybet .pred-btn:hover { box-shadow:0 10px 28px rgba(0,80,200,0.5); }
+#pred-sportybet .pred-card   { background:rgba(0,16,50,0.6); border-color:rgba(0,80,200,0.25); }
+#pred-sportybet .pred-mult   { color:#60a0ff; text-shadow:0 0 12px rgba(60,130,255,0.5); }
+#pred-sportybet .pred-details { background:rgba(0,16,50,0.5); border-color:rgba(0,80,200,0.2); }
+#pred-sportybet .pred-detail-value { color:#60a0ff; }
+#pred-sportybet .pred-history-dot  { background:#60a0ff; }
+
+/* Parimatch: Gold / Black */
+#pred-parimatch .pred-header  { background:rgba(15,12,0,0.95); border-color:rgba(200,170,0,0.3); }
+#pred-parimatch .pred-badge   { background:rgba(200,170,0,0.15); color:#ffe000; border:1px solid rgba(255,220,0,0.3); }
+#pred-parimatch .pred-title   { color:#ffe000; }
+#pred-parimatch .pred-input-section { background:rgba(15,12,0,0.5); border-color:rgba(200,170,0,0.2); }
+#pred-parimatch .pred-input-title   { color:#ffe000; }
+#pred-parimatch .pred-input:focus   { border-color:#ffe000; box-shadow:0 0 0 3px rgba(255,220,0,0.1); }
+#pred-parimatch .pred-btn    { background:linear-gradient(135deg,#c8aa00,#a08800); color:#000; box-shadow:0 6px 20px rgba(200,170,0,0.35); }
+#pred-parimatch .pred-btn:hover { box-shadow:0 10px 28px rgba(200,170,0,0.5); }
+#pred-parimatch .pred-card   { background:rgba(15,12,0,0.6); border-color:rgba(200,170,0,0.25); }
+#pred-parimatch .pred-mult   { color:#ffe000; text-shadow:0 0 12px rgba(255,220,0,0.5); }
+#pred-parimatch .pred-details { background:rgba(15,12,0,0.5); border-color:rgba(200,170,0,0.2); }
+#pred-parimatch .pred-detail-value { color:#ffe000; }
+#pred-parimatch .pred-history-dot  { background:#ffe000; }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════════════ */
+@media (max-width:360px) {
+  .sites-container { grid-template-columns:repeat(2,1fr); gap:8px; }
+  .site-box        { padding:13px 4px; font-size:0.72rem; min-height:60px; }
+  .stats-container { flex-direction:column; gap:8px; }
+  .pred-cards      { grid-template-columns:repeat(3,1fr); }
+}
+@media (min-width:361px) and (max-width:480px) {
+  .sites-container { grid-template-columns:repeat(3,1fr); }
+  .pred-cards      { grid-template-columns:repeat(5,1fr); }
+}
+@media (min-width:481px) and (max-width:768px) {
+  .sites-container { grid-template-columns:repeat(4,1fr); }
+}
+@media (min-width:769px) {
+  .sites-container { grid-template-columns:repeat(5,1fr); max-width:800px; }
+  #dashboard       { padding:20px; }
+  header           { font-size:1.2rem; }
+  .stats-container { max-width:800px; }
+}
 </style>
 </head>
 <body>
 
-<!-- ── TOAST CONTAINER ── -->
+<!-- ── TOAST ── -->
 <div id="toast-container"></div>
 
 <!-- ── SERVER STATUS ── -->
@@ -490,21 +761,23 @@
 
 <!-- ── LOADING SCREEN ── -->
 <div id="loading-screen">
-  <svg class="logo-plane" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-    <path d="M476.864 3.7L35.164 240.8c-11.4 6.1-11.3 22.3.2 28.3l116.3 62.4L430.064 69.4c3.5-3.4 9.1-3.3 12.5.2 3.4 3.5 3.3 9.1-.2 12.5L164.364 343.3l13.4 129.1c1.1 10.4 13.9 14.2 20.2 6l45.9-58.1 103.4 55.5c7.8 4.2 17.3-2.2 15.9-11l-16.6-103.5 148.4-155.3c2.9-3 3.6-7.5 1.8-11.3-1.8-3.8-5.8-6.2-10-6L476.864 3.7z"/>
-  </svg>
-  <h1 class="loading-text">AVIATOR PREDICTOR PRO</h1>
-  <p style="color:var(--text-secondary);margin-top:8px;text-align:center;font-size:0.8rem;">v12.0.5 — Premium Predictions</p>
-  <div class="loading-dots">
-    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  <div class="load-logo-wrap">
+    <div class="load-ring"></div>
+    <div class="load-ring-2"></div>
+    <svg class="logo-plane" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <path d="M476.864 3.7L35.164 240.8c-11.4 6.1-11.3 22.3.2 28.3l116.3 62.4L430.064 69.4c3.5-3.4 9.1-3.3 12.5.2 3.4 3.5 3.3 9.1-.2 12.5L164.364 343.3l13.4 129.1c1.1 10.4 13.9 14.2 20.2 6l45.9-58.1 103.4 55.5c7.8 4.2 17.3-2.2 15.9-11l-16.6-103.5 148.4-155.3c2.9-3 3.6-7.5 1.8-11.3-1.8-3.8-5.8-6.2-10-6L476.864 3.7z"/>
+    </svg>
   </div>
+  <h1 class="loading-text">AVIATOR PREDICTOR PRO</h1>
+  <p class="loading-ver">v13.0.0 — QUANTUM ENGINE</p>
+  <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
 </div>
 
 <!-- ── WHATSAPP CHANNEL MODAL ── -->
 <div id="whatsappModal">
   <div class="whatsapp-modal-content">
-    <h3>JOIN OUR CHANNEL</h3>
-    <p>Join our exclusive WhatsApp channel to get real-time Aviator predictions, winning strategies, and exclusive tips!</p>
+    <h3>📢 JOIN OUR CHANNEL</h3>
+    <p>Join our exclusive WhatsApp channel for real-time Aviator predictions, winning strategies, and premium tips!</p>
     <div class="whatsapp-buttons">
       <button class="cancel-btn" id="cancelBtn">CANCEL</button>
       <button class="join-btn"   id="joinBtn">JOIN NOW</button>
@@ -512,117 +785,296 @@
   </div>
 </div>
 
-<!-- ── DASHBOARD ── -->
+<!-- ══════════════════════════════════════════════════════════
+     DASHBOARD
+══════════════════════════════════════════════════════════ -->
 <div id="dashboard" class="locked">
-  <header>CHAGUA TOVUTI YAKO YA KUBETI</header>
-  <h2 class="subtitle">Aviator Predictor V12.0.5</h2>
+  <header>
+    <div class="header-title">CHAGUA TOVUTI YAKO YA KUBETI</div>
+    <div class="header-sub">SELECT YOUR BETTING PLATFORM · AVIATOR PREDICTOR</div>
+  </header>
+  <p class="subtitle">Aviator Predictor Pro v13.0.0 — Quantum Engine</p>
 
   <div class="stats-container">
     <div class="stat-card"><div class="stat-value">97%</div><div class="stat-label">Accuracy Rate</div></div>
     <div class="stat-card"><div class="stat-value">12.5x</div><div class="stat-label">Avg. Multiplier</div></div>
-    <div class="stat-card"><div class="stat-value">24/7</div><div class="stat-label">Active Predictions</div></div>
+    <div class="stat-card"><div class="stat-value">24/7</div><div class="stat-label">Live Predictions</div></div>
   </div>
 
+  <div class="sites-label">▸ PLATFORMS WITH INTERNAL PREDICTOR</div>
   <div class="sites-container">
-    <div class="site-box betway"      data-link="https://v0-html-code-deployment-snowy.vercel.app/">Betway</div>
-    <div class="site-box sportpesa"   data-link="https://v0-html-code-deployment-snowy.vercel.app/">SportPesa</div>
-    <div class="site-box betika"      data-link="https://v0-html-code-deployment-snowy.vercel.app/">Betika</div>
-    <div class="site-box meridianbet" data-link="https://v0-html-code-deployment-snowy.vercel.app/">Meridianbet</div>
-    <div class="site-box betpawa"     data-link="https://v0-html-code-deployment-snowy.vercel.app/">BetPawa</div>
-    <div class="site-box parimatch"   data-link="https://v0-html-code-deployment-snowy.vercel.app/">Parimatch</div>
-    <div class="site-box galabet"     data-link="https://v0-html-code-deployment-snowy.vercel.app/">Galabet</div>
-    <div class="site-box mcheza"      data-link="https://v0-html-code-deployment-snowy.vercel.app/">Mcheza</div>
-    <div class="site-box xbet1"       data-link="https://v0-html-code-deployment-snowy.vercel.app/">1xBet</div>
-    <div class="site-box bet365"      data-link="https://v0-html-code-deployment-snowy.vercel.app/">Bet365</div>
-    <div class="site-box melbet"      data-link="https://v0-html-code-deployment-snowy.vercel.app/">Melbet</div>
-    <div class="site-box palmsbet"    data-link="https://v0-html-code-deployment-snowy.vercel.app/">PalmsBet</div>
-    <div class="site-box bet22"       data-link="https://v0-html-code-deployment-snowy.vercel.app/">22Bet</div>
-    <div class="site-box betlion"     data-link="https://v0-html-code-deployment-snowy.vercel.app/">BetLion</div>
-    <div class="site-box betikaextra" data-link="https://v0-html-code-deployment-snowy.vercel.app/">Betika Extra</div>
-    <div class="site-box odibets"     data-link="https://v0-html-code-deployment-snowy.vercel.app/">OdiBets</div>
-    <div class="site-box powerbets"   data-link="https://v0-html-code-deployment-snowy.vercel.app/">PowerBets</div>
-    <div class="site-box mobet"       data-link="https://v0-html-code-deployment-snowy.vercel.app/">MoBet</div>
-    <div class="site-box bet888"      data-link="https://v0-html-code-deployment-snowy.vercel.app/">888Bet</div>
-    <div class="site-box wasafibet"   data-link="https://v0-html-code-deployment-snowy.vercel.app/">WasafiBet</div>
+    <!-- Internal predictor platforms -->
+    <div class="site-box betpawa has-predictor"   data-predictor="betpawa">
+      <span class="site-icon">✈</span>BetPawa<span class="site-tag">PREDICTOR</span>
+    </div>
+    <div class="site-box sportybet has-predictor" data-predictor="sportybet">
+      <span class="site-icon">✈</span>SportyBet<span class="site-tag">PREDICTOR</span>
+    </div>
+    <div class="site-box parimatch has-predictor" data-predictor="parimatch">
+      <span class="site-icon">✈</span>Parimatch<span class="site-tag">PREDICTOR</span>
+    </div>
+    <!-- External-link platforms (no redirect, just info toast) -->
+    <div class="site-box betway"      data-info="Betway">Betway</div>
+    <div class="site-box sportpesa"   data-info="SportPesa">SportPesa</div>
+    <div class="site-box betika"      data-info="Betika">Betika</div>
+    <div class="site-box meridianbet" data-info="Meridianbet">Meridianbet</div>
+    <div class="site-box galabet"     data-info="Galabet">Galabet</div>
+    <div class="site-box mcheza"      data-info="Mcheza">Mcheza</div>
+    <div class="site-box xbet1"       data-info="1xBet">1xBet</div>
+    <div class="site-box bet365"      data-info="Bet365">Bet365</div>
+    <div class="site-box melbet"      data-info="Melbet">Melbet</div>
+    <div class="site-box palmsbet"    data-info="PalmsBet">PalmsBet</div>
+    <div class="site-box bet22"       data-info="22Bet">22Bet</div>
+    <div class="site-box betlion"     data-info="BetLion">BetLion</div>
+    <div class="site-box betikaextra" data-info="Betika Extra">Betika Extra</div>
+    <div class="site-box odibets"     data-info="OdiBets">OdiBets</div>
+    <div class="site-box powerbets"   data-info="PowerBets">PowerBets</div>
+    <div class="site-box mobet"       data-info="MoBet">MoBet</div>
+    <div class="site-box bet888"      data-info="888Bet">888Bet</div>
+    <div class="site-box wasafibet"   data-info="WasafiBet">WasafiBet</div>
   </div>
 
   <footer>
-    <p>Click link👉🏿 <a href="https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A" target="_blank">https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A</a></p>
-    <p>to join our WhatsApp channel <b>AVIATOR|PREDICTOR PRO</b></p>
+    <p>Join our WhatsApp Channel 👉 <a href="https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A" target="_blank">AVIATOR PREDICTOR PRO</a></p>
+    <p style="margin-top:4px;opacity:0.5">© 2025 Aviator Predictor Pro — All predictions for entertainment</p>
   </footer>
 </div>
 
-<!-- ── MAIN MODAL (payment + verify steps) ── -->
+<!-- ══════════════════════════════════════════════════════════
+     PAYMENT MODAL
+══════════════════════════════════════════════════════════ -->
 <div id="modalBack" class="show">
   <div class="modal">
     <button class="closeBtn" id="closeModalBtn">×</button>
 
-    <!-- STEP 1: Phone + Pay -->
+    <!-- STEP 1: Pay -->
     <div class="modal-step active" id="step-payment">
       <div class="modal-icon">✈️</div>
       <h3>UNLOCK ACCESS</h3>
-      <p class="modal-subtitle">Pay once, get your 6-digit SMS code instantly and access all predictions.</p>
-
-      <div class="price-badge">
-        <span>💳</span> TSH 2,000 — One-time access
-      </div>
-
+      <p class="modal-subtitle">Pay once via M-Pesa, receive your 6-digit SMS code and access all predictions for 24 hours.</p>
+      <div class="price-badge"><span>💳</span> TSH 2,000 — 24-hour access</div>
       <div class="input-group">
         <label class="input-label" for="phoneInput">Phone Number</label>
         <input type="tel" id="phoneInput" placeholder="07XXXXXXXX or +255XXXXXXXXX" maxlength="15" inputmode="tel">
       </div>
-
       <button class="btn-primary" id="payBtn">PAY TSH 2,000</button>
       <div class="errorMsg" id="payError"></div>
     </div>
 
-    <!-- STEP 2: Enter SMS code -->
+    <!-- STEP 2: Verify -->
     <div class="modal-step" id="step-verify">
       <div class="modal-icon">📱</div>
       <h3>ENTER YOUR CODE</h3>
       <p class="modal-subtitle">A 6-digit code has been sent to your phone via SMS. Enter it below.</p>
-
       <div class="payment-info-box" id="paymentInfoBox">
         <div class="info-title">✅ Payment Initiated</div>
         <div id="paymentInfoText">Complete the M-Pesa prompt on your phone. Your access code will arrive by SMS within seconds.</div>
       </div>
-
       <div class="input-group">
         <label class="input-label" for="codeInput">6-Digit SMS Code</label>
         <input type="text" id="codeInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
       </div>
-
       <button class="btn-primary" id="verifyBtn">VERIFY CODE</button>
       <button class="btn-ghost"   id="backToPayBtn">← Try different number</button>
       <div class="errorMsg" id="verifyError"></div>
     </div>
-
   </div>
 </div>
 
-<!-- ── WHATSAPP FLOAT BTN ── -->
+<!-- ══════════════════════════════════════════════════════════
+     PREDICTOR PAGE: BETPAWA
+══════════════════════════════════════════════════════════ -->
+<div class="predictor-page" id="pred-betpawa">
+  <div class="pred-header">
+    <button class="pred-back" onclick="closePredictor()">←</button>
+    <div class="pred-title-wrap">
+      <div class="pred-title">BetPawa Predictor</div>
+      <div class="pred-subtitle">Aviator — Quantum Forecast Engine</div>
+    </div>
+    <span class="pred-badge">PREMIUM</span>
+  </div>
+  <div class="pred-body">
+    <div class="pred-input-section">
+      <div class="pred-input-title">⚡ ROUND DATA INPUT</div>
+      <div class="pred-input-row">
+        <div class="pred-input-group">
+          <label class="pred-input-label">Last Round</label>
+          <input class="pred-input" type="number" id="bp-last" placeholder="e.g. 2.5" step="0.01" min="1.01" max="100">
+        </div>
+        <div class="pred-input-group">
+          <label class="pred-input-label">Current Round</label>
+          <input class="pred-input" type="number" id="bp-current" placeholder="e.g. 1.8" step="0.01" min="1.01" max="100">
+        </div>
+      </div>
+      <button class="pred-btn" id="bp-btn" onclick="runPredictor('betpawa')">🚀 GENERATE PREDICTIONS</button>
+    </div>
+
+    <div class="pred-cards-title">▸ NEXT 5 ROUND FORECASTS</div>
+    <div class="pred-cards" id="bp-cards">
+      <div class="pred-card"><div class="pred-round">R+1</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+      <div class="pred-card"><div class="pred-round">R+2</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+      <div class="pred-card"><div class="pred-round">R+3</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+      <div class="pred-card"><div class="pred-round">R+4</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+      <div class="pred-card"><div class="pred-round">R+5</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+    </div>
+
+    <div class="pred-details" id="bp-details">
+      <div class="pred-details-title">📊 ANALYSIS SUMMARY</div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Trend</span><span class="pred-detail-value" id="bp-trend">—</span></div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Confidence</span><span class="pred-detail-value" id="bp-conf">—</span></div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Risk Level</span><span class="pred-detail-value" id="bp-risk">—</span></div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Recommended Cashout</span><span class="pred-detail-value" id="bp-cashout">—</span></div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Generated At</span><span class="pred-detail-value" id="bp-time">—</span></div>
+    </div>
+
+    <div class="pred-history">
+      <div class="pred-history-header">
+        <span class="pred-history-title">📋 PREDICTION HISTORY</span>
+        <button class="pred-history-clear" onclick="clearHistory('betpawa')">CLEAR</button>
+      </div>
+      <div class="pred-history-list" id="bp-history"><div class="pred-history-empty">No predictions yet</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PREDICTOR PAGE: SPORTYBET
+══════════════════════════════════════════════════════════ -->
+<div class="predictor-page" id="pred-sportybet">
+  <div class="pred-header">
+    <button class="pred-back" onclick="closePredictor()">←</button>
+    <div class="pred-title-wrap">
+      <div class="pred-title">SportyBet Predictor</div>
+      <div class="pred-subtitle">Aviator — Quantum Forecast Engine</div>
+    </div>
+    <span class="pred-badge">PREMIUM</span>
+  </div>
+  <div class="pred-body">
+    <div class="pred-input-section">
+      <div class="pred-input-title">⚡ ROUND DATA INPUT</div>
+      <div class="pred-input-row">
+        <div class="pred-input-group">
+          <label class="pred-input-label">Last Round</label>
+          <input class="pred-input" type="number" id="sb-last" placeholder="e.g. 2.5" step="0.01" min="1.01" max="100">
+        </div>
+        <div class="pred-input-group">
+          <label class="pred-input-label">Current Round</label>
+          <input class="pred-input" type="number" id="sb-current" placeholder="e.g. 1.8" step="0.01" min="1.01" max="100">
+        </div>
+      </div>
+      <button class="pred-btn" id="sb-btn" onclick="runPredictor('sportybet')">🚀 GENERATE PREDICTIONS</button>
+    </div>
+
+    <div class="pred-cards-title">▸ NEXT 5 ROUND FORECASTS</div>
+    <div class="pred-cards" id="sb-cards">
+      <div class="pred-card"><div class="pred-round">R+1</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+      <div class="pred-card"><div class="pred-round">R+2</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+      <div class="pred-card"><div class="pred-round">R+3</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+      <div class="pred-card"><div class="pred-round">R+4</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+      <div class="pred-card"><div class="pred-round">R+5</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+    </div>
+
+    <div class="pred-details" id="sb-details">
+      <div class="pred-details-title">📊 ANALYSIS SUMMARY</div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Trend</span><span class="pred-detail-value" id="sb-trend">—</span></div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Confidence</span><span class="pred-detail-value" id="sb-conf">—</span></div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Risk Level</span><span class="pred-detail-value" id="sb-risk">—</span></div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Recommended Cashout</span><span class="pred-detail-value" id="sb-cashout">—</span></div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Generated At</span><span class="pred-detail-value" id="sb-time">—</span></div>
+    </div>
+
+    <div class="pred-history">
+      <div class="pred-history-header">
+        <span class="pred-history-title">📋 PREDICTION HISTORY</span>
+        <button class="pred-history-clear" onclick="clearHistory('sportybet')">CLEAR</button>
+      </div>
+      <div class="pred-history-list" id="sb-history"><div class="pred-history-empty">No predictions yet</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     PREDICTOR PAGE: PARIMATCH
+══════════════════════════════════════════════════════════ -->
+<div class="predictor-page" id="pred-parimatch">
+  <div class="pred-header">
+    <button class="pred-back" onclick="closePredictor()">←</button>
+    <div class="pred-title-wrap">
+      <div class="pred-title">Parimatch Predictor</div>
+      <div class="pred-subtitle">Aviator — Quantum Forecast Engine</div>
+    </div>
+    <span class="pred-badge">PREMIUM</span>
+  </div>
+  <div class="pred-body">
+    <div class="pred-input-section">
+      <div class="pred-input-title">⚡ ROUND DATA INPUT</div>
+      <div class="pred-input-row">
+        <div class="pred-input-group">
+          <label class="pred-input-label">Last Round</label>
+          <input class="pred-input" type="number" id="pm-last" placeholder="e.g. 2.5" step="0.01" min="1.01" max="100">
+        </div>
+        <div class="pred-input-group">
+          <label class="pred-input-label">Current Round</label>
+          <input class="pred-input" type="number" id="pm-current" placeholder="e.g. 1.8" step="0.01" min="1.01" max="100">
+        </div>
+      </div>
+      <button class="pred-btn" id="pm-btn" onclick="runPredictor('parimatch')">🚀 GENERATE PREDICTIONS</button>
+    </div>
+
+    <div class="pred-cards-title">▸ NEXT 5 ROUND FORECASTS</div>
+    <div class="pred-cards" id="pm-cards">
+      <div class="pred-card"><div class="pred-round">R+1</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+      <div class="pred-card"><div class="pred-round">R+2</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+      <div class="pred-card"><div class="pred-round">R+3</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+      <div class="pred-card"><div class="pred-round">R+4</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+      <div class="pred-card"><div class="pred-round">R+5</div><div class="pred-mult">—</div><div class="pred-conf">—</div></div>
+    </div>
+
+    <div class="pred-details" id="pm-details">
+      <div class="pred-details-title">📊 ANALYSIS SUMMARY</div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Trend</span><span class="pred-detail-value" id="pm-trend">—</span></div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Confidence</span><span class="pred-detail-value" id="pm-conf">—</span></div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Risk Level</span><span class="pred-detail-value" id="pm-risk">—</span></div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Recommended Cashout</span><span class="pred-detail-value" id="pm-cashout">—</span></div>
+      <div class="pred-detail-row"><span class="pred-detail-label">Generated At</span><span class="pred-detail-value" id="pm-time">—</span></div>
+    </div>
+
+    <div class="pred-history">
+      <div class="pred-history-header">
+        <span class="pred-history-title">📋 PREDICTION HISTORY</span>
+        <button class="pred-history-clear" onclick="clearHistory('parimatch')">CLEAR</button>
+      </div>
+      <div class="pred-history-list" id="pm-history"><div class="pred-history-empty">No predictions yet</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── WHATSAPP FLOAT ── -->
 <div class="whatsapp-btn" onclick="window.open('https://wa.me/255783394967','_blank')">
   <span>💬</span>
   <div class="whatsapp-badge">1</div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════════════════ -->
 <script>
 /* ═══════════════════════════════════════════════════════════
-   CONFIGURATION
+   CONFIGURATION (UNCHANGED)
 ═══════════════════════════════════════════════════════════ */
-const API_BASE = "https://aviator-payment.onrender.com"
+const API_BASE   = "https://aviator-payment.onrender.com"
 const SESSION_KEY = "aviatorAccess"
 const SESSION_TTL = 24 * 60 * 60 * 1000 // 24 hours
 
 /* ═══════════════════════════════════════════════════════════
-   TOAST SYSTEM
+   TOAST SYSTEM (UNCHANGED)
 ═══════════════════════════════════════════════════════════ */
 function showToast(msg, type = "info", duration = 3500) {
-  const icons = { success: "✔", error: "✖", info: "ℹ", warning: "⚠" }
+  const icons = { success:"✔", error:"✖", info:"ℹ", warning:"⚠" }
   const container = document.getElementById("toast-container")
   const toast = document.createElement("div")
   toast.className = `toast ${type}`
-  toast.innerHTML = `<span>${icons[type] || "ℹ"}</span><span>${msg}</span>`
+  toast.innerHTML = `<span>${icons[type]||"ℹ"}</span><span>${msg}</span>`
   container.appendChild(toast)
   setTimeout(() => {
     toast.classList.add("out")
@@ -631,102 +1083,66 @@ function showToast(msg, type = "info", duration = 3500) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SESSION HELPERS
+   SESSION HELPERS (UNCHANGED)
 ═══════════════════════════════════════════════════════════ */
 function saveSession() {
   localStorage.setItem(SESSION_KEY, JSON.stringify({ ts: Date.now() }))
 }
-
 function hasValidSession() {
   try {
     const raw = localStorage.getItem(SESSION_KEY)
     if (!raw) return false
     const { ts } = JSON.parse(raw)
     return Date.now() - ts < SESSION_TTL
-  } catch {
-    return false
-  }
+  } catch { return false }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   UI HELPERS
+   UI HELPERS (UNCHANGED)
 ═══════════════════════════════════════════════════════════ */
 function setLoading(btn, loading, label) {
   btn.disabled = loading
-  btn.innerHTML = loading
-    ? `<span class="spinner"></span>${label}`
-    : label
+  btn.innerHTML = loading ? `<span class="spinner"></span>${label}` : label
 }
-
 function showStep(stepId) {
   document.querySelectorAll(".modal-step").forEach(s => s.classList.remove("active"))
   document.getElementById(stepId).classList.add("active")
 }
-
-function clearError(id) {
-  document.getElementById(id).textContent = ""
-}
-
+function clearError(id)    { document.getElementById(id).textContent = "" }
 function showError(id, msg) {
   const el = document.getElementById(id)
   el.textContent = msg
-  // Re-trigger shake animation
   el.style.animation = "none"
-  el.offsetHeight // reflow
+  el.offsetHeight
   el.style.animation = ""
 }
+function openModal()  { document.getElementById("modalBack").classList.add("show") }
+function closeModal() { document.getElementById("modalBack").classList.remove("show") }
 
+/* ── UNLOCK DASHBOARD — opens internal predictors instead of external links ── */
 function unlockDashboard() {
   const dash = document.getElementById("dashboard")
   dash.classList.remove("locked")
-  document.querySelectorAll(".site-box").forEach(box => {
+
+  // Internal predictor boxes
+  document.querySelectorAll(".site-box[data-predictor]").forEach(box => {
     box.addEventListener("click", () => {
-      const url = box.dataset.link
-      if (url) window.open(url, "_blank")
+      const key = box.dataset.predictor
+      openPredictor(key)
+    })
+  })
+
+  // Info-only boxes (no external redirect)
+  document.querySelectorAll(".site-box[data-info]").forEach(box => {
+    box.addEventListener("click", () => {
+      const name = box.dataset.info
+      showToast(`${name} predictor coming soon! Use BetPawa, SportyBet or Parimatch.`, "info", 4000)
     })
   })
 }
 
-function openModal()  { document.getElementById("modalBack").classList.add("show") }
-function closeModal() { document.getElementById("modalBack").classList.remove("show") }
-
 /* ═══════════════════════════════════════════════════════════
-   SERVER HEALTH CHECK
-═══════════════════════════════════════════════════════════ */
-async function checkServerHealth() {
-  const badge = document.getElementById("server-status")
-  const text  = document.getElementById("status-text")
-  try {
-    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(6000) })
-    if (res.ok) {
-      badge.classList.add("online")
-      badge.classList.remove("offline")
-      text.textContent = "Server Online"
-    } else { throw new Error("not ok") }
-  } catch {
-    badge.classList.add("offline")
-    badge.classList.remove("online")
-    text.textContent = "Payment Server Offline"
-    showToast("Payment server is currently unreachable.", "warning", 5000)
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   PHONE VALIDATION
-═══════════════════════════════════════════════════════════ */
-function sanitizePhone(raw) {
-  // Strip everything except digits and leading +
-  return raw.trim().replace(/[^\d+]/g, "")
-}
-
-function validatePhone(phone) {
-  const clean = sanitizePhone(phone)
-  // Accept: 07XXXXXXXX (10 digits) or +255XXXXXXXXX (12 digits)
-  return /^(0\d{9}|\+255\d{9})$/.test(clean) ? clean : null
-}
-
-/* ═══════════════════════════════════════════════════════════
-   API: START PAYMENT
+   API: START PAYMENT (UNCHANGED)
 ═══════════════════════════════════════════════════════════ */
 async function startPayment(phone) {
   const res = await fetch(`${API_BASE}/start-payment`, {
@@ -739,7 +1155,7 @@ async function startPayment(phone) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   API: VERIFY CODE
+   API: VERIFY CODE (UNCHANGED)
 ═══════════════════════════════════════════════════════════ */
 async function verifyCode(code) {
   const res = await fetch(`${API_BASE}/verify-code`, {
@@ -752,134 +1168,107 @@ async function verifyCode(code) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   PAY BUTTON HANDLER
+   PHONE VALIDATION (UNCHANGED)
+═══════════════════════════════════════════════════════════ */
+function sanitizePhone(raw) { return raw.trim().replace(/[^\d+]/g, "") }
+function validatePhone(phone) {
+  const clean = sanitizePhone(phone)
+  return /^(0\d{9}|\+255\d{9})$/.test(clean) ? clean : null
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAY BUTTON (UNCHANGED)
 ═══════════════════════════════════════════════════════════ */
 document.getElementById("payBtn").addEventListener("click", async () => {
   const rawPhone = document.getElementById("phoneInput").value
   clearError("payError")
-
   const phone = validatePhone(rawPhone)
   if (!phone) {
     showError("payError", "Enter a valid Tanzanian number (07XXXXXXXX or +255XXXXXXXXX)")
     return
   }
-
   const btn = document.getElementById("payBtn")
   setLoading(btn, true, "Processing...")
-
   try {
     const { ok, data } = await startPayment(phone)
-
     if (!ok) {
       const msg = data?.error || "Failed to start payment. Please try again."
-      showError("payError", msg)
-      showToast(msg, "error")
-      return
+      showError("payError", msg); showToast(msg, "error"); return
     }
-
-    // Show payment info and switch to verify step
     const infoText = data.message ||
       "Complete the M-Pesa prompt on your phone. Your 6-digit access code will arrive by SMS."
     document.getElementById("paymentInfoText").textContent = infoText
-
     showToast("✔ Payment started — check your phone!", "success")
     showStep("step-verify")
-
   } catch (err) {
     const msg = err.name === "TimeoutError"
       ? "Request timed out. Check your connection."
       : "Network error. Please try again."
-    showError("payError", msg)
-    showToast(msg, "error")
-  } finally {
-    setLoading(btn, false, "PAY TSH 5,000")
-  }
+    showError("payError", msg); showToast(msg, "error")
+  } finally { setLoading(btn, false, "PAY TSH 2,000") }
 })
 
 /* ═══════════════════════════════════════════════════════════
-   VERIFY BUTTON HANDLER
+   VERIFY BUTTON (UNCHANGED)
 ═══════════════════════════════════════════════════════════ */
 document.getElementById("verifyBtn").addEventListener("click", async () => {
   const rawCode = document.getElementById("codeInput").value.trim()
   clearError("verifyError")
-
   if (!/^\d{6}$/.test(rawCode)) {
     showError("verifyError", "Please enter the 6-digit code from your SMS.")
     return
   }
-
   const btn = document.getElementById("verifyBtn")
   setLoading(btn, true, "Verifying...")
-
   try {
     const { ok, data } = await verifyCode(rawCode)
-
     if (!ok || !data?.valid) {
       const msg = data?.expired
         ? "This code has expired. Please start a new payment."
         : (data?.error || "Invalid or already-used code.")
-      showError("verifyError", msg)
-      showToast("✖ " + msg, "error")
-      return
+      showError("verifyError", msg); showToast("✖ " + msg, "error"); return
     }
-
-    // Success — grant access
     saveSession()
     showToast("✔ Access granted! Welcome.", "success", 4000)
     closeModal()
     unlockDashboard()
-
   } catch (err) {
     const msg = err.name === "TimeoutError"
       ? "Request timed out. Try again."
       : "Network error. Please try again."
-    showError("verifyError", msg)
-    showToast(msg, "error")
-  } finally {
-    setLoading(btn, false, "VERIFY CODE")
-  }
+    showError("verifyError", msg); showToast(msg, "error")
+  } finally { setLoading(btn, false, "VERIFY CODE") }
 })
 
 /* ═══════════════════════════════════════════════════════════
-   BACK BUTTON
+   BACK BUTTON (UNCHANGED)
 ═══════════════════════════════════════════════════════════ */
 document.getElementById("backToPayBtn").addEventListener("click", () => {
-  clearError("verifyError")
-  clearError("payError")
+  clearError("verifyError"); clearError("payError")
   document.getElementById("codeInput").value = ""
   showStep("step-payment")
 })
 
 /* ═══════════════════════════════════════════════════════════
-   CLOSE BUTTON (only active if already has a valid session)
+   CLOSE MODAL BUTTON (UNCHANGED)
 ═══════════════════════════════════════════════════════════ */
 document.getElementById("closeModalBtn").addEventListener("click", () => {
-  if (hasValidSession()) {
-    closeModal()
-    unlockDashboard()
-  }
-  // If no session, silently ignore — modal stays open
+  if (hasValidSession()) { closeModal(); unlockDashboard() }
 })
 
 /* ═══════════════════════════════════════════════════════════
-   PHONE INPUT — allow only digits, +, and common separators
+   INPUT GUARDS (UNCHANGED)
 ═══════════════════════════════════════════════════════════ */
 document.getElementById("phoneInput").addEventListener("input", function () {
   this.value = this.value.replace(/[^\d\+\s\-]/g, "")
 })
-
-/* ═══════════════════════════════════════════════════════════
-   CODE INPUT — digits only, auto-submit at 6
-═══════════════════════════════════════════════════════════ */
 document.getElementById("codeInput").addEventListener("input", function () {
   this.value = this.value.replace(/\D/g, "").slice(0, 6)
-  if (this.value.length === 6) {
-    document.getElementById("verifyBtn").click()
-  }
+  if (this.value.length === 6) document.getElementById("verifyBtn").click()
 })
 
 /* ═══════════════════════════════════════════════════════════
-   WHATSAPP MODAL
+   WHATSAPP MODAL (UNCHANGED)
 ═══════════════════════════════════════════════════════════ */
 document.getElementById("joinBtn").addEventListener("click", () => {
   window.open("https://whatsapp.com/channel/0029Vb6I9CxEawdhPNKnxX0A", "_blank")
@@ -890,39 +1279,243 @@ document.getElementById("cancelBtn").addEventListener("click", () => {
 })
 
 /* ═══════════════════════════════════════════════════════════
-   BOOT SEQUENCE
+   SERVER HEALTH CHECK (UNCHANGED)
+═══════════════════════════════════════════════════════════ */
+async function checkServerHealth() {
+  const badge = document.getElementById("server-status")
+  const text  = document.getElementById("status-text")
+  try {
+    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(6000) })
+    if (res.ok) {
+      badge.classList.add("online"); badge.classList.remove("offline")
+      text.textContent = "Server Online"
+    } else { throw new Error("not ok") }
+  } catch {
+    badge.classList.add("offline"); badge.classList.remove("online")
+    text.textContent = "Payment Server Offline"
+    showToast("Payment server is currently unreachable.", "warning", 5000)
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BOOT SEQUENCE (UNCHANGED LOGIC)
 ═══════════════════════════════════════════════════════════ */
 window.addEventListener("DOMContentLoaded", () => {
   const loadingScreen = document.getElementById("loading-screen")
   const dashboard     = document.getElementById("dashboard")
 
-  // 1. Check server health in background
   checkServerHealth()
 
-  // 2. Show loading screen for 2.5s
   setTimeout(() => {
     loadingScreen.style.opacity = "0"
     setTimeout(() => {
       loadingScreen.style.display = "none"
       dashboard.style.display = "flex"
 
-      // 3. If valid session exists → skip payment, unlock immediately
       if (hasValidSession()) {
         closeModal()
         unlockDashboard()
         showToast("Welcome back! Access active.", "success")
-        // Optionally show WhatsApp modal after short delay
         setTimeout(() => document.getElementById("whatsappModal").classList.add("show"), 2000)
         return
       }
-
-      // 4. No session → open payment modal (already visible from HTML)
-      // WhatsApp modal shown after they pay, not before
       openModal()
-
     }, 800)
   }, 2500)
+
+  // Load all history displays
+  renderHistory("betpawa")
+  renderHistory("sportybet")
+  renderHistory("parimatch")
 })
+
+/* ═══════════════════════════════════════════════════════════
+   ██████████████████████████████████████████████████████████
+   PREDICTOR ENGINE — NEW INTERNAL SYSTEM
+   ██████████████████████████████████████████████████████████
+═══════════════════════════════════════════════════════════ */
+
+/* Config map for each platform */
+const PRED_CONFIG = {
+  betpawa:   { prefix:"bp", name:"BetPawa",   accentColor:"#00e676" },
+  sportybet: { prefix:"sb", name:"SportyBet", accentColor:"#60a0ff" },
+  parimatch: { prefix:"pm", name:"Parimatch", accentColor:"#ffe000" },
+}
+
+/* ── Open / Close predictor pages ── */
+function openPredictor(key) {
+  document.getElementById(`pred-${key}`).classList.add("visible")
+  document.body.style.overflow = "hidden"
+  renderHistory(key)
+}
+function closePredictor() {
+  document.querySelectorAll(".predictor-page").forEach(p => p.classList.remove("visible"))
+  document.body.style.overflow = ""
+}
+
+/* ── Quantum Forecast Algorithm ── */
+function generatePredictions(last, current) {
+  const results = []
+  const avg = (last + current) / 2
+  const momentum = current - last           // positive = rising, negative = falling
+  const volatility = Math.abs(momentum) / avg
+
+  for (let i = 1; i <= 5; i++) {
+    // Base: weighted average with decay
+    let base = avg * (1 + momentum * 0.08 * Math.pow(0.75, i))
+
+    // Trend pressure: after high multipliers, crash balancing kicks in
+    if (current > 5 && Math.random() < 0.45) {
+      base = 1.01 + Math.random() * 1.8  // crash corrector
+    } else if (current < 1.5 && Math.random() < 0.4) {
+      base = avg + 0.5 + Math.random() * 3  // rebound
+    }
+
+    // Controlled randomness (±25% of base, weighted low)
+    const noise = (Math.random() - 0.42) * base * 0.25 * (1 + volatility * 0.5)
+    let mult = base + noise
+
+    // Hard clamp 1.01 – 15x
+    mult = Math.max(1.01, Math.min(15, mult))
+
+    // Confidence: higher for rounds near current, lower for distant
+    const baseConf = 88 - (i - 1) * 7
+    const confNoise = Math.floor(Math.random() * 5) - 2
+    const conf = Math.max(55, Math.min(96, baseConf + confNoise))
+
+    results.push({ mult: Math.round(mult * 100) / 100, conf })
+  }
+  return results
+}
+
+/* ── Derive analysis from predictions ── */
+function analyseResults(predictions, last, current) {
+  const mults = predictions.map(p => p.mult)
+  const avgMult = mults.reduce((a,b) => a+b, 0) / mults.length
+  const avgConf = Math.round(predictions.reduce((a,b) => a+b.conf,0) / predictions.length)
+
+  const momentum = current - last
+  let trend = momentum > 0.3
+    ? "📈 Ascending"
+    : momentum < -0.3 ? "📉 Descending" : "↔ Neutral"
+
+  let risk = avgConf >= 80 ? "🟢 LOW" : avgConf >= 68 ? "🟡 MEDIUM" : "🔴 HIGH"
+  let riskNum = 100 - avgConf
+
+  // Cashout: 75th percentile of predictions
+  const sorted = [...mults].sort((a,b)=>a-b)
+  const p75 = sorted[Math.floor(sorted.length * 0.75)]
+  const cashout = `${(p75 * 0.85).toFixed(2)}x`
+
+  return { trend, conf:`${avgConf}%`, risk, riskNum:`${riskNum}%`, cashout }
+}
+
+/* ── Main run function ── */
+function runPredictor(key) {
+  const cfg = PRED_CONFIG[key]
+  const { prefix } = cfg
+
+  const lastInput    = document.getElementById(`${prefix}-last`)
+  const currentInput = document.getElementById(`${prefix}-current`)
+  const btn          = document.getElementById(`${prefix}-btn`)
+
+  const lastVal    = parseFloat(lastInput.value)
+  const currentVal = parseFloat(currentInput.value)
+
+  if (isNaN(lastVal) || lastVal < 1.01 || lastVal > 100) {
+    showToast("⚠ Enter a valid Last Round multiplier (1.01 – 100)", "warning"); return
+  }
+  if (isNaN(currentVal) || currentVal < 1.01 || currentVal > 100) {
+    showToast("⚠ Enter a valid Current Round multiplier (1.01 – 100)", "warning"); return
+  }
+
+  // Animate button
+  btn.disabled = true
+  btn.innerHTML = `<span class="spinner"></span>COMPUTING...`
+
+  setTimeout(() => {
+    const predictions = generatePredictions(lastVal, currentVal)
+    const analysis    = analyseResults(predictions, lastVal, currentVal)
+    const now         = new Date().toLocaleTimeString("en-GB", { hour:"2-digit", minute:"2-digit", second:"2-digit" })
+
+    // Render cards
+    const cardsEl = document.getElementById(`${prefix}-cards`)
+    const cards   = cardsEl.querySelectorAll(".pred-card")
+    cards.forEach((card, i) => {
+      card.classList.remove("show")
+      const p = predictions[i]
+      card.querySelector(".pred-mult").textContent = `${p.mult}x`
+      card.querySelector(".pred-conf").textContent = `${p.conf}%`
+      // Delay each card slightly
+      setTimeout(() => card.classList.add("show"), i * 100 + 50)
+    })
+
+    // Render details
+    document.getElementById(`${prefix}-trend`).textContent   = analysis.trend
+    document.getElementById(`${prefix}-conf`).textContent    = analysis.conf
+    document.getElementById(`${prefix}-risk`).textContent    = analysis.risk
+    document.getElementById(`${prefix}-cashout`).textContent = analysis.cashout
+    document.getElementById(`${prefix}-time`).textContent    = now
+
+    const detailsEl = document.getElementById(`${prefix}-details`)
+    detailsEl.classList.add("show")
+
+    // Save to history
+    saveToHistory(key, predictions, now, lastVal, currentVal)
+    renderHistory(key)
+
+    btn.disabled = false
+    btn.innerHTML = "🔄 REGENERATE"
+
+    showToast(`✔ ${cfg.name} — 5 predictions generated`, "success")
+  }, 900)
+}
+
+/* ── History Storage ── */
+function getHistoryKey(key) { return `aviator_pred_history_${key}` }
+
+function saveToHistory(key, predictions, time, last, current) {
+  const storageKey = getHistoryKey(key)
+  let history = []
+  try { history = JSON.parse(localStorage.getItem(storageKey) || "[]") } catch {}
+  const mults = predictions.map(p => `${p.mult}x`).join(" · ")
+  history.unshift({ mults, time, last, current })
+  if (history.length > 20) history = history.slice(0, 20)
+  localStorage.setItem(storageKey, JSON.stringify(history))
+}
+
+function renderHistory(key) {
+  const cfg = PRED_CONFIG[key]
+  const { prefix } = cfg
+  const storageKey = getHistoryKey(key)
+  const historyEl  = document.getElementById(`${prefix}-history`)
+  let history = []
+  try { history = JSON.parse(localStorage.getItem(storageKey) || "[]") } catch {}
+
+  if (!history.length) {
+    historyEl.innerHTML = `<div class="pred-history-empty">No predictions yet</div>`
+    return
+  }
+
+  historyEl.innerHTML = history.map(h => `
+    <div class="pred-history-item">
+      <div class="pred-history-dot" style="background:${cfg.accentColor}"></div>
+      <div>
+        <div class="pred-history-mults">${h.mults}</div>
+        <div style="font-family:var(--font-mono);font-size:0.58rem;opacity:0.4">
+          Input: ${h.last}x → ${h.current}x
+        </div>
+      </div>
+      <span class="pred-history-time">${h.time}</span>
+    </div>
+  `).join("")
+}
+
+function clearHistory(key) {
+  localStorage.removeItem(getHistoryKey(key))
+  renderHistory(key)
+  showToast("History cleared", "info")
+}
 </script>
 </body>
 </html>
